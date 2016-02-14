@@ -1,1 +1,0 @@
-/home/rob/Code/emberNodeMongo/emberMongo/tmp/babel-output_path-fA9MB1qj.tmp/ember-mongo/app.js

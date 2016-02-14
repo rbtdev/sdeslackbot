@@ -1,1 +1,0 @@
-/home/rob/Code/emberNodeMongo/emberMongo/app/initializers/custom-session.js

@@ -1,1 +1,0 @@
-/home/rob/Code/emberNodeMongo/emberMongo/tmp/babel-cache_path-xgB4i5A2.tmp/modules/ember-new-computed/index.js

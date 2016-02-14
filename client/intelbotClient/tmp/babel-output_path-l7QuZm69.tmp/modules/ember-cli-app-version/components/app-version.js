@@ -1,1 +1,0 @@
-/home/rob/Code/emberNodeMongo/emberMongo/tmp/babel-cache_path-Wkrw9WDN.tmp/modules/ember-cli-app-version/components/app-version.js

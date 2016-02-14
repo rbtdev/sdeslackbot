@@ -1,1 +1,0 @@
-/home/rob/Code/emberNodeMongo/emberMongo/tmp/funnel-input_base_path-iJXg1cJX.tmp/0/components/ember-ic-you.js

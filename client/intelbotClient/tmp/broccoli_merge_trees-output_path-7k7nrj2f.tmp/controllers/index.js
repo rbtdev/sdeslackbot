@@ -1,1 +1,0 @@
-/home/rob/Code/emberNodeMongo/emberMongo/app/controllers/index.js

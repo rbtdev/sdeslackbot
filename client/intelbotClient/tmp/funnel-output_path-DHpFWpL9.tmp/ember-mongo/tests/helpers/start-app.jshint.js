@@ -1,1 +1,0 @@
-/home/rob/Code/emberNodeMongo/emberMongo/tmp/jshinter-cache_path-H8rnEL1G.tmp/helpers/start-app.jshint.js

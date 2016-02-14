@@ -1,1 +1,0 @@
-/home/rob/Code/emberNodeMongo/emberMongo/tmp/babel-cache_path-hBQ2puEd.tmp/modules/ember-ic-you/components/ember-ic-you.js

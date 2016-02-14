@@ -1,1 +1,0 @@
-/home/rob/Code/emberNodeMongo/emberMongo/tmp/jshinter-output_path-ks76xZSa.tmp/helpers/flash-message.jshint.js

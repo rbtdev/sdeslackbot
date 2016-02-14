@@ -1,1 +1,0 @@
-/home/rob/Code/emberNodeMongo/emberMongo/tmp/babel-cache_path-J9zUAvOw.tmp/modules/ember-cli-infinite-scroll/mixins/infinite-scroll-route.js
