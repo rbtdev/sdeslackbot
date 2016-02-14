@@ -1,0 +1,1 @@
+/home/rob/Code/emberNodeMongo/emberMongo/tmp/babel-cache_path-tptBIZ1r.tmp/modules/simple-auth-token/configuration.js

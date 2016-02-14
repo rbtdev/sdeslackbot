@@ -1,0 +1,1 @@
+/home/rob/Code/emberNodeMongo/emberMongo/tmp/jshinter-output_path-ks76xZSa.tmp/unit/serializers/application-test.jshint.js

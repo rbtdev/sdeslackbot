@@ -1,0 +1,1 @@
+/home/rob/Code/emberNodeMongo/emberMongo/tmp/babel-cache_path-2sjns6LG.tmp/modules/ember-new-computed/utils/can-use-new-syntax.js

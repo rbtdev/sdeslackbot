@@ -1,0 +1,41 @@
+
+<div class ="small-8 medium-4 large-3 small-centered medium-centered large-centered columns">
+  <div class="login-box">
+    <div class="row">
+      <div class="columns">
+        <form {{action 'signup' on='submit'}}>
+           <div class="row">
+             <div class="columns">
+    	  		   {{input name='name' placeholder='name'  value=name}}
+             </div>
+          </div>
+           <div class="row">
+             <div class="columns">
+    	  		   {{input id='email' placeholder='email' value=email}}
+             </div>
+           </div>
+          <div class="row">
+             <div class="columns">
+    	  		   {{input name='password' placeholder='password' type='password' value=password}}
+             </div>
+          </div>
+          <div class="row">
+             <div class="columns">
+    	  		   {{input  placeholder='veriffy password' type='password' value=verifypw}}
+             </div>
+          </div>
+          <div class="row">
+             <div class="columns">
+    	  		   {{input name='avatar' placeholder='avatar url'  value=avatar}}
+             </div>
+          </div>
+           <div class="row">
+            <div class="centered columns">
+              <input type="submit" class="expand button" value="Sign Up"/>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

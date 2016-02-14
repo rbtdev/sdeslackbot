@@ -1,0 +1,1 @@
+/home/rob/Code/emberNodeMongo/emberMongo/tmp/funnel-input_base_path-uSbkMyYa.tmp/0/ember-mongo/initializers/custom-session.js
