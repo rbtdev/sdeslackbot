@@ -1,0 +1,6 @@
+
+<ul class="side-nav">
+	{{#each locations as |area|}}
+  		<li><a href = "#" {{action "showPortals" area}}>{{area.value}}</a></li>
+  	{{/each}}
+</ul>

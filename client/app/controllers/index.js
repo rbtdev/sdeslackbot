@@ -48,10 +48,17 @@ export default Ember.Controller.extend({
 	currentLocation: null,
 	newName: null,
 	showMap: false,
+	area: null,
 
 	mapButtonLabel: function () {
 		return this.get('showMap')?"Hide Map":"Show Map";
 	}.property('showMap'),
+
+	clearEdit: function () {
+		if (this.get('currentLocation')) {
+			this.set('currentLocation.isEditing', false);
+		}
+	},
 
 	actions: {
 		toggleMap: function () {
@@ -76,28 +83,22 @@ export default Ember.Controller.extend({
 			}
     	},
 
-		edit: function (location) {
-			this.send('cancel', this.get('currentLocation'))
-			location.set('isEditing', true);
-			this.set('currentLocation', location);
-		},
-		save: function () {
+		savePortal: function (location) {
+			debugger
 			var flashQueue = Ember.get(this, 'flashMessages')
-			var location = this.get('currentLocation');
 			var _this = this;
 			location.save().then(
 				function (location) {
 					flashQueue.success('Location Saved');
+					_this.clearEdit();
 					_this.send('reload');
 				},
 				function () {
 					flashQueue.alert('Unable to save location');
 				});
-			location.set('isEditing', false);
-			this.set('currentLocation', null);
 		},
 		add: function () {
-			 var location = this.store.createRecord('location', {
+			var location = this.store.createRecord('location', {
         		name: this.get('newName'),
         		area: "",
         		intelUrl: "",
@@ -115,11 +116,20 @@ export default Ember.Controller.extend({
 				//_this.send('reload');
 			});
 		},
-		cancel: function (location) {
-			if (location) {
-				location.set('isEditing', false);
-				location.rollback();
-			}
+		cancel: function () {
+			this.clearEdit();
+		},
+
+		showPortals: function (area) {
+			this.clearEdit();
+			this.set("area", area);
+			return false;
+		},
+
+		editPortal: function (portal) {
+			this.clearEdit();
+			this.set('currentLocation', portal);
+			portal.set("isEditing", true);
 		}
 	}
 });

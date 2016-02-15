@@ -1,7 +1,6 @@
 
 @import 'bower_components/foundation/scss/foundation';
 
-
 .map-canvas {
   width: 600px;
   height: 400px;
@@ -117,4 +116,10 @@
   .uploader.dropzone.is-dragging {
       border: 4px dashed grey;
   }
+}
+
+
+.scrolling {
+  max-height: 450px;
+  overflow-y:auto;
 }

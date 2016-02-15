@@ -1,73 +1,24 @@
-Portals of Interest
+<div class = "large-12 column">
 
-<div class = "locations">
+
+{{#if showMap}}
 	<div class = "row">
-		<div class = "row"> 
-			<button {{action "toggleMap"}}>{{mapButtonLabel}}</button>
-		</div>
-		{{#if showMap}}
-			<div class = "row">
-				{{google-map
-				  lat=lat lng=lng zoom=zoom type=type markers=markers
-				  gopt_mapTypeControl=false gopt_backgroundColor='transparent'
-				  ev_click='didClickMap' markerInfoWindowTemplateName='marker-info-window'}}
-			</div>
-		{{/if}}
+		{{google-map
+		  lat=lat lng=lng zoom=zoom type=type markers=markers
+		  gopt_mapTypeControl=false gopt_backgroundColor='transparent'
+	  	  ev_click='didClickMap' markerInfoWindowTemplateName='marker-info-window'}}
+	</div>
+{{/if}}
+
+	<div class = "large-2 columns left scrolling">
+		{{partial "partials/areas"}}
+	</div> 
+	<div class = "large-10 column left">
+		{{partial "partials/portals"}}
 	</div>
 
-	<div class="row">
-		<div class = "small-4 medium-4 large-4 column left">Locations</div>
-	</div>
-	<div class = "row">
-		<div class = "small-4 medium-4 large-4 column left">{{input action = "add" placeholder = "New Location Name" type = "text" value = newName}}</div>
-	</div>
-
-
-		{{#each locations as |group|}}
-			<div class = "small-12 medium-12 large-12 column left">
-				
-					{{group.value}}
-
-					
-						<ul class="accordion" data-accordion>
-							{{#each group.items as |location|}}
-								<div class = "small-12 medium-12 large-12 column left">
-								  <li class="accordion-navigation">
-								    <a {{action "toggle" location}}>{{location.name}}</a>
-								    <div id="{{location.id}}" {{bind-attr class=":content location.active:active"}}>
-								    {{#if location.isEditing}}
-										{{input class = "name" action = "save" placeholder = "Name" type = "text" value = location.name}}
-										{{input  placeholder = "Area" type = "text" value = location.area}}
-										{{input  placeholder = "Intel" type = "text" value = location.intelUrl}}
-										{{input  placeholder = "Maps" type = "text" value = location.mapsUrl}}
-										<button {{action "save"}}>Save</button>
-									{{else}}
-										<div class = "row">
-											<div class = "row">
-												<span class = "name">{{location.name}}</span>
-											</div>
-											<div class = "row">
-												<span class = "area">{{location.area}}</span>
-											</div>
-											<div class = "row">
-												<a href = "{{location.intelUrl}}" target = "Intel">Intel Map</a>
-											</div>
-											<div class = "row">
-												<a href = "{{location.mapsUrl}}" target = "Google">Google Map</a>
-											</div>
-										</div>
-									{{/if}}
-								    </div>
-								  </li>
-								</div>
-							{{/each}}
-					  	</ul>
-
-			</div>
-		{{/each}}
 
 </div>
-
 {{outlet}}
 
 

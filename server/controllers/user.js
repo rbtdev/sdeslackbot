@@ -4,7 +4,7 @@ var controller = {
 
 	create: function (req, res, next) {
 		var user = new UserModel({
-			email: req.body.user.email,
+			email: req.body.user.email.toLowerCase(),
 			password: req.body.user.password,
 			name: req.body.user.name,
 			avatar: req.body.user.avatar,
