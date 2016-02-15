@@ -11,8 +11,8 @@
 		{{else}}
 			<div class = "large-4 column left">{{portal.name}}</div>
 			<div class = "large-1 left">({{portal.shortCode}})</div>
-			<div class = "large-1 left"><a href = {{portal.mapsUrl}}>Google</a></div>
-			<div class = "large-1 left"><a href = {{portal.intelUrl}}>Intel</a></div>
+			<div class = "large-1 left"><a href = {{portal.mapsUrl}} target="google">Google</a></div>
+			<div class = "large-1 left"><a href = {{portal.intelUrl}} target = "inte">Intel</a></div>
 			<div class = "large-1 left" {{action "editPortal" portal}}><i class="fi-pencil"></i></div>
 		{{/if}}
 	</div>
