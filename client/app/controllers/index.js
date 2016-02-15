@@ -46,6 +46,7 @@ export default Ember.Controller.extend({
 
 
 	currentLocation: null,
+	newLocation: null,
 	newName: null,
 	showMap: false,
 	area: null,
@@ -58,6 +59,7 @@ export default Ember.Controller.extend({
 		if (this.get('currentLocation')) {
 			this.set('currentLocation.isEditing', false);
 		}
+		this.set('newLocation', null);
 	},
 
 	actions: {
@@ -84,7 +86,6 @@ export default Ember.Controller.extend({
     	},
 
 		savePortal: function (location) {
-			debugger
 			var flashQueue = Ember.get(this, 'flashMessages')
 			var _this = this;
 			location.save().then(
@@ -97,24 +98,26 @@ export default Ember.Controller.extend({
 					flashQueue.alert('Unable to save location');
 				});
 		},
-		add: function () {
+		addPortal: function () {
 			var location = this.store.createRecord('location', {
-        		name: this.get('newName'),
-        		area: "",
-        		intelUrl: "",
-        		mapsUrl: "",
-        		shortCode: "",
-        		isEditing: false
+        		name: null,
+        		area: this.get('area.value'),
+        		intelUrl: null,
+        		mapsUrl: null,
+        		shortCode: null
       		});
-			this.set('newName', null);
-			this.set('currentLocation', location)
-			this.send('save');
+			this.set('newLocation', location);
 		},
-		delete: function (location) {
+		deletePortal: function (location) {
 			var _this = this;
-			location.destroyRecord().then(function () {
-				//_this.send('reload');
-			});
+			if (confirm("Are you sure you'd like to delete " + location.get('name'))) {
+				location.destroyRecord().then(function () {
+					_this.send('reload');
+					_this.get('area.items').removeObject(location);
+					_this.send('showPortals', _this.get('area'));
+				});			
+			}
+
 		},
 		cancel: function () {
 			this.clearEdit();

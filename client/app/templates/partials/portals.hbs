@@ -13,7 +13,25 @@
 			<div class = "large-1 left">({{portal.shortCode}})</div>
 			<div class = "large-1 left"><a href = {{portal.mapsUrl}} target="google">Google</a></div>
 			<div class = "large-1 left"><a href = {{portal.intelUrl}} target = "inte">Intel</a></div>
-			<div class = "large-1 left" {{action "editPortal" portal}}><i class="fi-pencil"></i></div>
+			<div class = "large-1 left">
+				<span class = "icon" {{action "editPortal" portal}}><i class="fi-pencil"></i></span>
+				<span class = "icon" {{action "deletePortal" portal}}><i class="fi-x"></i></span>
+			</div>
 		{{/if}}
 	</div>
 {{/each}}
+<div class = "row">
+	{{#if newLocation}}
+		Name {{input type="text" placeholder = "Name" value=newLocation.name}}
+		Short Code {{input type="text" placeholder = "Short Code" value = newLocation.shortCode}}
+		Google Maps URL {{input type = "text" placeholder = "Google Maps URL" value = newLocation.mapsUrl}}
+		Intel URL {{input type = "text" placeholder = "Intel URL" value = newLocation.intelUrl}}
+		Area {{input type = "text" placeholder = "Area" value = newLocation.area}}
+		<button {{action "savePortal" newLocation}} class = "tiny">Save</button>
+	{{else}}
+		<div class = "large-4 column left" {{action "addPortal"}}>
+			<span class = "icon"><i class="fi-plus"></i></span>
+			<span>Add New Portal</span>
+		</div>
+	{{/if}}
+</div>
