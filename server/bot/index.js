@@ -63,7 +63,7 @@ var Bot = {
 				message.text = upload?"@" + slack.self.id + "> upload":message.text;
 				this.brain.exec(message, channel, function (response) {
 					channel.postMessage(response);
-					console.log('@%s responded with "%s"', _slack.self.name, response);
+					console.log('@%s responded with "%s"', slack.self.name, response);
 				});
 			}
 		}.bind(this));
