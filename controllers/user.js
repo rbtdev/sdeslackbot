@@ -1,23 +1,33 @@
 var UserModel = require('../models/user.js');
+var Bot = require('../bot');
 
 var controller = {
 
 	create: function (req, res, next) {
-		var user = new UserModel({
-			email: req.body.user.email.toLowerCase(),
-			password: req.body.user.password,
-			name: req.body.user.name,
-			avatar: req.body.user.avatar,
-			isAdmin: false,
-		});
-		user.save(function (err) {
-			if (!err) {
-				user.password = undefined;
-				return res.status(200).send({});
-			} else {
-				return res.status(403).send(err);
-			}
-		});
+		var isSlackUser = Bot.slack.getUserByEmail(req.body.user.email.toLowerCase())
+		console.log("isSlackUser:" + isSlackUser)
+		if (isSlackUser) {
+			console.log("User exists in slack team.");
+			var user = new UserModel({
+				email: req.body.user.email.toLowerCase(),
+				password: req.body.user.password,
+				name: req.body.user.name,
+				avatar: req.body.user.avatar,
+				isAdmin: false,
+			});
+			user.save(function (err) {
+				if (!err) {
+					user.password = undefined;
+					return res.status(200).send({});
+				} else {
+					return res.status(403).send(err);
+				}
+			});
+		}
+		else {
+			console.log("User is not in slack team.");
+			return res.status(403).send({});
+		}
 	},
 
 	readAll: function(req, res) {
