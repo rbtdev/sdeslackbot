@@ -28,8 +28,8 @@ var controller = {
 			    location.name = req.body.location.name;
 			    location.area = req.body.location.area;
 			    location.intelUrl = req.body.location.intelUrl;
-			    location.mapsUrl = req.body.mapsUrl;
-			    location.shortCode = req.body.shortCode;
+			    location.mapsUrl = req.body.location.mapsUrl;
+			    location.shortCode = req.body.location.shortCode;
 			    return location.save(function (err) {
 			      if (!err) {
 			      	res.status(200).send({location:location});
