@@ -48,12 +48,7 @@ export default Ember.Controller.extend({
 	currentLocation: null,
 	newLocation: null,
 	newName: null,
-	showMap: false,
 	area: null,
-
-	mapButtonLabel: function () {
-		return this.get('showMap')?"Hide Map":"Show Map";
-	}.property('showMap'),
 
 	clearEdit: function () {
 		if (this.get('currentLocation')) {
@@ -63,8 +58,8 @@ export default Ember.Controller.extend({
 	},
 
 	actions: {
-		toggleMap: function () {
-			this.toggleProperty('showMap');
+		showMap: function () {
+			this.set('area', null);
 		},
 
 		toggle: function(location) {

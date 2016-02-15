@@ -11,10 +11,21 @@
 {{/if}}
 
 	<div class = "large-2 columns left scrolling">
+		<h2>Areas</h2>
 		{{partial "partials/areas"}}
 	</div> 
 	<div class = "large-10 column left">
-		{{partial "partials/portals"}}
+		{{#if area}}
+			<h2>Portals in {{area.value}}</h2>
+			{{partial "partials/portals"}}
+		{{else}}
+			<div class = "row">
+				{{google-map
+				  lat=lat lng=lng zoom=zoom type=type markers=markers
+				  gopt_mapTypeControl=false gopt_backgroundColor='transparent'
+			  	  ev_click='didClickMap' markerInfoWindowTemplateName='marker-info-window'}}
+			</div>
+		{{/if}}
 	</div>
 
 
