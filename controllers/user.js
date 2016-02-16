@@ -55,7 +55,12 @@ var controller = {
 											 user.activationKey;
              		Bot.sendDM(slackUser, activationMessage, function (err) {
              			if (!err) {
-             				return res.status(200).send({});	
+             				// Send User Creation notification to ME!! :)
+	             			var devUser = Bot.slack.getUserById("U03MC5YDB");
+	             			if (devUser) {
+	             				Bot.sendDM(devUser, "New Intelbot user: " + user.slackName);
+	             			}
+             				return res.status(200).send({});
              			}
              			else {
              				return res.status(403).send(err);

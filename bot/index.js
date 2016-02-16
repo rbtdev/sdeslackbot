@@ -77,7 +77,9 @@ var Bot = {
 			if (!res.ok) {
 				err = res.error
 			}
-			cb(err);
+			if (cb) {
+				cb(err);
+			}
 		});
 	},
 
