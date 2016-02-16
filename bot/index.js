@@ -35,17 +35,22 @@ function onUserChange (slackUser) {
 	UserModel
 		.findOne({slackId: slackUser.id})
 		.exec(function (err, user) {
-			user.slackName = slackUser.name;
-			user.email = slackUser.profile.email;
-			user.avatar = slackUser.profile.image_192;
-			user.isAdmin = slackUser.is_admin;
-		    return user.save(function (err) {
-		      if (!err) {
-		      	console.log("User Changed: " + JSON.stringify(user));
-		      } else {
-		        console.log("Error updating user");
-		      }
-		    });
+			if (user) {
+				user.slackName = slackUser.name;
+				user.email = slackUser.profile.email;
+				user.avatar = slackUser.profile.image_192;
+				user.isAdmin = slackUser.is_admin;
+			    return user.save(function (err) {
+			      if (!err) {
+			      	console.log("User Changed: " + JSON.stringify(user));
+			      } else {
+			        console.log("Error updating user");
+			      }
+			    });
+			}
+			else {
+				console.log("SLack User not found: " + slackUser.name)
+			}
 	  	});
 }
 
