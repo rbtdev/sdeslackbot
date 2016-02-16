@@ -40,7 +40,8 @@ var controller = {
 				email: req.body.user.email.toLowerCase(),
 				password: req.body.user.password,
 				name: req.body.user.name,
-				avatar: req.body.user.avatar,
+				avatar: slackUser.profile.image_192,
+				slackName: slackUser.name,
 				isAdmin: slackUser.is_admin,
 				activationKey: 	mongoose.Types.ObjectId()
 			});

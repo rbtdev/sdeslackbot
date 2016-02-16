@@ -6,7 +6,7 @@ var Bot = {
 	brain: new Brain(),
 
 	sendActivationKey: function (user, key) {
-		var message = "To activate your SDE Intel Web account click here: " + key
+		var message = "To activate your SDE Intel Web account click here: " + key;
 		this.sendDM(user, message);
 	},
 
