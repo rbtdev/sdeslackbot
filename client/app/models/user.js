@@ -5,5 +5,6 @@ export default DS.Model.extend({
   email: DS.attr(),
   password: DS.attr(),
   isAdmin: DS.attr(),
-  avatar: DS.attr()
+  avatar: DS.attr(),
+  slackName: DS.attr()
 });
