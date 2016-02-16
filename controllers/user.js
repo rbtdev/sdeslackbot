@@ -49,11 +49,19 @@ var controller = {
 				if (!err) {
 					user.password = undefined;
 					// send activation code to user on slack
-             		Bot.sendActivationKey(slackUser, "https://intelbot.herokuapp.com/activate/" + user.activationKey);
-
-					return res.status(200).send({});
+					var activationMessage = "To activate your SDE Intel Web account click here: " + 
+											"https://intelbot.herokuapp.com/activate/" + 
+											 user.activationKey;
+             		Bot.sendDM(slackUser, activationMessage, function (err) {
+             			if (!err) {
+             				return res.status(200).send({});	
+             			}
+             			else {
+             				return res.status(403).send(err);
+             			}
+             		});
 				} else {
-					return res.status(403).send(err);
+             		return res.status(403).send(err);
 				}
 			});
 		}
