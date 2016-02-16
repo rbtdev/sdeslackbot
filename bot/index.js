@@ -20,7 +20,7 @@ function onMessage (message) {
 	var user = slack.getUserByID(message.user);
 
 	var time = message.ts;
-	var text = message.text;
+	var text = message.text?message.text:"";
 
 	var botMessage = ((type === 'message') && (text.split(' ')[0] === '<@' + slack.self.id + '>'))
 	if (botMessage) {
