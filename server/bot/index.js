@@ -12,6 +12,8 @@ var Bot = {
 
 	sendDM: function (user, message) {
 		var params = {
+			"unfurl_links": false,
+			"unfurl_media": false,
 			"as_user": false,
 		    "channel": "@" + user.name,
 		    "text": message,
