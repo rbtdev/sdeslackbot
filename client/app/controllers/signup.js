@@ -12,18 +12,7 @@ export default Ember.Controller.extend({
 				avatar: this.get('avatar')
 			});
 			user.save().then (function () {
-				var credentials = {identification: _this.get('email'), password: _this.get('password')};
-				var authenticator = 'simple-auth-authenticator:token';
-				_this.get('session').authenticate(authenticator, credentials).then( 
-					function () {
-						user = null;
-						_this.set('password', null);
-						_this.set('email', null);
-						_this.transitionToRoute('profile');
-					},
-					function () {
-						flashQueue.alert('Unable to login');
-					});;
+				_this.transitionToRoute('success');
 			},
 			function () {
 				flashQueue.alert('Unable to create user');

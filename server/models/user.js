@@ -9,7 +9,8 @@ var userSchema = new mongoose.Schema({
 	password: {type: 'string', select: 'false'},
 	name: 'string',
 	avatar: 'string',
-	isAdmin: 'boolean'
+	isAdmin: 'boolean',
+	activationKey: mongoose.Schema.Types.ObjectId
 });
 
 userSchema.plugin(acl.subject);

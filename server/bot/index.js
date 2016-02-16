@@ -5,6 +5,25 @@ var Bot = {
 
 	brain: new Brain(),
 
+	sendActivationKey: function (user, key) {
+		var message = "To activate your SDE Intel Web account click here: " + key
+		this.sendDM(user, message);
+	},
+
+	sendDM: function (user, message) {
+		var params = {
+			"as_user": false,
+		    "channel": "@" + user.name,
+		    "text": message,
+		    "username":  this.slack.self.name
+			}
+
+		this.slack._apiCall("chat.postMessage", params, function (res) {
+			console.log("API call returned");
+			console.log("Response: " + JSON.stringify(res))
+		});
+	},
+
 	connect: function (token) {
 		var autoReconnect = true;
 		var autoMark = true;

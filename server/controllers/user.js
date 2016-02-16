@@ -1,23 +1,55 @@
 var UserModel = require('../models/user.js');
 var Bot = require('../bot');
+var mongoose = require('mongoose');
 
 var controller = {
 
+	activate: function (req, res, next) {
+		var activationKey = req.params.activationKey;
+		UserModel
+			.findOne({activationKey:activationKey})
+			.exec(function (err, user) {
+				if (!err) {
+					if (user) {
+						user.activationKey = null;
+						user.save(function (err) {
+							if (!err) {
+								res.redirect('/');
+							}
+							else {
+								res.status(500).send(err);
+							}
+						});
+					}
+					else {
+						res.status(404).send("Activation key not found");
+					}
+				}
+				else {
+					res.status(500).send(err);
+				}
+			})
+	},
+
 	create: function (req, res, next) {
-		var isSlackUser = Bot.slack.getUserByEmail(req.body.user.email.toLowerCase())
-		console.log("isSlackUser:" + isSlackUser)
-		if (isSlackUser) {
+		var slackUser = Bot.slack.getUserByEmail(req.body.user.email.toLowerCase())
+		console.log("slackUser:" + slackUser)
+		if (slackUser) {
 			console.log("User exists in slack team.");
 			var user = new UserModel({
 				email: req.body.user.email.toLowerCase(),
 				password: req.body.user.password,
 				name: req.body.user.name,
 				avatar: req.body.user.avatar,
-				isAdmin: false,
+				isAdmin: slackUser.is_admin,
+				activationKey: 	mongoose.Types.ObjectId()
 			});
 			user.save(function (err) {
 				if (!err) {
 					user.password = undefined;
+					// send activation code to user on slack
+             		Bot.sendActivationKey(slackUser, "https://intelbot.herokuapp.com/activate/" + user.activationKey);
+
 					return res.status(200).send({});
 				} else {
 					return res.status(403).send(err);

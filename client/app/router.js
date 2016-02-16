@@ -12,6 +12,7 @@ Router.map(function() {
   this.route('signup');
   this.route('profile');
   this.route('portals');
+  this.route('success');
 });
 
 export default Router;
