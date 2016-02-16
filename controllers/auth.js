@@ -49,7 +49,7 @@ var controller = {
   authenticate:  function(req, res) {
 
     // find the user
-    UserModel.findOne({email: req.body.username.toLowerCase()}, function(err, user) {
+    UserModel.findOne({email: req.body.username.toLowerCase(), activationKey: null}, function(err, user) {
       if (err) throw err;
 
       if (!user) {
