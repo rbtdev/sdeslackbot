@@ -32,6 +32,8 @@ var setCORSHeaders = function (req, res, next) {
     res.header('Access-Control-Allow-Methods', 'POST, GET, PUT, DELETE, OPTIONS');
     next();
 };
+
+
 app.use('/api/v1', setCORSHeaders, require('./routes/api'));
 app.use('/activate/:activationKey',  require('./controllers/user').activate);
 // Serve the static Ember App for front end
