@@ -11,6 +11,7 @@ var userSchema = new mongoose.Schema({
 	avatar: 'string',
 	isAdmin: 'boolean',
 	slackName: 'string',
+	slackId: 'string',
 	activationKey: mongoose.Schema.Types.ObjectId
 });
 

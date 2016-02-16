@@ -42,6 +42,7 @@ var controller = {
 				name: req.body.user.name,
 				avatar: slackUser.profile.image_192,
 				slackName: slackUser.name,
+				slackId: slackUser.id,
 				isAdmin: slackUser.is_admin,
 				activationKey: 	mongoose.Types.ObjectId()
 			});
