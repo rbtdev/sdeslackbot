@@ -1,7 +1,6 @@
 var Slack = require('slack-client');
 var Brain = require('./brain.js');
-
-
+var UserModel = require('../models/user.js');
 
 function onOpen () {
 	var slack = this.slack;
@@ -31,8 +30,23 @@ function onMessage (message) {
 	}
 }
 
-function onUserChange (user) {
-	console.log("User Changed: " + user.name)
+function onUserChange (slackUser) {
+	console.log("User Changed: " + slackUser.id);
+	UserModel
+		.findOne({slackId: slackUser.id})
+		.exec(function (err, user) {
+			user.slackName = slackUser.name;
+			user.email = slackUser.profile.email;
+			user.avatar = slackUser.profile.image_192;
+			user.isAdmin = slackUser.is_admin;
+		    return user.save(function (err) {
+		      if (!err) {
+		      	console.log("User Changed: " + JSON.stringify(user));
+		      } else {
+		        console.log("Error updating user");
+		      }
+		    });
+	  	});
 }
 
 function onError (error) {
