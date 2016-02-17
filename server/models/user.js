@@ -12,7 +12,8 @@ var userSchema = new mongoose.Schema({
 	isAdmin: 'boolean',
 	slackName: 'string',
 	slackId: 'string',
-	activationKey: mongoose.Schema.Types.ObjectId
+	activationKey: mongoose.Schema.Types.ObjectId,
+	pwResetKey: mongoose.Schema.Types.ObjectId
 });
 
 userSchema.plugin(acl.subject);

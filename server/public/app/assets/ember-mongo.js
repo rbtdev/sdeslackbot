@@ -729,6 +729,51 @@ define('ember-mongo/controllers/object', ['exports', 'ember'], function (exports
 	exports['default'] = Ember['default'].Controller;
 
 });
+define('ember-mongo/controllers/password-reset', ['exports', 'ember'], function (exports, Ember) {
+
+	'use strict';
+
+	exports['default'] = Ember['default'].Controller.extend({
+		queryParams: ['pwResetKey'],
+		pwResetKey: null,
+
+		password: "",
+		verifypw: "",
+
+		hasPassword: Ember['default'].computed.notEmpty('password'),
+		pwIsStrong: Ember['default'].computed.match('password', /^(?=.*\d).{4,12}$/),
+
+		pwIsEqual: (function () {
+			return this.get('password') === this.get('verifypw');
+		}).property('password', 'verifypw'),
+
+		passwordIsValid: (function () {
+			return this.get('hasPassword') && this.get('pwIsEqual') && this.get('pwIsStrong');
+		}).property('hasPassword', 'pwIsEqual'),
+
+		isReady: (function () {
+			return this.get('passwordIsValid');
+		}).property('passwordIsValid'),
+
+		actions: {
+			resetPw: function resetPw() {
+				var _this = this;
+				var flashQueue = Ember['default'].get(this, 'flashMessages');
+				var pwReset = this.store.createRecord('password-reset', {
+					pwResetKey: this.get('pwResetKey'),
+					newPw: this.get('password')
+				});
+
+				pwReset.save().then(function () {
+					_this.transitionToRoute('login');
+				}, function () {
+					flashQueue.alert('Password reset failed.');
+				});
+			}
+		}
+	});
+
+});
 define('ember-mongo/controllers/profile', ['exports', 'ember'], function (exports, Ember) {
 
 	'use strict';
@@ -830,6 +875,33 @@ define('ember-mongo/controllers/profile', ['exports', 'ember'], function (export
 						Ember['default'].get(_this, 'flashMessages').alert(err);
 					});
 				}
+			},
+
+			saveProfile: function saveProfile() {}
+
+		}
+	});
+
+});
+define('ember-mongo/controllers/request-reset-password', ['exports', 'ember'], function (exports, Ember) {
+
+	'use strict';
+
+	exports['default'] = Ember['default'].Controller.extend({
+
+		actions: {
+
+			resetPw: function resetPw() {
+				var _this = this;
+				var pwReset = this.store.createRecord('password-reset-request', {
+					email: this.get('email')
+				});
+
+				pwReset.save().then(function () {
+					_this.transitionToRoute('reset-success');
+				}, function (err) {
+					_this.set('resetFailed', true);
+				});
 			}
 		}
 	});
@@ -873,7 +945,7 @@ define('ember-mongo/controllers/signup', ['exports', 'ember'], function (exports
 						avatar: this.get('avatar')
 					});
 					user.save().then(function () {
-						_this.transitionToRoute('success');
+						_this.transitionToRoute('activate-success');
 					}, function () {
 						flashQueue.alert('Unable to create user');
 					});
@@ -1238,6 +1310,25 @@ define('ember-mongo/models/note', ['exports', 'ember-data'], function (exports, 
 	});
 
 });
+define('ember-mongo/models/password-reset-request', ['exports', 'ember-data', 'ember'], function (exports, DS, Ember) {
+
+  'use strict';
+
+  exports['default'] = DS['default'].Model.extend({
+    email: DS['default'].attr('string')
+  });
+
+});
+define('ember-mongo/models/password-reset', ['exports', 'ember-data', 'ember'], function (exports, DS, Ember) {
+
+  'use strict';
+
+  exports['default'] = DS['default'].Model.extend({
+    pwResetKey: DS['default'].attr('string'),
+    newPw: DS['default'].attr('string')
+  });
+
+});
 define('ember-mongo/models/user', ['exports', 'ember-data'], function (exports, DS) {
 
   'use strict';
@@ -1267,13 +1358,23 @@ define('ember-mongo/router', ['exports', 'ember', 'ember-mongo/config/environmen
     this.route('signup');
     this.route('profile');
     this.route('portals');
-    this.route('success');
+    this.route('activate-success');
+    this.route('request-reset-password');
+    this.route('reset-success');
+    this.route('password-reset');
   });
 
   exports['default'] = Router;
 
 });
 define('ember-mongo/routes/about', ['exports', 'ember'], function (exports, Ember) {
+
+	'use strict';
+
+	exports['default'] = Ember['default'].Route.extend({});
+
+});
+define('ember-mongo/routes/activate-success', ['exports', 'ember'], function (exports, Ember) {
 
 	'use strict';
 
@@ -1334,6 +1435,13 @@ define('ember-mongo/routes/login', ['exports', 'ember'], function (exports, Embe
 	exports['default'] = Ember['default'].Route.extend({});
 
 });
+define('ember-mongo/routes/password-reset', ['exports', 'ember'], function (exports, Ember) {
+
+	'use strict';
+
+	exports['default'] = Ember['default'].Route.extend({});
+
+});
 define('ember-mongo/routes/portals', ['exports', 'ember'], function (exports, Ember) {
 
 	'use strict';
@@ -1352,14 +1460,21 @@ define('ember-mongo/routes/profile', ['exports', 'ember', 'simple-auth/mixins/au
 	});
 
 });
-define('ember-mongo/routes/signup', ['exports', 'ember'], function (exports, Ember) {
+define('ember-mongo/routes/request-reset-password', ['exports', 'ember'], function (exports, Ember) {
 
 	'use strict';
 
 	exports['default'] = Ember['default'].Route.extend({});
 
 });
-define('ember-mongo/routes/success', ['exports', 'ember'], function (exports, Ember) {
+define('ember-mongo/routes/reset-success', ['exports', 'ember'], function (exports, Ember) {
+
+	'use strict';
+
+	exports['default'] = Ember['default'].Route.extend({});
+
+});
+define('ember-mongo/routes/signup', ['exports', 'ember'], function (exports, Ember) {
 
 	'use strict';
 
@@ -1463,6 +1578,86 @@ define('ember-mongo/templates/about', ['exports'], function (exports) {
       },
       statements: [
         ["content","outlet",["loc",[null,[1,0],[1,10]]]]
+      ],
+      locals: [],
+      templates: []
+    };
+  }()));
+
+});
+define('ember-mongo/templates/activate-success', ['exports'], function (exports) {
+
+  'use strict';
+
+  exports['default'] = Ember.HTMLBars.template((function() {
+    return {
+      meta: {
+        "revision": "Ember@1.13.7",
+        "loc": {
+          "source": null,
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 15,
+            "column": 0
+          }
+        },
+        "moduleName": "ember-mongo/templates/activate-success.hbs"
+      },
+      arity: 0,
+      cachedFragment: null,
+      hasRendered: false,
+      buildFragment: function buildFragment(dom) {
+        var el0 = dom.createDocumentFragment();
+        var el1 = dom.createElement("div");
+        dom.setAttribute(el1,"class","small-8 medium-4 large-4 small-centered medium-centered large-centered columns");
+        var el2 = dom.createTextNode("\n	");
+        dom.appendChild(el1, el2);
+        var el2 = dom.createElement("div");
+        dom.setAttribute(el2,"class","login-box");
+        var el3 = dom.createTextNode("\n		");
+        dom.appendChild(el2, el3);
+        var el3 = dom.createElement("div");
+        dom.setAttribute(el3,"class","row");
+        var el4 = dom.createTextNode("\n			");
+        dom.appendChild(el3, el4);
+        var el4 = dom.createElement("div");
+        dom.setAttribute(el4,"class","large-12 large-centered column");
+        var el5 = dom.createTextNode("\n				Your account as been created.  An activation link has been sent to your SD Enlightened Slack account. Please check your \"Slackbot\" channel and click on the link there to complete activation and log in.\n				");
+        dom.appendChild(el4, el5);
+        var el5 = dom.createElement("p");
+        var el6 = dom.createTextNode("\n				Thank you!\n				");
+        dom.appendChild(el5, el6);
+        dom.appendChild(el4, el5);
+        var el5 = dom.createTextNode("\n			");
+        dom.appendChild(el4, el5);
+        dom.appendChild(el3, el4);
+        var el4 = dom.createTextNode("\n		");
+        dom.appendChild(el3, el4);
+        dom.appendChild(el2, el3);
+        var el3 = dom.createTextNode("\n	");
+        dom.appendChild(el2, el3);
+        dom.appendChild(el1, el2);
+        var el2 = dom.createTextNode("\n");
+        dom.appendChild(el1, el2);
+        dom.appendChild(el0, el1);
+        var el1 = dom.createTextNode("\n\n");
+        dom.appendChild(el0, el1);
+        var el1 = dom.createComment("");
+        dom.appendChild(el0, el1);
+        var el1 = dom.createTextNode("\n");
+        dom.appendChild(el0, el1);
+        return el0;
+      },
+      buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
+        var morphs = new Array(1);
+        morphs[0] = dom.createMorphAt(fragment,2,2,contextualElement);
+        return morphs;
+      },
+      statements: [
+        ["content","outlet",["loc",[null,[14,0],[14,10]]]]
       ],
       locals: [],
       templates: []
@@ -4483,6 +4678,40 @@ define('ember-mongo/templates/login', ['exports'], function (exports) {
         templates: []
       };
     }());
+    var child1 = (function() {
+      return {
+        meta: {
+          "revision": "Ember@1.13.7",
+          "loc": {
+            "source": null,
+            "start": {
+              "line": 25,
+              "column": 14
+            },
+            "end": {
+              "line": 25,
+              "column": 66
+            }
+          },
+          "moduleName": "ember-mongo/templates/login.hbs"
+        },
+        arity: 0,
+        cachedFragment: null,
+        hasRendered: false,
+        buildFragment: function buildFragment(dom) {
+          var el0 = dom.createDocumentFragment();
+          var el1 = dom.createTextNode("Forgot Password");
+          dom.appendChild(el0, el1);
+          return el0;
+        },
+        buildRenderNodes: function buildRenderNodes() { return []; },
+        statements: [
+
+        ],
+        locals: [],
+        templates: []
+      };
+    }());
     return {
       meta: {
         "revision": "Ember@1.13.7",
@@ -4493,7 +4722,7 @@ define('ember-mongo/templates/login', ['exports'], function (exports) {
             "column": 0
           },
           "end": {
-            "line": 30,
+            "line": 33,
             "column": 0
           }
         },
@@ -4507,6 +4736,7 @@ define('ember-mongo/templates/login', ['exports'], function (exports) {
         var el1 = dom.createTextNode("\n");
         dom.appendChild(el0, el1);
         var el1 = dom.createElement("div");
+        dom.setAttribute(el1,"id","login");
         dom.setAttribute(el1,"class","small-8 medium-4 large-3 small-centered medium-centered large-centered columns");
         var el2 = dom.createTextNode("\n  ");
         dom.appendChild(el1, el2);
@@ -4580,7 +4810,18 @@ define('ember-mongo/templates/login', ['exports'], function (exports) {
         var el7 = dom.createTextNode("\n            ");
         dom.appendChild(el6, el7);
         var el7 = dom.createElement("div");
-        dom.setAttribute(el7,"class","centered columns");
+        dom.setAttribute(el7,"class","centered columns sign-up");
+        var el8 = dom.createTextNode("\n              ");
+        dom.appendChild(el7, el8);
+        var el8 = dom.createComment("");
+        dom.appendChild(el7, el8);
+        var el8 = dom.createTextNode("\n            ");
+        dom.appendChild(el7, el8);
+        dom.appendChild(el6, el7);
+        var el7 = dom.createTextNode("\n            ");
+        dom.appendChild(el6, el7);
+        var el7 = dom.createElement("div");
+        dom.setAttribute(el7,"class","centered columns reset-pw");
         var el8 = dom.createTextNode("\n              ");
         dom.appendChild(el7, el8);
         var el8 = dom.createComment("");
@@ -4612,21 +4853,24 @@ define('ember-mongo/templates/login', ['exports'], function (exports) {
       },
       buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
         var element0 = dom.childAt(fragment, [1, 1, 1, 1, 1]);
-        var morphs = new Array(4);
+        var element1 = dom.childAt(element0, [5]);
+        var morphs = new Array(5);
         morphs[0] = dom.createElementMorph(element0);
         morphs[1] = dom.createMorphAt(dom.childAt(element0, [1, 1]),1,1);
         morphs[2] = dom.createMorphAt(dom.childAt(element0, [3, 1]),1,1);
-        morphs[3] = dom.createMorphAt(dom.childAt(element0, [5, 3]),1,1);
+        morphs[3] = dom.createMorphAt(dom.childAt(element1, [3]),1,1);
+        morphs[4] = dom.createMorphAt(dom.childAt(element1, [5]),1,1);
         return morphs;
       },
       statements: [
         ["element","action",["authenticate"],["on","submit"],["loc",[null,[6,14],[6,51]]]],
         ["inline","input",[],["name","email","placeholder","email","value",["subexpr","@mut",[["get","identification",["loc",[null,[9,61],[9,75]]]]],[],[]]],["loc",[null,[9,12],[9,77]]]],
         ["inline","input",[],["name","password","placeholder","password","type","password","value",["subexpr","@mut",[["get","password",["loc",[null,[14,81],[14,89]]]]],[],[]]],["loc",[null,[14,12],[14,91]]]],
-        ["block","link-to",["signup"],[],0,null,["loc",[null,[22,14],[22,54]]]]
+        ["block","link-to",["signup"],[],0,null,["loc",[null,[22,14],[22,54]]]],
+        ["block","link-to",["request-reset-password"],[],1,null,["loc",[null,[25,14],[25,78]]]]
       ],
       locals: [],
-      templates: [child0]
+      templates: [child0, child1]
     };
   }()));
 
@@ -5336,6 +5580,249 @@ define('ember-mongo/templates/partials/portals', ['exports'], function (exports)
   }()));
 
 });
+define('ember-mongo/templates/password-reset', ['exports'], function (exports) {
+
+  'use strict';
+
+  exports['default'] = Ember.HTMLBars.template((function() {
+    var child0 = (function() {
+      return {
+        meta: {
+          "revision": "Ember@1.13.7",
+          "loc": {
+            "source": null,
+            "start": {
+              "line": 11,
+              "column": 18
+            },
+            "end": {
+              "line": 13,
+              "column": 18
+            }
+          },
+          "moduleName": "ember-mongo/templates/password-reset.hbs"
+        },
+        arity: 0,
+        cachedFragment: null,
+        hasRendered: false,
+        buildFragment: function buildFragment(dom) {
+          var el0 = dom.createDocumentFragment();
+          var el1 = dom.createTextNode("                    4-12 characters, at least 1 number and 1 letter\n");
+          dom.appendChild(el0, el1);
+          return el0;
+        },
+        buildRenderNodes: function buildRenderNodes() { return []; },
+        statements: [
+
+        ],
+        locals: [],
+        templates: []
+      };
+    }());
+    var child1 = (function() {
+      return {
+        meta: {
+          "revision": "Ember@1.13.7",
+          "loc": {
+            "source": null,
+            "start": {
+              "line": 21,
+              "column": 18
+            },
+            "end": {
+              "line": 23,
+              "column": 18
+            }
+          },
+          "moduleName": "ember-mongo/templates/password-reset.hbs"
+        },
+        arity: 0,
+        cachedFragment: null,
+        hasRendered: false,
+        buildFragment: function buildFragment(dom) {
+          var el0 = dom.createDocumentFragment();
+          var el1 = dom.createTextNode("                    passwords must match\n");
+          dom.appendChild(el0, el1);
+          return el0;
+        },
+        buildRenderNodes: function buildRenderNodes() { return []; },
+        statements: [
+
+        ],
+        locals: [],
+        templates: []
+      };
+    }());
+    return {
+      meta: {
+        "revision": "Ember@1.13.7",
+        "loc": {
+          "source": null,
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 38,
+            "column": 0
+          }
+        },
+        "moduleName": "ember-mongo/templates/password-reset.hbs"
+      },
+      arity: 0,
+      cachedFragment: null,
+      hasRendered: false,
+      buildFragment: function buildFragment(dom) {
+        var el0 = dom.createDocumentFragment();
+        var el1 = dom.createElement("div");
+        dom.setAttribute(el1,"class","small-8 medium-4 large-4 small-centered medium-centered large-centered columns");
+        var el2 = dom.createTextNode("\n    ");
+        dom.appendChild(el1, el2);
+        var el2 = dom.createElement("div");
+        dom.setAttribute(el2,"id","signup-form");
+        dom.setAttribute(el2,"class","login-box");
+        var el3 = dom.createTextNode("\n        ");
+        dom.appendChild(el2, el3);
+        var el3 = dom.createElement("div");
+        dom.setAttribute(el3,"class","row");
+        var el4 = dom.createTextNode("\n        ");
+        dom.appendChild(el3, el4);
+        var el4 = dom.createElement("div");
+        dom.setAttribute(el4,"class","columns");
+        var el5 = dom.createTextNode("\n          ");
+        dom.appendChild(el4, el5);
+        var el5 = dom.createElement("form");
+        var el6 = dom.createTextNode("\n            ");
+        dom.appendChild(el5, el6);
+        var el6 = dom.createElement("div");
+        dom.setAttribute(el6,"class","row");
+        var el7 = dom.createTextNode("\n               ");
+        dom.appendChild(el6, el7);
+        var el7 = dom.createElement("div");
+        dom.setAttribute(el7,"class","large-7 columns left");
+        var el8 = dom.createTextNode("\n      	  		   ");
+        dom.appendChild(el7, el8);
+        var el8 = dom.createComment("");
+        dom.appendChild(el7, el8);
+        var el8 = dom.createTextNode("\n               ");
+        dom.appendChild(el7, el8);
+        dom.appendChild(el6, el7);
+        var el7 = dom.createTextNode("\n               ");
+        dom.appendChild(el6, el7);
+        var el7 = dom.createElement("div");
+        dom.setAttribute(el7,"class","large-5 columns left note password");
+        var el8 = dom.createTextNode("\n");
+        dom.appendChild(el7, el8);
+        var el8 = dom.createComment("");
+        dom.appendChild(el7, el8);
+        var el8 = dom.createTextNode("               ");
+        dom.appendChild(el7, el8);
+        dom.appendChild(el6, el7);
+        var el7 = dom.createTextNode("\n            ");
+        dom.appendChild(el6, el7);
+        dom.appendChild(el5, el6);
+        var el6 = dom.createTextNode("\n            ");
+        dom.appendChild(el5, el6);
+        var el6 = dom.createElement("div");
+        dom.setAttribute(el6,"class","row");
+        var el7 = dom.createTextNode("\n               ");
+        dom.appendChild(el6, el7);
+        var el7 = dom.createElement("div");
+        dom.setAttribute(el7,"class","large-7 columns left");
+        var el8 = dom.createTextNode("\n      	  		   ");
+        dom.appendChild(el7, el8);
+        var el8 = dom.createComment("");
+        dom.appendChild(el7, el8);
+        var el8 = dom.createTextNode("\n               ");
+        dom.appendChild(el7, el8);
+        dom.appendChild(el6, el7);
+        var el7 = dom.createTextNode("\n               ");
+        dom.appendChild(el6, el7);
+        var el7 = dom.createElement("div");
+        dom.setAttribute(el7,"class","large-5 columns left note verifypw");
+        var el8 = dom.createTextNode("\n");
+        dom.appendChild(el7, el8);
+        var el8 = dom.createComment("");
+        dom.appendChild(el7, el8);
+        var el8 = dom.createTextNode("               ");
+        dom.appendChild(el7, el8);
+        dom.appendChild(el6, el7);
+        var el7 = dom.createTextNode("\n            ");
+        dom.appendChild(el6, el7);
+        dom.appendChild(el5, el6);
+        var el6 = dom.createTextNode("\n             ");
+        dom.appendChild(el5, el6);
+        var el6 = dom.createElement("div");
+        dom.setAttribute(el6,"class","row");
+        var el7 = dom.createTextNode("\n              ");
+        dom.appendChild(el6, el7);
+        var el7 = dom.createElement("div");
+        dom.setAttribute(el7,"class","centered columns");
+        var el8 = dom.createTextNode("\n                ");
+        dom.appendChild(el7, el8);
+        var el8 = dom.createElement("input");
+        dom.setAttribute(el8,"type","submit");
+        dom.setAttribute(el8,"value","Reset");
+        dom.appendChild(el7, el8);
+        var el8 = dom.createTextNode("\n              ");
+        dom.appendChild(el7, el8);
+        dom.appendChild(el6, el7);
+        var el7 = dom.createTextNode("\n            ");
+        dom.appendChild(el6, el7);
+        dom.appendChild(el5, el6);
+        var el6 = dom.createTextNode("\n          ");
+        dom.appendChild(el5, el6);
+        dom.appendChild(el4, el5);
+        var el5 = dom.createTextNode("\n          ");
+        dom.appendChild(el4, el5);
+        dom.appendChild(el3, el4);
+        var el4 = dom.createTextNode("\n        ");
+        dom.appendChild(el3, el4);
+        dom.appendChild(el2, el3);
+        var el3 = dom.createTextNode("\n    ");
+        dom.appendChild(el2, el3);
+        dom.appendChild(el1, el2);
+        var el2 = dom.createTextNode("\n");
+        dom.appendChild(el1, el2);
+        dom.appendChild(el0, el1);
+        var el1 = dom.createTextNode("\n\n");
+        dom.appendChild(el0, el1);
+        var el1 = dom.createComment("");
+        dom.appendChild(el0, el1);
+        var el1 = dom.createTextNode("\n");
+        dom.appendChild(el0, el1);
+        return el0;
+      },
+      buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
+        var element0 = dom.childAt(fragment, [0, 1, 1, 1, 1]);
+        var element1 = dom.childAt(element0, [1]);
+        var element2 = dom.childAt(element0, [3]);
+        var element3 = dom.childAt(element0, [5, 1, 1]);
+        var morphs = new Array(7);
+        morphs[0] = dom.createElementMorph(element0);
+        morphs[1] = dom.createMorphAt(dom.childAt(element1, [1]),1,1);
+        morphs[2] = dom.createMorphAt(dom.childAt(element1, [3]),1,1);
+        morphs[3] = dom.createMorphAt(dom.childAt(element2, [1]),1,1);
+        morphs[4] = dom.createMorphAt(dom.childAt(element2, [3]),1,1);
+        morphs[5] = dom.createAttrMorph(element3, 'class');
+        morphs[6] = dom.createMorphAt(fragment,2,2,contextualElement);
+        return morphs;
+      },
+      statements: [
+        ["element","action",["resetPw"],["on","submit"],["loc",[null,[5,16],[5,48]]]],
+        ["inline","input",[],["name","password","placeholder","password","type","password","value",["subexpr","@mut",[["get","password",["loc",[null,[8,83],[8,91]]]]],[],[]]],["loc",[null,[8,14],[8,93]]]],
+        ["block","unless",[["get","pwIsStrong",["loc",[null,[11,28],[11,38]]]]],[],0,null,["loc",[null,[11,18],[13,29]]]],
+        ["inline","input",[],["placeholder","veriffy password","type","password","value",["subexpr","@mut",[["get","verifypw",["loc",[null,[18,76],[18,84]]]]],[],[]]],["loc",[null,[18,14],[18,86]]]],
+        ["block","unless",[["get","pwIsEqual",["loc",[null,[21,28],[21,37]]]]],[],1,null,["loc",[null,[21,18],[23,29]]]],
+        ["attribute","class",["concat",["expand"," ","button"," ",["subexpr","if",[["get","isReady",[]],"","disabled"],[],[]]]]],
+        ["content","outlet",["loc",[null,[37,0],[37,10]]]]
+      ],
+      locals: [],
+      templates: [child0, child1]
+    };
+  }()));
+
+});
 define('ember-mongo/templates/portals', ['exports'], function (exports) {
 
   'use strict';
@@ -5750,6 +6237,213 @@ define('ember-mongo/templates/profile', ['exports'], function (exports) {
   }()));
 
 });
+define('ember-mongo/templates/request-reset-password', ['exports'], function (exports) {
+
+  'use strict';
+
+  exports['default'] = Ember.HTMLBars.template((function() {
+    return {
+      meta: {
+        "revision": "Ember@1.13.7",
+        "loc": {
+          "source": null,
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 22,
+            "column": 0
+          }
+        },
+        "moduleName": "ember-mongo/templates/request-reset-password.hbs"
+      },
+      arity: 0,
+      cachedFragment: null,
+      hasRendered: false,
+      buildFragment: function buildFragment(dom) {
+        var el0 = dom.createDocumentFragment();
+        var el1 = dom.createElement("div");
+        dom.setAttribute(el1,"id","reset-pw");
+        dom.setAttribute(el1,"class","small-8 medium-4 large-3 small-centered medium-centered large-centered columns");
+        var el2 = dom.createTextNode("\n  ");
+        dom.appendChild(el1, el2);
+        var el2 = dom.createElement("div");
+        dom.setAttribute(el2,"class","login-box");
+        var el3 = dom.createTextNode("\n    ");
+        dom.appendChild(el2, el3);
+        var el3 = dom.createElement("div");
+        dom.setAttribute(el3,"class","row");
+        var el4 = dom.createTextNode("\n      ");
+        dom.appendChild(el3, el4);
+        var el4 = dom.createElement("div");
+        dom.setAttribute(el4,"class","columns");
+        var el5 = dom.createTextNode("\n        ");
+        dom.appendChild(el4, el5);
+        var el5 = dom.createElement("form");
+        var el6 = dom.createTextNode("\n           ");
+        dom.appendChild(el5, el6);
+        var el6 = dom.createElement("div");
+        dom.setAttribute(el6,"class","row");
+        var el7 = dom.createTextNode("\n             ");
+        dom.appendChild(el6, el7);
+        var el7 = dom.createElement("div");
+        dom.setAttribute(el7,"class","columns");
+        var el8 = dom.createTextNode("\n    	  		   ");
+        dom.appendChild(el7, el8);
+        var el8 = dom.createComment("");
+        dom.appendChild(el7, el8);
+        var el8 = dom.createTextNode("\n             ");
+        dom.appendChild(el7, el8);
+        dom.appendChild(el6, el7);
+        var el7 = dom.createTextNode("\n           ");
+        dom.appendChild(el6, el7);
+        dom.appendChild(el5, el6);
+        var el6 = dom.createTextNode("\n          ");
+        dom.appendChild(el5, el6);
+        var el6 = dom.createElement("div");
+        dom.setAttribute(el6,"class","row");
+        var el7 = dom.createTextNode("\n            ");
+        dom.appendChild(el6, el7);
+        var el7 = dom.createElement("div");
+        dom.setAttribute(el7,"class","centered columns");
+        var el8 = dom.createTextNode("\n              ");
+        dom.appendChild(el7, el8);
+        var el8 = dom.createElement("input");
+        dom.setAttribute(el8,"type","submit");
+        dom.setAttribute(el8,"class","expand button");
+        dom.setAttribute(el8,"value","Reset Password");
+        dom.appendChild(el7, el8);
+        var el8 = dom.createTextNode("\n            ");
+        dom.appendChild(el7, el8);
+        dom.appendChild(el6, el7);
+        var el7 = dom.createTextNode("\n          ");
+        dom.appendChild(el6, el7);
+        dom.appendChild(el5, el6);
+        var el6 = dom.createTextNode("\n        ");
+        dom.appendChild(el5, el6);
+        dom.appendChild(el4, el5);
+        var el5 = dom.createTextNode("\n      ");
+        dom.appendChild(el4, el5);
+        dom.appendChild(el3, el4);
+        var el4 = dom.createTextNode("\n    ");
+        dom.appendChild(el3, el4);
+        dom.appendChild(el2, el3);
+        var el3 = dom.createTextNode("\n  ");
+        dom.appendChild(el2, el3);
+        dom.appendChild(el1, el2);
+        var el2 = dom.createTextNode("\n");
+        dom.appendChild(el1, el2);
+        dom.appendChild(el0, el1);
+        var el1 = dom.createTextNode("\n");
+        dom.appendChild(el0, el1);
+        var el1 = dom.createComment("");
+        dom.appendChild(el0, el1);
+        var el1 = dom.createTextNode("\n");
+        dom.appendChild(el0, el1);
+        return el0;
+      },
+      buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
+        var element0 = dom.childAt(fragment, [0, 1, 1, 1, 1]);
+        var morphs = new Array(3);
+        morphs[0] = dom.createElementMorph(element0);
+        morphs[1] = dom.createMorphAt(dom.childAt(element0, [1, 1]),1,1);
+        morphs[2] = dom.createMorphAt(fragment,2,2,contextualElement);
+        return morphs;
+      },
+      statements: [
+        ["element","action",["resetPw"],["on","submit"],["loc",[null,[5,14],[5,46]]]],
+        ["inline","input",[],["name","email","placeholder","email","value",["subexpr","@mut",[["get","email",["loc",[null,[8,61],[8,66]]]]],[],[]]],["loc",[null,[8,12],[8,68]]]],
+        ["content","outlet",["loc",[null,[21,0],[21,10]]]]
+      ],
+      locals: [],
+      templates: []
+    };
+  }()));
+
+});
+define('ember-mongo/templates/reset-success', ['exports'], function (exports) {
+
+  'use strict';
+
+  exports['default'] = Ember.HTMLBars.template((function() {
+    return {
+      meta: {
+        "revision": "Ember@1.13.7",
+        "loc": {
+          "source": null,
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 16,
+            "column": 0
+          }
+        },
+        "moduleName": "ember-mongo/templates/reset-success.hbs"
+      },
+      arity: 0,
+      cachedFragment: null,
+      hasRendered: false,
+      buildFragment: function buildFragment(dom) {
+        var el0 = dom.createDocumentFragment();
+        var el1 = dom.createTextNode("\n");
+        dom.appendChild(el0, el1);
+        var el1 = dom.createElement("div");
+        dom.setAttribute(el1,"class","small-8 medium-4 large-4 small-centered medium-centered large-centered columns");
+        var el2 = dom.createTextNode("\n	");
+        dom.appendChild(el1, el2);
+        var el2 = dom.createElement("div");
+        dom.setAttribute(el2,"class","login-box");
+        var el3 = dom.createTextNode("\n		");
+        dom.appendChild(el2, el3);
+        var el3 = dom.createElement("div");
+        dom.setAttribute(el3,"class","row");
+        var el4 = dom.createTextNode("\n			");
+        dom.appendChild(el3, el4);
+        var el4 = dom.createElement("div");
+        dom.setAttribute(el4,"class","large-12 large-centered column");
+        var el5 = dom.createTextNode("\n				Your password is ready to be reset.  A reset link has been sent to your SD Enlightened Slack account. Please check your \"Slackbot\" channel and click on the link there to complete your password reset.\n				");
+        dom.appendChild(el4, el5);
+        var el5 = dom.createElement("p");
+        var el6 = dom.createTextNode("\n				Thank you!\n				");
+        dom.appendChild(el5, el6);
+        dom.appendChild(el4, el5);
+        var el5 = dom.createTextNode("\n			");
+        dom.appendChild(el4, el5);
+        dom.appendChild(el3, el4);
+        var el4 = dom.createTextNode("\n		");
+        dom.appendChild(el3, el4);
+        dom.appendChild(el2, el3);
+        var el3 = dom.createTextNode("\n	");
+        dom.appendChild(el2, el3);
+        dom.appendChild(el1, el2);
+        var el2 = dom.createTextNode("\n");
+        dom.appendChild(el1, el2);
+        dom.appendChild(el0, el1);
+        var el1 = dom.createTextNode("\n\n");
+        dom.appendChild(el0, el1);
+        var el1 = dom.createComment("");
+        dom.appendChild(el0, el1);
+        var el1 = dom.createTextNode("\n");
+        dom.appendChild(el0, el1);
+        return el0;
+      },
+      buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
+        var morphs = new Array(1);
+        morphs[0] = dom.createMorphAt(fragment,3,3,contextualElement);
+        return morphs;
+      },
+      statements: [
+        ["content","outlet",["loc",[null,[15,0],[15,10]]]]
+      ],
+      locals: [],
+      templates: []
+    };
+  }()));
+
+});
 define('ember-mongo/templates/signup', ['exports'], function (exports) {
 
   'use strict';
@@ -6014,86 +6708,6 @@ define('ember-mongo/templates/signup', ['exports'], function (exports) {
   }()));
 
 });
-define('ember-mongo/templates/success', ['exports'], function (exports) {
-
-  'use strict';
-
-  exports['default'] = Ember.HTMLBars.template((function() {
-    return {
-      meta: {
-        "revision": "Ember@1.13.7",
-        "loc": {
-          "source": null,
-          "start": {
-            "line": 1,
-            "column": 0
-          },
-          "end": {
-            "line": 15,
-            "column": 0
-          }
-        },
-        "moduleName": "ember-mongo/templates/success.hbs"
-      },
-      arity: 0,
-      cachedFragment: null,
-      hasRendered: false,
-      buildFragment: function buildFragment(dom) {
-        var el0 = dom.createDocumentFragment();
-        var el1 = dom.createElement("div");
-        dom.setAttribute(el1,"class","small-8 medium-4 large-4 small-centered medium-centered large-centered columns");
-        var el2 = dom.createTextNode("\n	");
-        dom.appendChild(el1, el2);
-        var el2 = dom.createElement("div");
-        dom.setAttribute(el2,"class","login-box");
-        var el3 = dom.createTextNode("\n		");
-        dom.appendChild(el2, el3);
-        var el3 = dom.createElement("div");
-        dom.setAttribute(el3,"class","row");
-        var el4 = dom.createTextNode("\n			");
-        dom.appendChild(el3, el4);
-        var el4 = dom.createElement("div");
-        dom.setAttribute(el4,"class","large-12 large-centered column");
-        var el5 = dom.createTextNode("\n				Your account as been created.  An activation link has been sent to your SD Enlightened Slack account. Please check your \"Slackbot\" channel and click on the link there to complete activation and log in.\n				");
-        dom.appendChild(el4, el5);
-        var el5 = dom.createElement("p");
-        var el6 = dom.createTextNode("\n				Thank you!\n				");
-        dom.appendChild(el5, el6);
-        dom.appendChild(el4, el5);
-        var el5 = dom.createTextNode("\n			");
-        dom.appendChild(el4, el5);
-        dom.appendChild(el3, el4);
-        var el4 = dom.createTextNode("\n		");
-        dom.appendChild(el3, el4);
-        dom.appendChild(el2, el3);
-        var el3 = dom.createTextNode("\n	");
-        dom.appendChild(el2, el3);
-        dom.appendChild(el1, el2);
-        var el2 = dom.createTextNode("\n");
-        dom.appendChild(el1, el2);
-        dom.appendChild(el0, el1);
-        var el1 = dom.createTextNode("\n\n");
-        dom.appendChild(el0, el1);
-        var el1 = dom.createComment("");
-        dom.appendChild(el0, el1);
-        var el1 = dom.createTextNode("\n");
-        dom.appendChild(el0, el1);
-        return el0;
-      },
-      buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
-        var morphs = new Array(1);
-        morphs[0] = dom.createMorphAt(fragment,2,2,contextualElement);
-        return morphs;
-      },
-      statements: [
-        ["content","outlet",["loc",[null,[14,0],[14,10]]]]
-      ],
-      locals: [],
-      templates: []
-    };
-  }()));
-
-});
 define('ember-mongo/tests/adapters/application.jshint', function () {
 
   'use strict';
@@ -6154,13 +6768,33 @@ define('ember-mongo/tests/controllers/login.jshint', function () {
   });
 
 });
+define('ember-mongo/tests/controllers/password-reset.jshint', function () {
+
+  'use strict';
+
+  QUnit.module('JSHint - controllers');
+  QUnit.test('controllers/password-reset.js should pass jshint', function(assert) { 
+    assert.ok(false, 'controllers/password-reset.js should pass jshint.\ncontrollers/password-reset.js: line 14, col 63, Missing semicolon.\ncontrollers/password-reset.js: line 39, col 15, Missing semicolon.\n\n2 errors'); 
+  });
+
+});
 define('ember-mongo/tests/controllers/profile.jshint', function () {
 
   'use strict';
 
   QUnit.module('JSHint - controllers');
   QUnit.test('controllers/profile.js should pass jshint', function(assert) { 
-    assert.ok(false, 'controllers/profile.js should pass jshint.\ncontrollers/profile.js: line 17, col 89, Missing semicolon.\ncontrollers/profile.js: line 26, col 53, Missing semicolon.\ncontrollers/profile.js: line 30, col 14, Missing semicolon.\ncontrollers/profile.js: line 39, col 57, Missing semicolon.\ncontrollers/profile.js: line 41, col 11, Missing semicolon.\ncontrollers/profile.js: line 46, col 66, Unnecessary semicolon.\ncontrollers/profile.js: line 61, col 38, Missing semicolon.\ncontrollers/profile.js: line 84, col 13, Forgotten \'debugger\' statement?\ncontrollers/profile.js: line 90, col 47, Missing semicolon.\ncontrollers/profile.js: line 99, col 64, Missing semicolon.\ncontrollers/profile.js: line 102, col 64, Missing semicolon.\ncontrollers/profile.js: line 107, col 56, Missing semicolon.\ncontrollers/profile.js: line 114, col 3, Missing semicolon.\ncontrollers/profile.js: line 25, col 43, \'err\' is defined but never used.\ncontrollers/profile.js: line 68, col 26, \'error\' is defined but never used.\n\n15 errors'); 
+    assert.ok(false, 'controllers/profile.js should pass jshint.\ncontrollers/profile.js: line 17, col 89, Missing semicolon.\ncontrollers/profile.js: line 26, col 53, Missing semicolon.\ncontrollers/profile.js: line 30, col 14, Missing semicolon.\ncontrollers/profile.js: line 39, col 57, Missing semicolon.\ncontrollers/profile.js: line 41, col 11, Missing semicolon.\ncontrollers/profile.js: line 46, col 66, Unnecessary semicolon.\ncontrollers/profile.js: line 61, col 38, Missing semicolon.\ncontrollers/profile.js: line 84, col 13, Forgotten \'debugger\' statement?\ncontrollers/profile.js: line 90, col 47, Missing semicolon.\ncontrollers/profile.js: line 99, col 64, Missing semicolon.\ncontrollers/profile.js: line 102, col 64, Missing semicolon.\ncontrollers/profile.js: line 107, col 56, Missing semicolon.\ncontrollers/profile.js: line 120, col 3, Missing semicolon.\ncontrollers/profile.js: line 25, col 43, \'err\' is defined but never used.\ncontrollers/profile.js: line 68, col 26, \'error\' is defined but never used.\n\n15 errors'); 
+  });
+
+});
+define('ember-mongo/tests/controllers/request-reset-password.jshint', function () {
+
+  'use strict';
+
+  QUnit.module('JSHint - controllers');
+  QUnit.test('controllers/request-reset-password.js should pass jshint', function(assert) { 
+    assert.ok(false, 'controllers/request-reset-password.js should pass jshint.\ncontrollers/request-reset-password.js: line 15, col 61, Missing semicolon.\ncontrollers/request-reset-password.js: line 18, col 51, Missing semicolon.\ncontrollers/request-reset-password.js: line 17, col 27, \'err\' is defined but never used.\n\n3 errors'); 
   });
 
 });
@@ -6298,6 +6932,26 @@ define('ember-mongo/tests/models/note.jshint', function () {
   });
 
 });
+define('ember-mongo/tests/models/password-reset-request.jshint', function () {
+
+  'use strict';
+
+  QUnit.module('JSHint - models');
+  QUnit.test('models/password-reset-request.js should pass jshint', function(assert) { 
+    assert.ok(false, 'models/password-reset-request.js should pass jshint.\nmodels/password-reset-request.js: line 2, col 8, \'Ember\' is defined but never used.\n\n1 error'); 
+  });
+
+});
+define('ember-mongo/tests/models/password-reset.jshint', function () {
+
+  'use strict';
+
+  QUnit.module('JSHint - models');
+  QUnit.test('models/password-reset.js should pass jshint', function(assert) { 
+    assert.ok(false, 'models/password-reset.js should pass jshint.\nmodels/password-reset.js: line 2, col 8, \'Ember\' is defined but never used.\n\n1 error'); 
+  });
+
+});
 define('ember-mongo/tests/models/user.jshint', function () {
 
   'use strict';
@@ -6325,6 +6979,16 @@ define('ember-mongo/tests/routes/about.jshint', function () {
   QUnit.module('JSHint - routes');
   QUnit.test('routes/about.js should pass jshint', function(assert) { 
     assert.ok(true, 'routes/about.js should pass jshint.'); 
+  });
+
+});
+define('ember-mongo/tests/routes/activate-success.jshint', function () {
+
+  'use strict';
+
+  QUnit.module('JSHint - routes');
+  QUnit.test('routes/activate-success.js should pass jshint', function(assert) { 
+    assert.ok(true, 'routes/activate-success.js should pass jshint.'); 
   });
 
 });
@@ -6368,6 +7032,16 @@ define('ember-mongo/tests/routes/login.jshint', function () {
   });
 
 });
+define('ember-mongo/tests/routes/password-reset.jshint', function () {
+
+  'use strict';
+
+  QUnit.module('JSHint - routes');
+  QUnit.test('routes/password-reset.js should pass jshint', function(assert) { 
+    assert.ok(true, 'routes/password-reset.js should pass jshint.'); 
+  });
+
+});
 define('ember-mongo/tests/routes/portals.jshint', function () {
 
   'use strict';
@@ -6388,6 +7062,26 @@ define('ember-mongo/tests/routes/profile.jshint', function () {
   });
 
 });
+define('ember-mongo/tests/routes/request-reset-password.jshint', function () {
+
+  'use strict';
+
+  QUnit.module('JSHint - routes');
+  QUnit.test('routes/request-reset-password.js should pass jshint', function(assert) { 
+    assert.ok(true, 'routes/request-reset-password.js should pass jshint.'); 
+  });
+
+});
+define('ember-mongo/tests/routes/reset-success.jshint', function () {
+
+  'use strict';
+
+  QUnit.module('JSHint - routes');
+  QUnit.test('routes/reset-success.js should pass jshint', function(assert) { 
+    assert.ok(true, 'routes/reset-success.js should pass jshint.'); 
+  });
+
+});
 define('ember-mongo/tests/routes/signup.jshint', function () {
 
   'use strict';
@@ -6395,16 +7089,6 @@ define('ember-mongo/tests/routes/signup.jshint', function () {
   QUnit.module('JSHint - routes');
   QUnit.test('routes/signup.js should pass jshint', function(assert) { 
     assert.ok(true, 'routes/signup.js should pass jshint.'); 
-  });
-
-});
-define('ember-mongo/tests/routes/success.jshint', function () {
-
-  'use strict';
-
-  QUnit.module('JSHint - routes');
-  QUnit.test('routes/success.js should pass jshint', function(assert) { 
-    assert.ok(true, 'routes/success.js should pass jshint.'); 
   });
 
 });
@@ -6699,6 +7383,31 @@ define('ember-mongo/tests/unit/routes/login-test.jshint', function () {
   });
 
 });
+define('ember-mongo/tests/unit/routes/password-reset-test', ['ember-qunit'], function (ember_qunit) {
+
+  'use strict';
+
+  ember_qunit.moduleFor('route:password-reset', 'Unit | Route | password reset', {
+    // Specify the other units that are required for this test.
+    // needs: ['controller:foo']
+  });
+
+  ember_qunit.test('it exists', function (assert) {
+    var route = this.subject();
+    assert.ok(route);
+  });
+
+});
+define('ember-mongo/tests/unit/routes/password-reset-test.jshint', function () {
+
+  'use strict';
+
+  QUnit.module('JSHint - unit/routes');
+  QUnit.test('unit/routes/password-reset-test.js should pass jshint', function(assert) { 
+    assert.ok(true, 'unit/routes/password-reset-test.js should pass jshint.'); 
+  });
+
+});
 define('ember-mongo/tests/unit/routes/portals-test', ['ember-qunit'], function (ember_qunit) {
 
   'use strict';
@@ -6746,6 +7455,56 @@ define('ember-mongo/tests/unit/routes/profile-test.jshint', function () {
   QUnit.module('JSHint - unit/routes');
   QUnit.test('unit/routes/profile-test.js should pass jshint', function(assert) { 
     assert.ok(true, 'unit/routes/profile-test.js should pass jshint.'); 
+  });
+
+});
+define('ember-mongo/tests/unit/routes/reset-password-test', ['ember-qunit'], function (ember_qunit) {
+
+  'use strict';
+
+  ember_qunit.moduleFor('route:reset-password', 'Unit | Route | reset password', {
+    // Specify the other units that are required for this test.
+    // needs: ['controller:foo']
+  });
+
+  ember_qunit.test('it exists', function (assert) {
+    var route = this.subject();
+    assert.ok(route);
+  });
+
+});
+define('ember-mongo/tests/unit/routes/reset-password-test.jshint', function () {
+
+  'use strict';
+
+  QUnit.module('JSHint - unit/routes');
+  QUnit.test('unit/routes/reset-password-test.js should pass jshint', function(assert) { 
+    assert.ok(true, 'unit/routes/reset-password-test.js should pass jshint.'); 
+  });
+
+});
+define('ember-mongo/tests/unit/routes/reset-success-test', ['ember-qunit'], function (ember_qunit) {
+
+  'use strict';
+
+  ember_qunit.moduleFor('route:reset-success', 'Unit | Route | reset success', {
+    // Specify the other units that are required for this test.
+    // needs: ['controller:foo']
+  });
+
+  ember_qunit.test('it exists', function (assert) {
+    var route = this.subject();
+    assert.ok(route);
+  });
+
+});
+define('ember-mongo/tests/unit/routes/reset-success-test.jshint', function () {
+
+  'use strict';
+
+  QUnit.module('JSHint - unit/routes');
+  QUnit.test('unit/routes/reset-success-test.js should pass jshint', function(assert) { 
+    assert.ok(true, 'unit/routes/reset-success-test.js should pass jshint.'); 
   });
 
 });
@@ -6934,7 +7693,7 @@ catch(err) {
 if (runningTests) {
   require("ember-mongo/tests/test-helper");
 } else {
-  require("ember-mongo/app")["default"].create({"name":"ember-mongo","version":"0.0.0+55951a4c"});
+  require("ember-mongo/app")["default"].create({"name":"ember-mongo","version":"0.0.0+0277e84c"});
 }
 
 /* jshint ignore:end */

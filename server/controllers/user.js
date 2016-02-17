@@ -77,9 +77,9 @@ var controller = {
 		}
 	},
 
-	readAll: function(req, res) {
+	readMany: function(req, res, next) {
 		UserModel
-			.find({})
+			.find()
 			.select("-password")
 			.exec(function(err, users) {
 		    	res.status(200).send({user:users});
@@ -116,7 +116,80 @@ var controller = {
 			      }
 			    });
 		  	});
+	},
+	setResetPwRequest: function (req, res, next) {
+		var email = req.body.passwordResetRequest.email.toLowerCase()
+		console.log('Email: ' +  email);
+		var slackUser = Bot.slack.getUserByEmail(email)
+		UserModel
+			.findOne({email: email})
+			.exec(function (err, user) {
+				if (!err) {
+					if (user) {
+						user.pwResetKey = mongoose.Types.ObjectId();
+						user.save (function (err) {
+							if (!err) {
+								var resetMessage = "Your password is ready to be reset. Please click here to reset your password:" + 
+											"https://intelbot.herokuapp.com/#/password-reset?pwResetKey=" + 
+											 user.pwResetKey;
+		             			Bot.sendDM(slackUser, resetMessage, function (err) {
+			             			if (!err) {
+			             				// Send User Creation notification to ME!! :)
+				             			var devUser = Bot.slack.getUserByID("U03MC5YDB");
+				             			if (devUser) {
+				             				Bot.sendDM(devUser, "Password Reset request: " + user.slackName);
+				             			}
+			             				return res.status(200).send({});
+			             			}
+			             			else {
+			             				return res.status(403).send(err);
+			             			}
+								});
+							}
+							else {
+								return res.status(403).send(err);
+							}
+						});
+					}
+					else {
+						return res.status(404).send(err);
+					}
+				}
+				else {
+					return res.status(403).send(err);
+				}
+			});
+	},
+
+	resetPw: function (req, res, next) {
+		var pwResetKey = req.body.passwordReset.pwResetKey;
+		console.log("PW reset key = " + pwResetKey)
+		UserModel.findOne({pwResetKey: pwResetKey})
+			.exec(function (err, user) {
+				if (!err) {
+					if (user) {
+						console.log("User = " + user.email);
+						user.password = req.body.passwordReset.newPw;
+						user.pwResetKey = null;
+						user.save(function (err, user) {
+							if (!err) {
+								res.status(200).send({});
+							}
+						});
+					}
+					else {
+						//not found
+						res.status(404).send({});
+
+					}
+				}
+				else {
+					res.status(500).send({});
+				}
+			})
 	}
+
+
 };
 
 module.exports = controller;

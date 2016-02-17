@@ -35,7 +35,7 @@ export default Ember.Controller.extend({
 					avatar: this.get('avatar')
 				});
 				user.save().then (function () {
-					_this.transitionToRoute('success');
+					_this.transitionToRoute('activate-success');
 				},
 				function () {
 					flashQueue.alert('Unable to create user');

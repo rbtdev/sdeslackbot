@@ -109,6 +109,12 @@ export default Ember.Controller.extend({
 					}
 				);
 			}
+		},
+
+		saveProfile: function () {
+			
 		}
+
+
 	}
 })

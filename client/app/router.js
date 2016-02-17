@@ -12,7 +12,10 @@ Router.map(function() {
   this.route('signup');
   this.route('profile');
   this.route('portals');
-  this.route('success');
+  this.route('activate-success');
+  this.route('request-reset-password');
+  this.route('reset-success');
+  this.route('password-reset');
 });
 
 export default Router;
