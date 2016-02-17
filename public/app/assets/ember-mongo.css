@@ -6508,3 +6508,10 @@ th.hide-for-touch {
 
 #signup-form .verifypw {
   color: red; }
+
+#login .sign-up {
+  font-size: small; }
+
+#login .reset-pw {
+  margin-top: 20px;
+  font-size: small; }

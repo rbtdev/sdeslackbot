@@ -13,9 +13,13 @@ var router = express.Router();
 // Authentication 
 router.post('/api-token-auth', AuthController.authenticate);
 
+// Password Reset
+router.post('/passwordResetRequests', UserController.setResetPwRequest);
+router.post('/passwordResets', UserController.resetPw);
+
 // User 
 router.post('/users', UserController.create);
-router.get('/users', AuthController.isAuthorized, UserController.readAll); 
+router.get('/users', AuthController.isAuthorized, UserController.readMany); 
 router.get('/users/:id', AuthController.isAuthorized, UserController.readOne);
 router.put('/users/:id', AuthController.isAuthorized, UserController.update);
 
