@@ -47,11 +47,20 @@
     right: 0;
     top: -45px;
   }
-  
+
   .logo {
     width: 70px;
     margin-top: -2.3rem;
     border-radius: 70px;
+  }
+  .slack-name {
+    width: 100px;
+    font-size: 30px;
+    color: #55ff55;
+    margin-top: -1.6rem;
+    text-transform: uppercase;
+    font-style: italic;
+    font-weight: bold;
   }
 }
 
@@ -64,10 +73,7 @@
   text-align: center;
 }
 
-.agent-name {
-  font-size: 30px;
-  color: white;
-}
+
 
 .alert-box {
   font-size: larger;

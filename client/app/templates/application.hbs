@@ -3,25 +3,30 @@
 
 <nav class="top-bar" data-topbar role="navigation">
   <ul class="title-area">
- <li>
-    <div class="logo">
-      {{#link-to 'profile' }}
-        {{#if session.currentUser.avatar}}
-          <img {{bind-attr src=session.currentUser.avatar}}/>
-        {{else}}
-          <img src="http://zurb.com/stickers/images/intro-foundation.png" />
-       {{/if}}
-      {{/link-to}}
-    </div>
-  </li>
+    <li>
+      <div class="logo">
+        {{#link-to 'profile' }}
+          {{#if session.currentUser.avatar}}
+            <img {{bind-attr src=session.currentUser.avatar}}/>
+          {{else}}
+            <img src="http://zurb.com/stickers/images/intro-foundation.png" />
+         {{/if}}
+        {{/link-to}}
+      </div>
+    </li>
 
 
-     <!-- Remove the class "menu-icon" to get rid of menu icon. Take out "Menu" to just have icon alone -->
-    <li class="toggle-topbar menu-icon"><a href="#"><span>Menu</span></a></li>
+       <!-- Remove the class "menu-icon" to get rid of menu icon. Take out "Menu" to just have icon alone -->
+      <li class="toggle-topbar menu-icon"><a href="#"><span>Menu</span></a></li>
   </ul>
 
 
   <section class="top-bar-section">
+
+    <ul class="left">
+      <li class = "slack-name">{{session.currentUser.slackName}}</li>
+    </ul>
+
     <!-- Right Nav Section -->
     <ul class="right">
       <li class="">{{#link-to 'index'}}Portals{{/link-to}}</li>
