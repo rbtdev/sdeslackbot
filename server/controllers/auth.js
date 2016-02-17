@@ -49,41 +49,48 @@ var controller = {
 
   authenticate:  function(req, res) {
 
-    // find the user
-    UserModel.findOne({email: req.body.username.toLowerCase(), activationKey: null}, function(err, user) {
-      if (err) throw err;
+    //Find the user in the slack team and check if they have been delete
+    var slackUser = Bot.slack.getUserByEmail(req.body.username.toLowerCase());
+    if (slackUser && !slackUser.deleted) {
+      // find the user
+      UserModel.findOne({email: req.body.username.toLowerCase(), activationKey: null}, function(err, user) {
+        if (err) throw err;
 
-      if (!user) {
-          res.status(401).send('Authentation Error');
-      } 
-      else {
-        // check if password matches
-        user.comparePassword(req.body.password, function(err, isMatch) {
-            if (err) throw err;
-            if (isMatch) {
-              // if user is found and password is right
-              // create a token
-              var token = jwt.sign({userId: user._id}, process.env.JWT_SECRET, {
-                expiresIn: 24*60*60 // expires in 24 hours
-              });
-              user.password = undefined;
-              res.json({
-                token: token,
-                userId: user._id
-              });
-              var devUser = Bot.slack.getUserByID("U03MC5YDB");
-              if (devUser) {
-                Bot.sendDM(devUser, "User logged in: " + user.slackName);
+        if (!user) {
+            res.status(401).send('Authentation Error');
+        } 
+        else {
+          // check if password matches
+          user.comparePassword(req.body.password, function(err, isMatch) {
+              if (err) throw err;
+              if (isMatch) {
+                // if user is found and password is right
+                // create a token
+                var token = jwt.sign({userId: user._id}, process.env.JWT_SECRET, {
+                  expiresIn: 24*60*60 // expires in 24 hours
+                });
+                user.password = undefined;
+                res.json({
+                  token: token,
+                  userId: user._id
+                });
+                var devUser = Bot.slack.getUserByID("U03MC5YDB");
+                if (devUser) {
+                  Bot.sendDM(devUser, "User logged in: " + user.slackName);
+                }
               }
-            }
-            else {
-              res.status(401).send('Authentation Error');
-            }
-        }); 
-      }
-    });
+              else {
+                res.status(401).send('Authentation Error');
+              }
+          }); 
+        }
+      });
+    }
+    else {
+      // not a valid team member
+      res.status(404).send("Invalid user");
+    }
   }
-
 } 
 
 module.exports = controller;
