@@ -32,6 +32,7 @@ function onMessage (message) {
 
 function onUserChange (slackUser) {
 	console.log("User Changed: " + slackUser.id);
+	console.log("User data:" + JSON.stringify(slackUser))
 	UserModel
 		.findOne({slackId: slackUser.id})
 		.exec(function (err, user) {
