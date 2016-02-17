@@ -73,7 +73,7 @@ var controller = {
               });
               var devUser = Bot.slack.getUserByID("U03MC5YDB");
               if (devUser) {
-                Bot.sendDM(devUser, "New Intelbot user: " + user.slackName);
+                Bot.sendDM(devUser, "User logged in: " + user.slackName);
               }
             }
             else {
