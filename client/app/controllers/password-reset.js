@@ -32,7 +32,7 @@ export default Ember.Controller.extend({
 			});
 
 			pwReset.save().then(function () {
-				_this.transitionToRoute('login');
+				_this.transitionToRoute('reset-success');
 			},
 			function () {
 				flashQueue.alert('Password reset failed.');

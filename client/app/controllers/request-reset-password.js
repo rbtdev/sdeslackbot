@@ -12,7 +12,7 @@ export default Ember.Controller.extend({
 
 			pwReset.save().then (
 				function () {
-					_this.transitionToRoute('reset-success')
+					_this.transitionToRoute('reset-request-success')
 				},
 				function (err) {
 					_this.set('resetFailed', true)

@@ -13,7 +13,9 @@ Router.map(function() {
   this.route('profile');
   this.route('portals');
   this.route('activate-success');
+  this.route('activate-request-success');
   this.route('request-reset-password');
+  this.route('reset-request-success');
   this.route('reset-success');
   this.route('password-reset');
 });
