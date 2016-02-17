@@ -12,6 +12,7 @@ var userSchema = new mongoose.Schema({
 	isAdmin: 'boolean',
 	slackName: 'string',
 	slackId: 'string',
+	isDisabled: 'boolean',
 	activationKey: mongoose.Schema.Types.ObjectId,
 	pwResetKey: mongoose.Schema.Types.ObjectId
 });

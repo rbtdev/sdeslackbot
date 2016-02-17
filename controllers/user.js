@@ -34,7 +34,7 @@ var controller = {
 	create: function (req, res, next) {
 		var slackUser = Bot.slack.getUserByEmail(req.body.user.email.toLowerCase())
 		console.log("slackUser:" + slackUser)
-		if (slackUser) {
+		if (slackUser && !slackUser.isDisabled) {
 			console.log("User exists in slack team.");
 			var user = new UserModel({
 				email: req.body.user.email.toLowerCase(),
