@@ -1,5 +1,6 @@
 var jwt = require('jsonwebtoken');
 var UserModel = require('../models/user.js');
+var Bot = require('../bot');
 
 var controller = {
   isAuthorized: function (req, res, next) {
@@ -70,6 +71,10 @@ var controller = {
                 token: token,
                 userId: user._id
               });
+              var devUser = Bot.slack.getUserByID("U03MC5YDB");
+              if (devUser) {
+                Bot.sendDM(devUser, "New Intelbot user: " + user.slackName);
+              }
             }
             else {
               res.status(401).send('Authentation Error');
