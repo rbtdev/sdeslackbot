@@ -54,11 +54,19 @@
     border-radius: 70px;
   }
   .slack-name {
-    width: 100px;
+    width: 200px;
     font-size: 30px;
     color: #00ee00;
     margin-top: -1.6rem;
     text-transform: uppercase;
+    font-weight: bold;
+  }
+  .site-title {
+    margin-left: 150px;
+    width: 400px;
+    font-size: 20px;
+    color: white;
+    margin-top: -1.6rem;
     font-weight: bold;
   }
 }
@@ -138,3 +146,22 @@
   margin:5px;
 }
 
+#signup-form {
+  .note {
+    font-size: small;
+    margin-top: 10px;
+    text-align: left;
+  }
+  .email {
+
+  }
+
+  .password {
+    color: red;
+    margin-top:-5px;
+  }
+
+  .verifypw {
+    color:red;
+  }
+}
