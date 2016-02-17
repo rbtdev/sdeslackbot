@@ -49,15 +49,13 @@ var controller = {
 
   authenticate:  function(req, res) {
 
-    //Find the user in the slack team and check if they have been delete
-    var slackUser = Bot.slack.getUserByEmail(req.body.username.toLowerCase());
-    if (slackUser && !slackUser.deleted) {
+
       // find the user
-      UserModel.findOne({email: req.body.username.toLowerCase(), activationKey: null}, function(err, user) {
+      UserModel.findOne({email: req.body.username.toLowerCase(), activationKey: null, isDisabled: false}, function(err, user) {
         if (err) throw err;
 
         if (!user) {
-            res.status(401).send('Authentation Error');
+            res.status(404).send('User not found');
         } 
         else {
           // check if password matches
@@ -85,11 +83,6 @@ var controller = {
           }); 
         }
       });
-    }
-    else {
-      // not a valid team member
-      res.status(404).send("Invalid user");
-    }
   }
 } 
 

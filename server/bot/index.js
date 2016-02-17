@@ -41,6 +41,7 @@ function onUserChange (slackUser) {
 				user.email = slackUser.profile.email;
 				user.avatar = slackUser.profile.image_192;
 				user.isAdmin = slackUser.is_admin;
+				user.isDisabled= slackUser.deleted;
 			    return user.save(function (err) {
 			      if (!err) {
 			      	console.log("User Changed: " + JSON.stringify(user));
