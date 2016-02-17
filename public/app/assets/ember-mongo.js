@@ -1544,7 +1544,7 @@ define('ember-mongo/templates/application', ['exports'], function (exports) {
             var el1 = dom.createTextNode("            ");
             dom.appendChild(el0, el1);
             var el1 = dom.createElement("img");
-            dom.setAttribute(el1,"src","http://zurb.com/stickers/images/intro-foundation.png");
+            dom.setAttribute(el1,"src","/assets/en-logo.jpg");
             dom.appendChild(el0, el1);
             var el1 = dom.createTextNode("\n");
             dom.appendChild(el0, el1);
