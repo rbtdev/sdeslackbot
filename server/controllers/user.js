@@ -44,6 +44,7 @@ var controller = {
 				slackName: slackUser.name,
 				slackId: slackUser.id,
 				isAdmin: slackUser.is_admin,
+				isDisabled: slackUser.deleted,
 				activationKey: 	mongoose.Types.ObjectId()
 			});
 			user.save(function (err) {
