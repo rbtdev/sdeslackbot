@@ -43,7 +43,7 @@ function requireHTTPS(req, res, next) {
 app.use('/api/v1', requireHTTPS, setCORSHeaders, require('./routes/api'));
 app.use('/activate/:activationKey', requireHTTPS, require('./controllers/user').activate);
 // Serve the static Ember App for front end
-app.use('/', express.static('public/app'));
+app.use('/', requireHTTPS, express.static('public/app'));
 
 
 // catch 404 and forward to error handler
