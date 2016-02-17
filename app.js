@@ -26,16 +26,22 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Set up the API endpoints
-var setCORSHeaders = function (req, res, next) {
+function setCORSHeaders (req, res, next) {
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.header("Access-Control-Allow-Headers", "Authorization, Origin, X-Requested-With, Content-Type, Accept");
     res.header('Access-Control-Allow-Methods', 'POST, GET, PUT, DELETE, OPTIONS');
     next();
 };
+function requireHTTPS(req, res, next) {
+    if (!req.secure && (app.get('env') !== 'development')) {
+        //FYI this should work for local development as well
+        return res.redirect('https://' + req.get('host') + req.url);
+    }
+    next();
+}
 
-
-app.use('/api/v1', setCORSHeaders, require('./routes/api'));
-app.use('/activate/:activationKey',  require('./controllers/user').activate);
+app.use('/api/v1', requireHTTPS, setCORSHeaders, require('./routes/api'));
+app.use('/activate/:activationKey', requireHTTPS, require('./controllers/user').activate);
 // Serve the static Ember App for front end
 app.use('/', express.static('public/app'));
 
