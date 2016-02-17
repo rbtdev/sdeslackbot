@@ -765,7 +765,7 @@ define('ember-mongo/controllers/password-reset', ['exports', 'ember'], function 
 				});
 
 				pwReset.save().then(function () {
-					_this.transitionToRoute('login');
+					_this.transitionToRoute('reset-success');
 				}, function () {
 					flashQueue.alert('Password reset failed.');
 				});
@@ -898,7 +898,7 @@ define('ember-mongo/controllers/request-reset-password', ['exports', 'ember'], f
 				});
 
 				pwReset.save().then(function () {
-					_this.transitionToRoute('reset-success');
+					_this.transitionToRoute('reset-request-success');
 				}, function (err) {
 					_this.set('resetFailed', true);
 				});
@@ -945,7 +945,7 @@ define('ember-mongo/controllers/signup', ['exports', 'ember'], function (exports
 						avatar: this.get('avatar')
 					});
 					user.save().then(function () {
-						_this.transitionToRoute('activate-success');
+						_this.transitionToRoute('activate-request-success');
 					}, function () {
 						flashQueue.alert('Unable to create user');
 					});
@@ -1359,7 +1359,9 @@ define('ember-mongo/router', ['exports', 'ember', 'ember-mongo/config/environmen
     this.route('profile');
     this.route('portals');
     this.route('activate-success');
+    this.route('activate-request-success');
     this.route('request-reset-password');
+    this.route('reset-request-success');
     this.route('reset-success');
     this.route('password-reset');
   });
@@ -1374,7 +1376,7 @@ define('ember-mongo/routes/about', ['exports', 'ember'], function (exports, Embe
 	exports['default'] = Ember['default'].Route.extend({});
 
 });
-define('ember-mongo/routes/activate-success', ['exports', 'ember'], function (exports, Ember) {
+define('ember-mongo/routes/activate-request-success', ['exports', 'ember'], function (exports, Ember) {
 
 	'use strict';
 
@@ -1461,6 +1463,13 @@ define('ember-mongo/routes/profile', ['exports', 'ember', 'simple-auth/mixins/au
 
 });
 define('ember-mongo/routes/request-reset-password', ['exports', 'ember'], function (exports, Ember) {
+
+	'use strict';
+
+	exports['default'] = Ember['default'].Route.extend({});
+
+});
+define('ember-mongo/routes/reset-request-success', ['exports', 'ember'], function (exports, Ember) {
 
 	'use strict';
 
@@ -1585,7 +1594,7 @@ define('ember-mongo/templates/about', ['exports'], function (exports) {
   }()));
 
 });
-define('ember-mongo/templates/activate-success', ['exports'], function (exports) {
+define('ember-mongo/templates/activate-request-success', ['exports'], function (exports) {
 
   'use strict';
 
@@ -1604,7 +1613,7 @@ define('ember-mongo/templates/activate-success', ['exports'], function (exports)
             "column": 0
           }
         },
-        "moduleName": "ember-mongo/templates/activate-success.hbs"
+        "moduleName": "ember-mongo/templates/activate-request-success.hbs"
       },
       arity: 0,
       cachedFragment: null,
@@ -1661,6 +1670,125 @@ define('ember-mongo/templates/activate-success', ['exports'], function (exports)
       ],
       locals: [],
       templates: []
+    };
+  }()));
+
+});
+define('ember-mongo/templates/activate-success', ['exports'], function (exports) {
+
+  'use strict';
+
+  exports['default'] = Ember.HTMLBars.template((function() {
+    var child0 = (function() {
+      return {
+        meta: {
+          "revision": "Ember@1.13.7",
+          "loc": {
+            "source": null,
+            "start": {
+              "line": 5,
+              "column": 62
+            },
+            "end": {
+              "line": 5,
+              "column": 87
+            }
+          },
+          "moduleName": "ember-mongo/templates/activate-success.hbs"
+        },
+        arity: 0,
+        cachedFragment: null,
+        hasRendered: false,
+        buildFragment: function buildFragment(dom) {
+          var el0 = dom.createDocumentFragment();
+          var el1 = dom.createTextNode("login");
+          dom.appendChild(el0, el1);
+          return el0;
+        },
+        buildRenderNodes: function buildRenderNodes() { return []; },
+        statements: [
+
+        ],
+        locals: [],
+        templates: []
+      };
+    }());
+    return {
+      meta: {
+        "revision": "Ember@1.13.7",
+        "loc": {
+          "source": null,
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 14,
+            "column": 10
+          }
+        },
+        "moduleName": "ember-mongo/templates/activate-success.hbs"
+      },
+      arity: 0,
+      cachedFragment: null,
+      hasRendered: false,
+      buildFragment: function buildFragment(dom) {
+        var el0 = dom.createDocumentFragment();
+        var el1 = dom.createElement("div");
+        dom.setAttribute(el1,"class","small-8 medium-4 large-4 small-centered medium-centered large-centered columns");
+        var el2 = dom.createTextNode("\n	");
+        dom.appendChild(el1, el2);
+        var el2 = dom.createElement("div");
+        dom.setAttribute(el2,"class","login-box");
+        var el3 = dom.createTextNode("\n		");
+        dom.appendChild(el2, el3);
+        var el3 = dom.createElement("div");
+        dom.setAttribute(el3,"class","row");
+        var el4 = dom.createTextNode("\n			");
+        dom.appendChild(el3, el4);
+        var el4 = dom.createElement("div");
+        dom.setAttribute(el4,"class","large-12 large-centered column");
+        var el5 = dom.createTextNode("\n				Your account has been sccessfully activated.  You may now ");
+        dom.appendChild(el4, el5);
+        var el5 = dom.createComment("");
+        dom.appendChild(el4, el5);
+        var el5 = dom.createTextNode(" using the email and password you signed up with.\n				");
+        dom.appendChild(el4, el5);
+        var el5 = dom.createElement("p");
+        var el6 = dom.createTextNode("\n				Thank you!\n				");
+        dom.appendChild(el5, el6);
+        dom.appendChild(el4, el5);
+        var el5 = dom.createTextNode("\n			");
+        dom.appendChild(el4, el5);
+        dom.appendChild(el3, el4);
+        var el4 = dom.createTextNode("\n		");
+        dom.appendChild(el3, el4);
+        dom.appendChild(el2, el3);
+        var el3 = dom.createTextNode("\n	");
+        dom.appendChild(el2, el3);
+        dom.appendChild(el1, el2);
+        var el2 = dom.createTextNode("\n");
+        dom.appendChild(el1, el2);
+        dom.appendChild(el0, el1);
+        var el1 = dom.createTextNode("\n\n");
+        dom.appendChild(el0, el1);
+        var el1 = dom.createComment("");
+        dom.appendChild(el0, el1);
+        return el0;
+      },
+      buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
+        var morphs = new Array(2);
+        morphs[0] = dom.createMorphAt(dom.childAt(fragment, [0, 1, 1, 1]),1,1);
+        morphs[1] = dom.createMorphAt(fragment,2,2,contextualElement);
+        dom.insertBoundary(fragment, null);
+        return morphs;
+      },
+      statements: [
+        ["block","link-to",["login"],[],0,null,["loc",[null,[5,62],[5,99]]]],
+        ["content","outlet",["loc",[null,[14,0],[14,10]]]]
+      ],
+      locals: [],
+      templates: [child0]
     };
   }()));
 
@@ -6362,7 +6490,7 @@ define('ember-mongo/templates/request-reset-password', ['exports'], function (ex
   }()));
 
 });
-define('ember-mongo/templates/reset-success', ['exports'], function (exports) {
+define('ember-mongo/templates/reset-request-success', ['exports'], function (exports) {
 
   'use strict';
 
@@ -6381,7 +6509,7 @@ define('ember-mongo/templates/reset-success', ['exports'], function (exports) {
             "column": 0
           }
         },
-        "moduleName": "ember-mongo/templates/reset-success.hbs"
+        "moduleName": "ember-mongo/templates/reset-request-success.hbs"
       },
       arity: 0,
       cachedFragment: null,
@@ -6440,6 +6568,121 @@ define('ember-mongo/templates/reset-success', ['exports'], function (exports) {
       ],
       locals: [],
       templates: []
+    };
+  }()));
+
+});
+define('ember-mongo/templates/reset-success', ['exports'], function (exports) {
+
+  'use strict';
+
+  exports['default'] = Ember.HTMLBars.template((function() {
+    var child0 = (function() {
+      return {
+        meta: {
+          "revision": "Ember@1.13.7",
+          "loc": {
+            "source": null,
+            "start": {
+              "line": 6,
+              "column": 54
+            },
+            "end": {
+              "line": 6,
+              "column": 79
+            }
+          },
+          "moduleName": "ember-mongo/templates/reset-success.hbs"
+        },
+        arity: 0,
+        cachedFragment: null,
+        hasRendered: false,
+        buildFragment: function buildFragment(dom) {
+          var el0 = dom.createDocumentFragment();
+          var el1 = dom.createTextNode("login");
+          dom.appendChild(el0, el1);
+          return el0;
+        },
+        buildRenderNodes: function buildRenderNodes() { return []; },
+        statements: [
+
+        ],
+        locals: [],
+        templates: []
+      };
+    }());
+    return {
+      meta: {
+        "revision": "Ember@1.13.7",
+        "loc": {
+          "source": null,
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 12,
+            "column": 10
+          }
+        },
+        "moduleName": "ember-mongo/templates/reset-success.hbs"
+      },
+      arity: 0,
+      cachedFragment: null,
+      hasRendered: false,
+      buildFragment: function buildFragment(dom) {
+        var el0 = dom.createDocumentFragment();
+        var el1 = dom.createTextNode("\n");
+        dom.appendChild(el0, el1);
+        var el1 = dom.createElement("div");
+        dom.setAttribute(el1,"class","small-8 medium-4 large-4 small-centered medium-centered large-centered columns");
+        var el2 = dom.createTextNode("\n	");
+        dom.appendChild(el1, el2);
+        var el2 = dom.createElement("div");
+        dom.setAttribute(el2,"class","login-box");
+        var el3 = dom.createTextNode("\n		");
+        dom.appendChild(el2, el3);
+        var el3 = dom.createElement("div");
+        dom.setAttribute(el3,"class","row");
+        var el4 = dom.createTextNode("\n			");
+        dom.appendChild(el3, el4);
+        var el4 = dom.createElement("div");
+        dom.setAttribute(el4,"class","large-12 large-centered column");
+        var el5 = dom.createTextNode("\n				Your password has been successfully reset. Please ");
+        dom.appendChild(el4, el5);
+        var el5 = dom.createComment("");
+        dom.appendChild(el4, el5);
+        var el5 = dom.createTextNode(" to continue.\n			");
+        dom.appendChild(el4, el5);
+        dom.appendChild(el3, el4);
+        var el4 = dom.createTextNode("\n		");
+        dom.appendChild(el3, el4);
+        dom.appendChild(el2, el3);
+        var el3 = dom.createTextNode("\n	");
+        dom.appendChild(el2, el3);
+        dom.appendChild(el1, el2);
+        var el2 = dom.createTextNode("\n");
+        dom.appendChild(el1, el2);
+        dom.appendChild(el0, el1);
+        var el1 = dom.createTextNode("\n\n");
+        dom.appendChild(el0, el1);
+        var el1 = dom.createComment("");
+        dom.appendChild(el0, el1);
+        return el0;
+      },
+      buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
+        var morphs = new Array(2);
+        morphs[0] = dom.createMorphAt(dom.childAt(fragment, [1, 1, 1, 1]),1,1);
+        morphs[1] = dom.createMorphAt(fragment,3,3,contextualElement);
+        dom.insertBoundary(fragment, null);
+        return morphs;
+      },
+      statements: [
+        ["block","link-to",["login"],[],0,null,["loc",[null,[6,54],[6,91]]]],
+        ["content","outlet",["loc",[null,[12,0],[12,10]]]]
+      ],
+      locals: [],
+      templates: [child0]
     };
   }()));
 
@@ -6794,7 +7037,7 @@ define('ember-mongo/tests/controllers/request-reset-password.jshint', function (
 
   QUnit.module('JSHint - controllers');
   QUnit.test('controllers/request-reset-password.js should pass jshint', function(assert) { 
-    assert.ok(false, 'controllers/request-reset-password.js should pass jshint.\ncontrollers/request-reset-password.js: line 15, col 61, Missing semicolon.\ncontrollers/request-reset-password.js: line 18, col 51, Missing semicolon.\ncontrollers/request-reset-password.js: line 17, col 27, \'err\' is defined but never used.\n\n3 errors'); 
+    assert.ok(false, 'controllers/request-reset-password.js should pass jshint.\ncontrollers/request-reset-password.js: line 15, col 69, Missing semicolon.\ncontrollers/request-reset-password.js: line 18, col 51, Missing semicolon.\ncontrollers/request-reset-password.js: line 17, col 27, \'err\' is defined but never used.\n\n3 errors'); 
   });
 
 });
@@ -6982,13 +7225,13 @@ define('ember-mongo/tests/routes/about.jshint', function () {
   });
 
 });
-define('ember-mongo/tests/routes/activate-success.jshint', function () {
+define('ember-mongo/tests/routes/activate-request-success.jshint', function () {
 
   'use strict';
 
   QUnit.module('JSHint - routes');
-  QUnit.test('routes/activate-success.js should pass jshint', function(assert) { 
-    assert.ok(true, 'routes/activate-success.js should pass jshint.'); 
+  QUnit.test('routes/activate-request-success.js should pass jshint', function(assert) { 
+    assert.ok(true, 'routes/activate-request-success.js should pass jshint.'); 
   });
 
 });
@@ -7069,6 +7312,16 @@ define('ember-mongo/tests/routes/request-reset-password.jshint', function () {
   QUnit.module('JSHint - routes');
   QUnit.test('routes/request-reset-password.js should pass jshint', function(assert) { 
     assert.ok(true, 'routes/request-reset-password.js should pass jshint.'); 
+  });
+
+});
+define('ember-mongo/tests/routes/reset-request-success.jshint', function () {
+
+  'use strict';
+
+  QUnit.module('JSHint - routes');
+  QUnit.test('routes/reset-request-success.js should pass jshint', function(assert) { 
+    assert.ok(true, 'routes/reset-request-success.js should pass jshint.'); 
   });
 
 });
@@ -7693,7 +7946,7 @@ catch(err) {
 if (runningTests) {
   require("ember-mongo/tests/test-helper");
 } else {
-  require("ember-mongo/app")["default"].create({"name":"ember-mongo","version":"0.0.0+0277e84c"});
+  require("ember-mongo/app")["default"].create({"name":"ember-mongo","version":"0.0.0+d510bd32"});
 }
 
 /* jshint ignore:end */

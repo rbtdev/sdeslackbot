@@ -14,7 +14,7 @@ var controller = {
 						user.activationKey = null;
 						user.save(function (err) {
 							if (!err) {
-								res.redirect('/');
+								res.redirect('/#/activate-success');
 							}
 							else {
 								res.status(500).send(err);
