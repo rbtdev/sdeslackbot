@@ -30,7 +30,7 @@ export default Ember.Controller.extend({
    		marker.area = location.area;
    		marker.infoWindowTemplateName = 'marker-info-window';
 
-  		var urlArr = location.intelUrl.split("=");
+  		var urlArr = location.intelUrl?location.intelUrl.split("="):["0"];
   		var llStr = urlArr[urlArr.length-1];
   		var ll = llStr.split(',');
 

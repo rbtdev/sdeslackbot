@@ -1,35 +1,37 @@
-<div class = "large-12 column">
-
-
-{{#if showMap}}
+<div id = "locations" class = "large-12 columns">
 	<div class = "row">
-		{{google-map
-		  lat=lat lng=lng zoom=zoom type=type markers=markers
-		  gopt_mapTypeControl=false gopt_backgroundColor='transparent'
-	  	  ev_click='didClickMap' markerInfoWindowTemplateName='marker-info-window'}}
-	</div>
-{{/if}}
-
-	<div class = "large-2 columns left scrolling">
-		<h2>Areas</h2>
-		{{partial "partials/areas"}}
-	</div> 
-	<div class = "large-10 column left">
+		<div class = "large-2 colmuns left">
+				<div class = "title">Areas</div>
+				<div class = "download">
+					<a class = "button tiny" href = "/api/v1/locations/download">Download CSV</a>
+				</div>
+		</div>
 		{{#if area}}
-			<h2>Portals in {{area.value}}</h2>
-			{{partial "partials/portals"}}
-		{{else}}
-			<div class = "row">
-				{{google-map
-				  lat=lat lng=lng zoom=zoom type=type markers=markers
-				  gopt_mapTypeControl=false gopt_backgroundColor='transparent'
-			  	  ev_click='didClickMap' markerInfoWindowTemplateName='marker-info-window'}}
+			<div class = "large-10 columns left">
+				<div class = "title">Portals in {{area.value}}</div>
 			</div>
 		{{/if}}
 	</div>
-
-
+	<div class = "row">
+		<div class = "large-2 columns left scrolling">
+			{{partial "partials/areas"}}
+		</div>
+		<div class = "large-10 column left">
+			{{#if area}}
+				<div class = "portal-list">{{partial "partials/portals"}}</div>
+			{{else}}
+				<div class = "row map">
+					{{google-map
+					  lat=lat lng=lng zoom=zoom type=type markers=markers
+					  gopt_mapTypeControl=false gopt_backgroundColor='transparent'
+				  	  ev_click='didClickMap' markerInfoWindowTemplateName='marker-info-window'}}
+				</div>
+			{{/if}}
+		</div>
+	</div>
 </div>
+
+
 {{outlet}}
 
 

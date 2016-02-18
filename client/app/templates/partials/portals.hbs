@@ -1,5 +1,5 @@
 {{#each area.items as |portal|}} 
-	<div class = "row">
+	<div class = "row portal">
 		{{#if portal.isEditing}}
 			Name {{input type="text" placeholder = "Name" value=portal.name}}
 			Short Code {{input type="text" placeholder = "Short Code" value = portal.shortCode}}
@@ -23,7 +23,7 @@
 	</div>
 {{/each}}
 {{#if session.currentUser.isAdmin}}
-<div class = "row">
+<div class = "row add-new">
 	{{#if newLocation}}
 		Name {{input type="text" placeholder = "Name" value=newLocation.name}}
 		Short Code {{input type="text" placeholder = "Short Code" value = newLocation.shortCode}}
