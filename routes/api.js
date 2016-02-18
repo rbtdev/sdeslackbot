@@ -5,6 +5,7 @@ var LocationController = require('../controllers/location.js');
 var NoteController = require('../controllers/note.js');
 var UserController = require('../controllers/user.js');
 var FileController = require('../controllers/file.js');
+
 var multer  = require('multer');
 var FileUpload = multer({ dest: './public/uploads/'});
 
@@ -34,6 +35,10 @@ router.post('/locations/', AuthController.isAuthorized, LocationController.creat
 router.get('/locations', AuthController.isAuthorized, Paginate, LocationController.readAll);
 router.put('/locations/:id',AuthController.isAuthorized, LocationController.update);
 router.delete('/locations/:id', AuthController.isAuthorized, LocationController.delete);
+// TODO: The download endpoint is currently not secured.
+//   Need to find a way for the front end to download a file using Auth tokens
+router.get('/locations/download', LocationController.download);
+
 
 // Files
 router.post('/files/', FileUpload.single('file[image]'), AuthController.isAuthorized, FileController.create);
