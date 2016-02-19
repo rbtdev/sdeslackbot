@@ -2,13 +2,13 @@ var mongoose = require('mongoose');
 //var acl = require('mongoose-acl');
 
 var locationSchema = new mongoose.Schema({
-    name: String,
-    area: String,
+    name: {type: String, index: true },
+    area: {type: String, index: true },
     lat: Number,
     lng: Number,
     intelUrl: String,
     mapsUrl: String,
-    shortCode: String,
+    shortCode: {type: String, index: true },
 	//author: { type: mongoose.Schema.ObjectId, ref: 'user' }
 });
 

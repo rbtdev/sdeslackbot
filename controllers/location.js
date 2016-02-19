@@ -126,15 +126,24 @@ var controller = {
 					res.status(500).send(err);
 				}
 				else {
-					LocationModel
-					.find()
-					.exec(function (err, results) {
+					LocationModel.
+					ensureIndexes({name: "text", area : "text", shortCode : "text" }, 
+					function (err) {
 						if (err) {
-							res.status(500).send(err);
+							res.status.send(err);
 						}
 						else {
-							res.status(200).send({location:results.ops});
-					    }
+							LocationModel
+							.find()
+							.exec(function (err, results) {
+								if (err) {
+									res.status(500).send(err);
+								}
+								else {
+									res.status(200).send({location:results.ops});
+							    }
+							});						
+						}
 					});
 				};				
 			})
