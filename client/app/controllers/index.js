@@ -118,6 +118,7 @@ export default Ember.Controller.extend({
 					function () {
 						_this.saveFile(file).then(
 							function () {
+								Ember.get(_this, 'flashMessages').success('Portal upload complete');
 								_this.set('isUploading', false)
 								_this.send('reload');
 							},
