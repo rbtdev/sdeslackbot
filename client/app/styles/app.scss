@@ -54,13 +54,22 @@
     border-radius: 70px;
   }
   .slack-name {
-    width: 200px;
     font-size: 30px;
     color: #00bb00;
     margin-top: -1.6rem;
     text-transform: uppercase;
     font-weight: bold;
   }
+
+  .slack-role {
+    margin-left: 10px;
+    font-size: 15px;
+    color: #00bb00;
+    margin-top: -0.8rem;
+    text-transform: lowercase;
+    font-weight: bold;
+  }
+
   .site-title {
     margin-left: 150px;
     width: 400px;

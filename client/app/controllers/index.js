@@ -29,10 +29,9 @@ export default Ember.Controller.extend({
   		marker.intelUrl = location.intelUrl;
    		marker.area = location.area;
    		marker.infoWindowTemplateName = 'marker-info-window';
-   		debugger
   		marker.lat = location.lat?location.lat:0;
   		marker.lng = location.lng?location.lng:0;
-  		marker.isDraggable = true;
+  		marker.isDraggable = false;
   		marker.hasInfoWindow = true;
   		marker.infoWindowTemplate = 'marker-info-window';
   		markers.pushObject(marker);

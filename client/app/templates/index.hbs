@@ -1,15 +1,17 @@
 <div id = "locations" class = "large-12 columns">
 	<div class = "row">
-		<div class = "large-12 colmuns left">
+
 			<div class = "large-1 columns left title">Areas</div>
-			<div class = "large-3 columns left actions">
-				<a class = "button tiny" href = "/api/v1/locations/download">Download</a>
-				<a class = "button tiny" href = "#" {{action 'triggerFileSelection'}}>Upload</a>
-				{{#file-uploader isDisabled=controller.isUploading fileInputChanged="receiveFile" uploadProgress="uploadProgress" }}
-					<input type="file" id="locations-upload">
-				{{/file-uploader}}
-			</div>
-		</div>
+			{{#if session.currentUser.isAdmin}}
+				<div class = "large-3 columns left actions">
+					<a class = "button tiny" href = "/api/v1/locations/download">Download</a>
+					<a class = "button tiny" href = "#" {{action 'triggerFileSelection'}}>Upload</a>
+					{{#file-uploader isDisabled=controller.isUploading fileInputChanged="receiveFile" uploadProgress="uploadProgress" }}
+						<input type="file" id="locations-upload">
+					{{/file-uploader}}
+				</div>
+			{{/if}}
+
 	</div>
 	<div class = "row">
 		<div class = "large-2 columns left scrolling">
