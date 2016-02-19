@@ -105,17 +105,13 @@ var controller = {
 		var saveCount = 0;
 
 		function save(location, cb) {
-			console.log("Creating new location: " + location.name);
 			var locationObj = new LocationModel(location);
-			console.log("Executing save for location: " + locationObj.name);
 			locationObj.save(function (err) {
 				if (err) {
 					// ignore errors on individual objects for now
-					console.log("Location Obj rejected: " + locationObj.name);
 					return cb();
 				}
 				else {
-					console.log("Location Obj saved: " + locationObj.name)
 					saveCount++
 					return cb();
 				}
@@ -124,15 +120,12 @@ var controller = {
 
 		console.log("Dropping collection..");
 		mongoose.connection.db.dropCollection('locations', function(err, result) {
-			console.log("Async save starting.");
 			var locations = req.body.locations;
-			console.log("Location list: " + JSON.stringify(locations))
 			async.each(locations, save, function (err) {
 				if (err) {
 					res.status(500).send(err);
 				}
 				else {
-					console.log("Async save complete. Saved " + saveCount + " items. Fetching new collection.");
 					LocationModel
 					.find()
 					.exec(function (err, results) {

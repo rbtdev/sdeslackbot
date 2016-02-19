@@ -13,7 +13,6 @@ var locationSchema = new mongoose.Schema({
 });
 
 function _preSave(next) {
-	console.log("Inside pre-save. Location: " + this.name)
 	if (!this.name || !this.intelUrl || !this.area) {
 		return next (new Error());
 	}
