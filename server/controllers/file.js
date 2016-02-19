@@ -14,6 +14,7 @@ var controller = {
 		if (process.env.ENV === "development") {
 			url = req.protocol + "://"  + req.host + ":" + process.env.PORT;
 		}
+		console.log("req.file: " + JSON.stringify(req.file));
 		url = url + '/api/v1/images/' + req.file.filename
 
 

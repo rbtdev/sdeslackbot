@@ -7,11 +7,11 @@ export default Ember.Controller.extend({
   locations: groupBy('model','area'),
 
   lat:  function () {
-  	return this.get('markers')[0].lat;
+  	return this.get('markers')[0]?this.get('markers')[0].lat:0;
   }.property('markers'),
 
   lng:  function () {
-  	 return this.get('markers')[0].lng;
+  	return this.get('markers')[0]?this.get('markers')[0].lng:0;
   }.property('markers'),
 
   zoom:     9,
@@ -57,7 +57,90 @@ export default Ember.Controller.extend({
 		this.set('newLocation', null);
 	},
 
+
+	saveFile: function (file) {
+		var _this = this;
+		return new Ember.RSVP.Promise(function(resolve, reject) {;
+			var fileObj = _this.store.createRecord('locations-file', {
+			    file:  file,
+			    fileName: file.name,
+			    title: 'something'
+			  });
+			fileObj.save().then(
+				function(fileObj) {
+					console.info(fileObj.get('fileUrl'));
+					_this.set('isUploading', true);
+					resolve();
+				}, 
+				function(error){
+					reject('Unable to save image.');
+				}, 'file upload');
+		});
+	},
+
+	validateFile: function (file) {
+		return new Ember.RSVP.Promise(function(resolve, reject) {
+			var reader = new FileReader();
+
+			reader.onloadend = function(fileData) {
+				//Add any client side CSV validations here
+
+				resolve();
+			}
+
+			reader.onerror = function() {
+        		reject(reader.error);
+      		};
+      		//if (file.type.indexOf('image') >=0) {
+      			reader.readAsDataURL(file);
+      		// }
+      		// else {
+      		// 	reject ("Please select an image file")
+      		// }
+		})
+	},
+
 	actions: {
+		uploadProgress: function (progress) {
+			this.set('progress', progress);
+		},
+
+		triggerFileSelection: function () {
+			var _this = this;
+			Ember.$('#locations-upload:not(.bound)').addClass('bound').on('change', function() {
+      			_this.send('receiveFile', this.files[0]);
+    		});
+			Ember.$('#locations-upload').trigger('click');
+		},
+
+		receiveFile: function (file) {
+			if (!file) {
+				this.set('isUploading', false)
+			}
+			else {
+
+				var _this = this;
+				this.validateFile(file).then(
+					function () {
+						_this.saveFile(file).then(
+							function () {
+								_this.set('isUploading', false)
+								_this.send('reload');
+							},
+							function (err) {
+								_this.set('isUploading', false)
+								Ember.get(_this, 'flashMessages').alert(err);
+							});
+					},
+					function (err) {
+						_this.set('isUploading', false)
+						Ember.get(_this, 'flashMessages').alert(err);
+					}
+				);
+			}
+		},
+
+
 		showMap: function () {
 			this.set('area', null);
 		},

@@ -2,8 +2,11 @@ var LocationModel = require('../models/location.js');
 var UserModel = require('../models/user.js');
 var ObjectId = require('mongoose').Types.ObjectId; 
 var json2csv = require('json2csv');
+var loadCsv = require('../models/data.js').loadCsv;
+var mongoose = require('mongoose');
 
 var controller = {
+
 	readAll: function (req, res, next) {
 
 		//var owned = {author: ObjectId(req.user)}
@@ -94,7 +97,32 @@ var controller = {
 					res.status(500).send("Error getting locations")
 				}
 			})
-	}
+	},
+
+	replace: function (req, res, next) {
+		var locations = req.body.locations;
+		console.log("Parsed csv. Locations: " + JSON.stringify(locations));
+		console.log("Dropping locations");
+		mongoose.connection.db.dropCollection('locations', function(err, result) {
+			console.log("Inserting collection");
+			LocationModel.collection.insert(locations, function (err, results) {
+			  if (err) {
+			    res.status(500).send(err);
+			  }
+			  else {
+			    console.log("Database updated. Re-Indexing...");
+			    LocationModel.ensureIndexes(function (err) {
+			      if (err) {
+			        res.status(500).send(err);
+			      }
+			      else {
+			        res.status(200).send({location:results.ops});
+			      }
+			    });
+			  }
+			});
+		});
+	},
 };
 
 module.exports = controller;

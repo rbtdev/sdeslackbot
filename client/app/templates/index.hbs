@@ -5,6 +5,20 @@
 				<div class = "download">
 					<a class = "button tiny" href = "/api/v1/locations/download">Download CSV</a>
 				</div>
+
+				<div id= "upload-trigger">
+		  		  {{#file-uploader isDisabled=controller.isUploading fileInputChanged="receiveFile" uploadProgress="uploadProgress" }}
+		  		  	<div {{action 'triggerFileSelection'}}>
+			  		  	<div class = "button">Upload</div>
+					</div>
+					<form id="file-upload-form">
+			      		<input type="file" id="locations-upload">
+			      	</form>
+				  {{/file-uploader}}
+	  			</div>
+
+
+
 		</div>
 		{{#if area}}
 			<div class = "large-10 columns left">

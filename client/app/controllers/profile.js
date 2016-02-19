@@ -45,8 +45,8 @@ export default Ember.Controller.extend({
 		var _this = this;
 		return new Ember.RSVP.Promise(function(resolve, reject) {;
 			var asset = _this.store.createRecord('file', {
-			    image:  file,
-			    imageName: file.name,
+			    file:  file,
+			    fileName: file.name,
 			    title: 'something'
 			  });
 
@@ -81,7 +81,6 @@ export default Ember.Controller.extend({
 		},
 
 		uploadProgress: function (progress) {
-			debugger;
 			this.set('progress', progress);
 		},
 
