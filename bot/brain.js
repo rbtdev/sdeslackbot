@@ -154,13 +154,6 @@ module.exports = function Brain() {
 		}
 	};
 
-	function upload (hook, respond) {
-		console.log("file url: " + hook.file.url_download)
-		data.load(hook.file.url_download, function (resp) {
-			respond ({text: resp, attachments: null});
-		})
-	};
-
 	function help (args, respond) {
 		var attachments = [];
 		response = "*Welcome to the Ingress Intel Link Bot (beta)*\n\n";
@@ -199,9 +192,6 @@ module.exports = function Brain() {
 			break;
 			case "motd":
 				motd(hook, command.args, channel, respond);
-			break;
-			case "upload":
-				upload(hook, respond);
 			break;
 			default:
 				help(command.args, respond);

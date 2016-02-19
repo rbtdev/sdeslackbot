@@ -5,6 +5,7 @@ var LocationController = require('../controllers/location.js');
 var NoteController = require('../controllers/note.js');
 var UserController = require('../controllers/user.js');
 var FileController = require('../controllers/file.js');
+var CsvUpload = require('../middleware/csvUpload.js');
 
 var multer  = require('multer');
 var FileUpload = multer({ dest: './public/uploads/'});
@@ -41,7 +42,12 @@ router.get('/locations/download', LocationController.download);
 
 
 // Files
-router.post('/files/', FileUpload.single('file[image]'), AuthController.isAuthorized, FileController.create);
+router.post('/files/', FileUpload.single('file[file]'), AuthController.isAuthorized, FileController.create);
+router.post('/locationsFiles', 
+			FileUpload.single('locationsFile[file]'), 
+			AuthController.isAuthorized, 
+			CsvUpload('locations'), 
+			LocationController.replace);
 
 // Images
 router.get('/images/:id', FileController.getImage);
