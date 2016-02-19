@@ -1,12 +1,12 @@
 {{#each area.items as |portal|}} 
 	<div class = "row portal">
 		{{#if portal.isEditing}}
+			Area {{input type = "text" placeholder = "Area" value = portal.area}}
 			Name {{input type="text" placeholder = "Name" value=portal.name}}
 			Short Code {{input type="text" placeholder = "Short Code" value = portal.shortCode}}
-			Google Maps URL {{input type = "text" placeholder = "Google Maps URL" value = portal.mapsUrl}}
 			Intel URL {{input type = "text" placeholder = "Intel URL" value = portal.intelUrl}}
-			Area {{input type = "text" placeholder = "Area" value = portal.area}}
 			<button {{action "savePortal" portal}} class = "tiny">Save</button>
+			<button {{action "cancelEdit"}} class = "tiny">Cancel</button>
 
 		{{else}}
 			<div class = "large-4 column left">{{portal.name}}</div>
@@ -25,12 +25,12 @@
 {{#if session.currentUser.isAdmin}}
 <div class = "row add-new">
 	{{#if newLocation}}
+		Area {{input type = "text" placeholder = "Area" value = newLocation.area}}
 		Name {{input type="text" placeholder = "Name" value=newLocation.name}}
 		Short Code {{input type="text" placeholder = "Short Code" value = newLocation.shortCode}}
-		Google Maps URL {{input type = "text" placeholder = "Google Maps URL" value = newLocation.mapsUrl}}
 		Intel URL {{input type = "text" placeholder = "Intel URL" value = newLocation.intelUrl}}
-		Area {{input type = "text" placeholder = "Area" value = newLocation.area}}
 		<button {{action "savePortal" newLocation}} class = "tiny">Save</button>
+		<button {{action "cancelEdit"}} class = "tiny">Cancel</button>
 	{{else}}
 		<div class = "large-4 column left" {{action "addPortal"}}>
 			<span class = "icon"><i class="fi-plus"></i></span>

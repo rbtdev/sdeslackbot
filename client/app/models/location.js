@@ -6,5 +6,7 @@ export default DS.Model.extend({
 	intelUrl: DS.attr('string'),
 	mapsUrl: DS.attr('string'),
 	shortCode: DS.attr('string'),
+	lat: DS.attr(),
+	lng: DS.attr(),
 	author: DS.belongsTo('user', {async: true})
 });

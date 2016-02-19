@@ -7,12 +7,12 @@ export default Ember.Controller.extend({
   locations: groupBy('model','area'),
 
   lat:  function () {
-  	return this.get('markers')[0]?this.get('markers')[0].lat:0;
-  }.property('markers'),
+  	return 32.7150;
+  }.property(),
 
   lng:  function () {
-  	return this.get('markers')[0]?this.get('markers')[0].lng:0;
-  }.property('markers'),
+  	return -117.1625;
+  }.property(),
 
   zoom:     9,
   type:     'road',
@@ -29,20 +29,16 @@ export default Ember.Controller.extend({
   		marker.intelUrl = location.intelUrl;
    		marker.area = location.area;
    		marker.infoWindowTemplateName = 'marker-info-window';
-
-  		var urlArr = location.intelUrl?location.intelUrl.split("="):["0"];
-  		var llStr = urlArr[urlArr.length-1];
-  		var ll = llStr.split(',');
-
-  		marker.lat = parseFloat(ll[0]);
-  		marker.lng = parseFloat(ll[1]);
+   		debugger
+  		marker.lat = location.lat?location.lat:0;
+  		marker.lng = location.lng?location.lng:0;
   		marker.isDraggable = true;
   		marker.hasInfoWindow = true;
   		marker.infoWindowTemplate = 'marker-info-window';
   		markers.pushObject(marker);
   	}
   	return markers;
-  }.property('model'),
+  }.property('model.content.@each'),
 
 
 	currentLocation: null,
@@ -84,19 +80,17 @@ export default Ember.Controller.extend({
 
 			reader.onloadend = function(fileData) {
 				//Add any client side CSV validations here
-
 				resolve();
 			}
-
 			reader.onerror = function() {
         		reject(reader.error);
       		};
-      		//if (file.type.indexOf('image') >=0) {
+      		if (file.type === "text/csv")  {
       			reader.readAsDataURL(file);
-      		// }
-      		// else {
-      		// 	reject ("Please select an image file")
-      		// }
+      		}
+      		else {
+      		 	reject ("Please select a CSV file")
+      		}
 		})
 	},
 
@@ -145,24 +139,6 @@ export default Ember.Controller.extend({
 			this.set('area', null);
 		},
 
-		toggle: function(location) {
-			if (this.get('currentLocation')) {
-				if (this.get('currentLocation.id') === location.get('id')) {
-					location.set('active', false);
-					this.set('currentLocation', null)
-				}
-				else {
-					this.set('currentLocation.active', false);
-					location.set('active', true);
-					this.set('currentLocation', location)
-				}
-			}
-			else {
-				this.set('currentLocation', location);
-				location.set('active', true);
-			}
-    	},
-
 		savePortal: function (location) {
 			var flashQueue = Ember.get(this, 'flashMessages')
 			var _this = this;
@@ -176,6 +152,7 @@ export default Ember.Controller.extend({
 					flashQueue.alert('Unable to save location');
 				});
 		},
+
 		addPortal: function () {
 			var location = this.store.createRecord('location', {
         		name: null,
@@ -197,7 +174,7 @@ export default Ember.Controller.extend({
 			}
 
 		},
-		cancel: function () {
+		cancelEdit: function () {
 			this.clearEdit();
 		},
 

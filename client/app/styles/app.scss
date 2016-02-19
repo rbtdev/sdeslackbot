@@ -178,19 +178,21 @@
 }
 
 #locations {
+  font-size: 12px;
   .title {
     text-align: center;
-    font-size: 30px;
-    font-weight: bold;
+    font-size: x-large;
   }
 
   .portal-list {
     margin:30px;
+    margin-top: 60px;
   }
 
   .map {
     text-align: center;
     margin: 30px;
+    margin-left: 60px;
   }
   
   .portal {
@@ -205,5 +207,10 @@
 
   .download {
       text-align: center;
+  }
+
+  .upload {
+      text-align: center;
+      display: none;
   }
 }

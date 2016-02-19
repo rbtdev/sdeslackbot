@@ -1,5 +1,5 @@
 
-var Location = require('./location.js')
+var Location = require('./location.js').model;
 
 module.exports = {
   find: find

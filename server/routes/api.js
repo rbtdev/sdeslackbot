@@ -6,6 +6,7 @@ var NoteController = require('../controllers/note.js');
 var UserController = require('../controllers/user.js');
 var FileController = require('../controllers/file.js');
 var CsvUpload = require('../middleware/csvUpload.js');
+var LocationModel = require('../models/location.js');
 
 var multer  = require('multer');
 var FileUpload = multer({ dest: './public/uploads/'});
@@ -46,7 +47,7 @@ router.post('/files/', FileUpload.single('file[file]'), AuthController.isAuthori
 router.post('/locationsFiles', 
 			FileUpload.single('locationsFile[file]'), 
 			AuthController.isAuthorized, 
-			CsvUpload('locations'), 
+			CsvUpload('locations', LocationModel.fieldNames), 
 			LocationController.replace);
 
 // Images
