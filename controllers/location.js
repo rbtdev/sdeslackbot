@@ -127,7 +127,7 @@ var controller = {
 				}
 				else {
 					LocationModel.
-					ensureIndexes({name: "text", area : "text", shortCode : "text" }, 
+					ensureIndexes(
 					function (err) {
 						if (err) {
 							res.status.send(err);
