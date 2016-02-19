@@ -2,15 +2,16 @@ var mongoose = require('mongoose');
 //var acl = require('mongoose-acl');
 
 var locationSchema = new mongoose.Schema({
-    name: {type: String, index: true },
-    area: {type: String, index: true },
+    name: String,
+    area: String,
     lat: Number,
     lng: Number,
     intelUrl: String,
     mapsUrl: String,
-    shortCode: {type: String, index: true },
+    shortCode: String,
 	//author: { type: mongoose.Schema.ObjectId, ref: 'user' }
 });
+locationSchema.index({ name: 'text', area: 'text', shortCode: 'text'});
 
 function _preSave(next) {
 	if (!this.name || !this.intelUrl || !this.area) {
