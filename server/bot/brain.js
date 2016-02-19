@@ -32,7 +32,7 @@ module.exports = function Brain() {
 	};
 
 	function add (args, respond) {
-		var response = "Coming soon...";
+		var response = "Visit the <https://intelbot.herokuapp.com|Intel Bot Web Potal> to add portals";
 		var attachments = [];
 		respond({text: response, attachments: attachments});
 	};
@@ -185,7 +185,7 @@ module.exports = function Brain() {
 				list(command.args, respond);
 			break;
 			case "add":
-				response = add(command.args);
+				response = add(command.args, respond);
 			break;
 			case "find":
 				find(command.args, respond);

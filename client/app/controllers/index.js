@@ -7,15 +7,15 @@ export default Ember.Controller.extend({
   locations: groupBy('model','area'),
 
   lat:  function () {
-  	return 32.7150;
+  	return 32.91;
   }.property(),
 
   lng:  function () {
-  	return -117.1625;
+  	return -116.62;
   }.property(),
 
   zoom:     9,
-  type:     'road',
+  type:     'hybrid',
   mapTypes: MAP_TYPES,
 
   markers: function () {

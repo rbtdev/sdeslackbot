@@ -205,12 +205,14 @@
       margin-top: 40px
   }
 
-  .download {
+  .actions {
       text-align: center;
+      a {
+        width: 40%;
+      }
   }
 
-  .upload {
-      text-align: center;
-      display: none;
+  #locations-upload {
+      display: none
   }
 }
