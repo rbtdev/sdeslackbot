@@ -588,14 +588,8 @@ define('ember-mongo/controllers/index', ['exports', 'ember', 'ember-mongo/compon
 
 		locations: groupBy['default']('model', 'area'),
 
-		lat: (function () {
-			return 32.91;
-		}).property(),
-
-		lng: (function () {
-			return -116.62;
-		}).property(),
-
+		lat: 32.8528287,
+		lng: -116.6158525,
 		zoom: 9,
 		type: 'hybrid',
 		mapTypes: google_map.MAP_TYPES,
@@ -5199,11 +5193,11 @@ define('ember-mongo/templates/index', ['exports'], function (exports) {
               "source": null,
               "start": {
                 "line": 9,
-                "column": 5
+                "column": 3
               },
               "end": {
                 "line": 11,
-                "column": 5
+                "column": 3
               }
             },
             "moduleName": "ember-mongo/templates/index.hbs"
@@ -5213,7 +5207,7 @@ define('ember-mongo/templates/index', ['exports'], function (exports) {
           hasRendered: false,
           buildFragment: function buildFragment(dom) {
             var el0 = dom.createDocumentFragment();
-            var el1 = dom.createTextNode("						");
+            var el1 = dom.createTextNode("				");
             dom.appendChild(el0, el1);
             var el1 = dom.createElement("input");
             dom.setAttribute(el1,"type","file");
@@ -5238,11 +5232,11 @@ define('ember-mongo/templates/index', ['exports'], function (exports) {
             "source": null,
             "start": {
               "line": 5,
-              "column": 3
+              "column": 2
             },
             "end": {
               "line": 13,
-              "column": 3
+              "column": 2
             }
           },
           "moduleName": "ember-mongo/templates/index.hbs"
@@ -5252,11 +5246,11 @@ define('ember-mongo/templates/index', ['exports'], function (exports) {
         hasRendered: false,
         buildFragment: function buildFragment(dom) {
           var el0 = dom.createDocumentFragment();
-          var el1 = dom.createTextNode("				");
+          var el1 = dom.createTextNode("		");
           dom.appendChild(el0, el1);
           var el1 = dom.createElement("div");
-          dom.setAttribute(el1,"class","large-3 columns left actions");
-          var el2 = dom.createTextNode("\n					");
+          dom.setAttribute(el1,"class","large-3 medium-6 small-12 columns right actions");
+          var el2 = dom.createTextNode("\n			");
           dom.appendChild(el1, el2);
           var el2 = dom.createElement("a");
           dom.setAttribute(el2,"class","button tiny");
@@ -5264,7 +5258,7 @@ define('ember-mongo/templates/index', ['exports'], function (exports) {
           var el3 = dom.createTextNode("Download");
           dom.appendChild(el2, el3);
           dom.appendChild(el1, el2);
-          var el2 = dom.createTextNode("\n					");
+          var el2 = dom.createTextNode("\n			");
           dom.appendChild(el1, el2);
           var el2 = dom.createElement("a");
           dom.setAttribute(el2,"class","button tiny");
@@ -5276,7 +5270,7 @@ define('ember-mongo/templates/index', ['exports'], function (exports) {
           dom.appendChild(el1, el2);
           var el2 = dom.createComment("");
           dom.appendChild(el1, el2);
-          var el2 = dom.createTextNode("				");
+          var el2 = dom.createTextNode("		");
           dom.appendChild(el1, el2);
           dom.appendChild(el0, el1);
           var el1 = dom.createTextNode("\n");
@@ -5292,8 +5286,8 @@ define('ember-mongo/templates/index', ['exports'], function (exports) {
           return morphs;
         },
         statements: [
-          ["element","action",["triggerFileSelection"],[],["loc",[null,[8,41],[8,74]]]],
-          ["block","file-uploader",[],["isDisabled",["subexpr","@mut",[["get","controller.isUploading",["loc",[null,[9,33],[9,55]]]]],[],[]],"fileInputChanged","receiveFile","uploadProgress","uploadProgress"],0,null,["loc",[null,[9,5],[11,23]]]]
+          ["element","action",["triggerFileSelection"],[],["loc",[null,[8,39],[8,72]]]],
+          ["block","file-uploader",[],["isDisabled",["subexpr","@mut",[["get","controller.isUploading",["loc",[null,[9,31],[9,53]]]]],[],[]],"fileInputChanged","receiveFile","uploadProgress","uploadProgress"],0,null,["loc",[null,[9,3],[11,21]]]]
         ],
         locals: [],
         templates: [child0]
@@ -5306,11 +5300,11 @@ define('ember-mongo/templates/index', ['exports'], function (exports) {
           "loc": {
             "source": null,
             "start": {
-              "line": 21,
+              "line": 22,
               "column": 3
             },
             "end": {
-              "line": 26,
+              "line": 25,
               "column": 3
             }
           },
@@ -5324,17 +5318,10 @@ define('ember-mongo/templates/index', ['exports'], function (exports) {
           var el1 = dom.createTextNode("				");
           dom.appendChild(el0, el1);
           var el1 = dom.createElement("div");
-          dom.setAttribute(el1,"class","large-8 columns left");
-          var el2 = dom.createTextNode("\n					");
+          dom.setAttribute(el1,"class","title");
+          var el2 = dom.createTextNode("Portals in ");
           dom.appendChild(el1, el2);
-          var el2 = dom.createElement("div");
-          dom.setAttribute(el2,"class","title");
-          var el3 = dom.createTextNode("Portals in ");
-          dom.appendChild(el2, el3);
-          var el3 = dom.createComment("");
-          dom.appendChild(el2, el3);
-          dom.appendChild(el1, el2);
-          var el2 = dom.createTextNode("\n				");
+          var el2 = dom.createComment("");
           dom.appendChild(el1, el2);
           dom.appendChild(el0, el1);
           var el1 = dom.createTextNode("\n				");
@@ -5350,13 +5337,13 @@ define('ember-mongo/templates/index', ['exports'], function (exports) {
         },
         buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
           var morphs = new Array(2);
-          morphs[0] = dom.createMorphAt(dom.childAt(fragment, [1, 1]),1,1);
+          morphs[0] = dom.createMorphAt(dom.childAt(fragment, [1]),1,1);
           morphs[1] = dom.createMorphAt(dom.childAt(fragment, [3]),0,0);
           return morphs;
         },
         statements: [
-          ["content","area.value",["loc",[null,[23,37],[23,51]]]],
-          ["inline","partial",["partials/portals"],[],["loc",[null,[25,31],[25,61]]]]
+          ["content","area.value",["loc",[null,[23,36],[23,50]]]],
+          ["inline","partial",["partials/portals"],[],["loc",[null,[24,31],[24,61]]]]
         ],
         locals: [],
         templates: []
@@ -5369,11 +5356,11 @@ define('ember-mongo/templates/index', ['exports'], function (exports) {
           "loc": {
             "source": null,
             "start": {
-              "line": 26,
+              "line": 25,
               "column": 3
             },
             "end": {
-              "line": 33,
+              "line": 32,
               "column": 3
             }
           },
@@ -5387,8 +5374,8 @@ define('ember-mongo/templates/index', ['exports'], function (exports) {
           var el1 = dom.createTextNode("				");
           dom.appendChild(el0, el1);
           var el1 = dom.createElement("div");
-          dom.setAttribute(el1,"class","row map");
-          var el2 = dom.createTextNode("\n					");
+          dom.setAttribute(el1,"class","map");
+          var el2 = dom.createTextNode("\n				");
           dom.appendChild(el1, el2);
           var el2 = dom.createComment("");
           dom.appendChild(el1, el2);
@@ -5405,7 +5392,7 @@ define('ember-mongo/templates/index', ['exports'], function (exports) {
           return morphs;
         },
         statements: [
-          ["inline","google-map",[],["lat",["subexpr","@mut",[["get","lat",["loc",[null,[29,11],[29,14]]]]],[],[]],"lng",["subexpr","@mut",[["get","lng",["loc",[null,[29,19],[29,22]]]]],[],[]],"zoom",["subexpr","@mut",[["get","zoom",["loc",[null,[29,28],[29,32]]]]],[],[]],"type",["subexpr","@mut",[["get","type",["loc",[null,[29,38],[29,42]]]]],[],[]],"markers",["subexpr","@mut",[["get","markers",["loc",[null,[29,51],[29,58]]]]],[],[]],"gopt_mapTypeControl",false,"gopt_backgroundColor","transparent","ev_click","didClickMap","markerInfoWindowTemplateName","marker-info-window"],["loc",[null,[28,5],[31,83]]]]
+          ["inline","google-map",[],["lat",["subexpr","@mut",[["get","lat",["loc",[null,[28,11],[28,14]]]]],[],[]],"lng",["subexpr","@mut",[["get","lng",["loc",[null,[28,19],[28,22]]]]],[],[]],"zoom",["subexpr","@mut",[["get","zoom",["loc",[null,[28,28],[28,32]]]]],[],[]],"type",["subexpr","@mut",[["get","type",["loc",[null,[28,38],[28,42]]]]],[],[]],"markers",["subexpr","@mut",[["get","markers",["loc",[null,[28,51],[28,58]]]]],[],[]],"gopt_mapTypeControl",false,"gopt_backgroundColor","transparent","ev_click","didClickMap","markerInfoWindowTemplateName","marker-info-window"],["loc",[null,[27,4],[30,83]]]]
         ],
         locals: [],
         templates: []
@@ -5434,33 +5421,32 @@ define('ember-mongo/templates/index', ['exports'], function (exports) {
         var el0 = dom.createDocumentFragment();
         var el1 = dom.createElement("div");
         dom.setAttribute(el1,"id","locations");
-        dom.setAttribute(el1,"class","large-12 columns");
         var el2 = dom.createTextNode("\n	");
         dom.appendChild(el1, el2);
         var el2 = dom.createElement("div");
-        dom.setAttribute(el2,"class","row");
-        var el3 = dom.createTextNode("\n\n			");
-        dom.appendChild(el2, el3);
-        var el3 = dom.createElement("div");
-        dom.setAttribute(el3,"class","large-1 columns left title");
-        var el4 = dom.createTextNode("Areas");
-        dom.appendChild(el3, el4);
-        dom.appendChild(el2, el3);
-        var el3 = dom.createTextNode("\n");
-        dom.appendChild(el2, el3);
-        var el3 = dom.createComment("");
-        dom.appendChild(el2, el3);
-        var el3 = dom.createTextNode("\n	");
-        dom.appendChild(el2, el3);
-        dom.appendChild(el1, el2);
-        var el2 = dom.createTextNode("\n	");
-        dom.appendChild(el1, el2);
-        var el2 = dom.createElement("div");
-        dom.setAttribute(el2,"class","row");
+        dom.setAttribute(el2,"class","column");
         var el3 = dom.createTextNode("\n		");
         dom.appendChild(el2, el3);
         var el3 = dom.createElement("div");
-        dom.setAttribute(el3,"class","large-2 columns left scrolling");
+        dom.setAttribute(el3,"class","large-2 medium-2 small-4 columns left title");
+        var el4 = dom.createTextNode("Areas");
+        dom.appendChild(el3, el4);
+        dom.appendChild(el2, el3);
+        var el3 = dom.createTextNode("\n\n");
+        dom.appendChild(el2, el3);
+        var el3 = dom.createComment("");
+        dom.appendChild(el2, el3);
+        var el3 = dom.createTextNode("	");
+        dom.appendChild(el2, el3);
+        dom.appendChild(el1, el2);
+        var el2 = dom.createTextNode("\n\n	");
+        dom.appendChild(el1, el2);
+        var el2 = dom.createElement("div");
+        dom.setAttribute(el2,"class","column");
+        var el3 = dom.createTextNode("\n		");
+        dom.appendChild(el2, el3);
+        var el3 = dom.createElement("div");
+        dom.setAttribute(el3,"class","large-2 medium-3 small-4 columns left");
         var el4 = dom.createTextNode("\n			");
         dom.appendChild(el3, el4);
         var el4 = dom.createComment("");
@@ -5468,10 +5454,10 @@ define('ember-mongo/templates/index', ['exports'], function (exports) {
         var el4 = dom.createTextNode("\n		");
         dom.appendChild(el3, el4);
         dom.appendChild(el2, el3);
-        var el3 = dom.createTextNode("\n		");
+        var el3 = dom.createTextNode("\n\n		");
         dom.appendChild(el2, el3);
         var el3 = dom.createElement("div");
-        dom.setAttribute(el3,"class","large-10 column left");
+        dom.setAttribute(el3,"class","large-8 medium-9 small-8 column left portal-list");
         var el4 = dom.createTextNode("\n");
         dom.appendChild(el3, el4);
         var el4 = dom.createComment("");
@@ -5485,7 +5471,7 @@ define('ember-mongo/templates/index', ['exports'], function (exports) {
         var el2 = dom.createTextNode("\n");
         dom.appendChild(el1, el2);
         dom.appendChild(el0, el1);
-        var el1 = dom.createTextNode("\n\n\n");
+        var el1 = dom.createTextNode("\n\n\n\n");
         dom.appendChild(el0, el1);
         var el1 = dom.createComment("");
         dom.appendChild(el0, el1);
@@ -5504,9 +5490,9 @@ define('ember-mongo/templates/index', ['exports'], function (exports) {
         return morphs;
       },
       statements: [
-        ["block","if",[["get","session.currentUser.isAdmin",["loc",[null,[5,9],[5,36]]]]],[],0,null,["loc",[null,[5,3],[13,10]]]],
+        ["block","if",[["get","session.currentUser.isAdmin",["loc",[null,[5,8],[5,35]]]]],[],0,null,["loc",[null,[5,2],[13,9]]]],
         ["inline","partial",["partials/areas"],[],["loc",[null,[18,3],[18,31]]]],
-        ["block","if",[["get","area",["loc",[null,[21,9],[21,13]]]]],[],1,2,["loc",[null,[21,3],[33,10]]]],
+        ["block","if",[["get","area",["loc",[null,[22,9],[22,13]]]]],[],1,2,["loc",[null,[22,3],[32,10]]]],
         ["content","outlet",["loc",[null,[39,0],[39,10]]]]
       ],
       locals: [],
@@ -6008,15 +5994,15 @@ define('ember-mongo/templates/partials/portals', ['exports'], function (exports)
             return el0;
           },
           buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
-            var element8 = dom.childAt(fragment, [9]);
-            var element9 = dom.childAt(fragment, [11]);
+            var element7 = dom.childAt(fragment, [9]);
+            var element8 = dom.childAt(fragment, [11]);
             var morphs = new Array(6);
             morphs[0] = dom.createMorphAt(fragment,1,1,contextualElement);
             morphs[1] = dom.createMorphAt(fragment,3,3,contextualElement);
             morphs[2] = dom.createMorphAt(fragment,5,5,contextualElement);
             morphs[3] = dom.createMorphAt(fragment,7,7,contextualElement);
-            morphs[4] = dom.createElementMorph(element8);
-            morphs[5] = dom.createElementMorph(element9);
+            morphs[4] = dom.createElementMorph(element7);
+            morphs[5] = dom.createElementMorph(element8);
             return morphs;
           },
           statements: [
@@ -6043,7 +6029,7 @@ define('ember-mongo/templates/partials/portals', ['exports'], function (exports)
                   "column": 3
                 },
                 "end": {
-                  "line": 21,
+                  "line": 23,
                   "column": 3
                 }
               },
@@ -6066,6 +6052,13 @@ define('ember-mongo/templates/partials/portals', ['exports'], function (exports)
               dom.setAttribute(el3,"class","fi-pencil");
               dom.appendChild(el2, el3);
               dom.appendChild(el1, el2);
+              var el2 = dom.createTextNode("\n				");
+              dom.appendChild(el1, el2);
+              dom.appendChild(el0, el1);
+              var el1 = dom.createTextNode("\n				");
+              dom.appendChild(el0, el1);
+              var el1 = dom.createElement("div");
+              dom.setAttribute(el1,"class","large-1 left");
               var el2 = dom.createTextNode("\n					");
               dom.appendChild(el1, el2);
               var el2 = dom.createElement("span");
@@ -6082,17 +6075,16 @@ define('ember-mongo/templates/partials/portals', ['exports'], function (exports)
               return el0;
             },
             buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
-              var element3 = dom.childAt(fragment, [1]);
-              var element4 = dom.childAt(element3, [1]);
-              var element5 = dom.childAt(element3, [3]);
+              var element3 = dom.childAt(fragment, [1, 1]);
+              var element4 = dom.childAt(fragment, [3, 1]);
               var morphs = new Array(2);
-              morphs[0] = dom.createElementMorph(element4);
-              morphs[1] = dom.createElementMorph(element5);
+              morphs[0] = dom.createElementMorph(element3);
+              morphs[1] = dom.createElementMorph(element4);
               return morphs;
             },
             statements: [
               ["element","action",["editPortal",["get","portal",["loc",[null,[18,48],[18,54]]]]],[],["loc",[null,[18,26],[18,56]]]],
-              ["element","action",["deletePortal",["get","portal",["loc",[null,[19,50],[19,56]]]]],[],["loc",[null,[19,26],[19,58]]]]
+              ["element","action",["deletePortal",["get","portal",["loc",[null,[21,50],[21,56]]]]],[],["loc",[null,[21,26],[21,58]]]]
             ],
             locals: [],
             templates: []
@@ -6108,7 +6100,7 @@ define('ember-mongo/templates/partials/portals', ['exports'], function (exports)
                 "column": 2
               },
               "end": {
-                "line": 22,
+                "line": 24,
                 "column": 2
               }
             },
@@ -6122,7 +6114,7 @@ define('ember-mongo/templates/partials/portals', ['exports'], function (exports)
             var el1 = dom.createTextNode("			");
             dom.appendChild(el0, el1);
             var el1 = dom.createElement("div");
-            dom.setAttribute(el1,"class","large-4 column left");
+            dom.setAttribute(el1,"class","large-3 column left");
             var el2 = dom.createComment("");
             dom.appendChild(el1, el2);
             dom.appendChild(el0, el1);
@@ -6164,13 +6156,13 @@ define('ember-mongo/templates/partials/portals', ['exports'], function (exports)
             return el0;
           },
           buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
-            var element6 = dom.childAt(fragment, [5, 0]);
-            var element7 = dom.childAt(fragment, [7, 0]);
+            var element5 = dom.childAt(fragment, [5, 0]);
+            var element6 = dom.childAt(fragment, [7, 0]);
             var morphs = new Array(5);
             morphs[0] = dom.createMorphAt(dom.childAt(fragment, [1]),0,0);
             morphs[1] = dom.createMorphAt(dom.childAt(fragment, [3]),1,1);
-            morphs[2] = dom.createAttrMorph(element6, 'href');
-            morphs[3] = dom.createAttrMorph(element7, 'href');
+            morphs[2] = dom.createAttrMorph(element5, 'href');
+            morphs[3] = dom.createAttrMorph(element6, 'href');
             morphs[4] = dom.createMorphAt(fragment,9,9,contextualElement);
             dom.insertBoundary(fragment, null);
             return morphs;
@@ -6180,7 +6172,7 @@ define('ember-mongo/templates/partials/portals', ['exports'], function (exports)
             ["content","portal.shortCode",["loc",[null,[13,32],[13,52]]]],
             ["attribute","href",["get","portal.mapsUrl",["loc",[null,[14,43],[14,57]]]]],
             ["attribute","href",["get","portal.intelUrl",["loc",[null,[15,43],[15,58]]]]],
-            ["block","if",[["get","session.currentUser.isAdmin",["loc",[null,[16,9],[16,36]]]]],[],0,null,["loc",[null,[16,3],[21,10]]]]
+            ["block","if",[["get","session.currentUser.isAdmin",["loc",[null,[16,9],[16,36]]]]],[],0,null,["loc",[null,[16,3],[23,10]]]]
           ],
           locals: [],
           templates: [child0]
@@ -6196,7 +6188,7 @@ define('ember-mongo/templates/partials/portals', ['exports'], function (exports)
               "column": 0
             },
             "end": {
-              "line": 24,
+              "line": 26,
               "column": 0
             }
           },
@@ -6228,7 +6220,7 @@ define('ember-mongo/templates/partials/portals', ['exports'], function (exports)
           return morphs;
         },
         statements: [
-          ["block","if",[["get","portal.isEditing",["loc",[null,[3,8],[3,24]]]]],[],0,1,["loc",[null,[3,2],[22,9]]]]
+          ["block","if",[["get","portal.isEditing",["loc",[null,[3,8],[3,24]]]]],[],0,1,["loc",[null,[3,2],[24,9]]]]
         ],
         locals: ["portal"],
         templates: [child0, child1]
@@ -6242,11 +6234,11 @@ define('ember-mongo/templates/partials/portals', ['exports'], function (exports)
             "loc": {
               "source": null,
               "start": {
-                "line": 27,
+                "line": 29,
                 "column": 1
               },
               "end": {
-                "line": 34,
+                "line": 36,
                 "column": 1
               }
             },
@@ -6304,12 +6296,12 @@ define('ember-mongo/templates/partials/portals', ['exports'], function (exports)
             return morphs;
           },
           statements: [
-            ["inline","input",[],["type","text","placeholder","Area","value",["subexpr","@mut",[["get","newLocation.area",["loc",[null,[28,58],[28,74]]]]],[],[]]],["loc",[null,[28,7],[28,76]]]],
-            ["inline","input",[],["type","text","placeholder","Name","value",["subexpr","@mut",[["get","newLocation.name",["loc",[null,[29,54],[29,70]]]]],[],[]]],["loc",[null,[29,7],[29,72]]]],
-            ["inline","input",[],["type","text","placeholder","Short Code","value",["subexpr","@mut",[["get","newLocation.shortCode",["loc",[null,[30,68],[30,89]]]]],[],[]]],["loc",[null,[30,13],[30,91]]]],
-            ["inline","input",[],["type","text","placeholder","Intel URL","value",["subexpr","@mut",[["get","newLocation.intelUrl",["loc",[null,[31,68],[31,88]]]]],[],[]]],["loc",[null,[31,12],[31,90]]]],
-            ["element","action",["savePortal",["get","newLocation",["loc",[null,[32,32],[32,43]]]]],[],["loc",[null,[32,10],[32,45]]]],
-            ["element","action",["cancelEdit"],[],["loc",[null,[33,10],[33,33]]]]
+            ["inline","input",[],["type","text","placeholder","Area","value",["subexpr","@mut",[["get","newLocation.area",["loc",[null,[30,58],[30,74]]]]],[],[]]],["loc",[null,[30,7],[30,76]]]],
+            ["inline","input",[],["type","text","placeholder","Name","value",["subexpr","@mut",[["get","newLocation.name",["loc",[null,[31,54],[31,70]]]]],[],[]]],["loc",[null,[31,7],[31,72]]]],
+            ["inline","input",[],["type","text","placeholder","Short Code","value",["subexpr","@mut",[["get","newLocation.shortCode",["loc",[null,[32,68],[32,89]]]]],[],[]]],["loc",[null,[32,13],[32,91]]]],
+            ["inline","input",[],["type","text","placeholder","Intel URL","value",["subexpr","@mut",[["get","newLocation.intelUrl",["loc",[null,[33,68],[33,88]]]]],[],[]]],["loc",[null,[33,12],[33,90]]]],
+            ["element","action",["savePortal",["get","newLocation",["loc",[null,[34,32],[34,43]]]]],[],["loc",[null,[34,10],[34,45]]]],
+            ["element","action",["cancelEdit"],[],["loc",[null,[35,10],[35,33]]]]
           ],
           locals: [],
           templates: []
@@ -6322,11 +6314,11 @@ define('ember-mongo/templates/partials/portals', ['exports'], function (exports)
             "loc": {
               "source": null,
               "start": {
-                "line": 34,
+                "line": 36,
                 "column": 1
               },
               "end": {
-                "line": 39,
+                "line": 41,
                 "column": 1
               }
             },
@@ -6369,7 +6361,7 @@ define('ember-mongo/templates/partials/portals', ['exports'], function (exports)
             return morphs;
           },
           statements: [
-            ["element","action",["addPortal"],[],["loc",[null,[35,37],[35,59]]]]
+            ["element","action",["addPortal"],[],["loc",[null,[37,37],[37,59]]]]
           ],
           locals: [],
           templates: []
@@ -6381,11 +6373,11 @@ define('ember-mongo/templates/partials/portals', ['exports'], function (exports)
           "loc": {
             "source": null,
             "start": {
-              "line": 25,
+              "line": 27,
               "column": 0
             },
             "end": {
-              "line": 41,
+              "line": 43,
               "column": 0
             }
           },
@@ -6413,7 +6405,7 @@ define('ember-mongo/templates/partials/portals', ['exports'], function (exports)
           return morphs;
         },
         statements: [
-          ["block","if",[["get","newLocation",["loc",[null,[27,7],[27,18]]]]],[],0,1,["loc",[null,[27,1],[39,8]]]]
+          ["block","if",[["get","newLocation",["loc",[null,[29,7],[29,18]]]]],[],0,1,["loc",[null,[29,1],[41,8]]]]
         ],
         locals: [],
         templates: [child0, child1]
@@ -6429,7 +6421,7 @@ define('ember-mongo/templates/partials/portals', ['exports'], function (exports)
             "column": 0
           },
           "end": {
-            "line": 41,
+            "line": 43,
             "column": 7
           }
         },
@@ -6455,8 +6447,8 @@ define('ember-mongo/templates/partials/portals', ['exports'], function (exports)
         return morphs;
       },
       statements: [
-        ["block","each",[["get","area.items",["loc",[null,[1,8],[1,18]]]]],[],0,null,["loc",[null,[1,0],[24,9]]]],
-        ["block","if",[["get","session.currentUser.isAdmin",["loc",[null,[25,6],[25,33]]]]],[],1,null,["loc",[null,[25,0],[41,7]]]]
+        ["block","each",[["get","area.items",["loc",[null,[1,8],[1,18]]]]],[],0,null,["loc",[null,[1,0],[26,9]]]],
+        ["block","if",[["get","session.currentUser.isAdmin",["loc",[null,[27,6],[27,33]]]]],[],1,null,["loc",[null,[27,0],[43,7]]]]
       ],
       locals: [],
       templates: [child0, child1]
@@ -7921,7 +7913,7 @@ define('ember-mongo/tests/controllers/index.jshint', function () {
 
   QUnit.module('JSHint - controllers');
   QUnit.test('controllers/index.js should pass jshint', function(assert) { 
-    assert.ok(false, 'controllers/index.js should pass jshint.\ncontrollers/index.js: line 58, col 66, Unnecessary semicolon.\ncontrollers/index.js: line 83, col 14, Missing semicolon.\ncontrollers/index.js: line 91, col 55, Missing semicolon.\ncontrollers/index.js: line 93, col 11, Missing semicolon.\ncontrollers/index.js: line 111, col 47, Missing semicolon.\ncontrollers/index.js: line 121, col 64, Missing semicolon.\ncontrollers/index.js: line 125, col 64, Missing semicolon.\ncontrollers/index.js: line 130, col 56, Missing semicolon.\ncontrollers/index.js: line 143, col 62, Missing semicolon.\ncontrollers/index.js: line 70, col 26, \'error\' is defined but never used.\ncontrollers/index.js: line 80, col 41, \'fileData\' is defined but never used.\ncontrollers/index.js: line 146, col 27, \'location\' is defined but never used.\n\n12 errors'); 
+    assert.ok(false, 'controllers/index.js should pass jshint.\ncontrollers/index.js: line 52, col 66, Unnecessary semicolon.\ncontrollers/index.js: line 77, col 14, Missing semicolon.\ncontrollers/index.js: line 85, col 55, Missing semicolon.\ncontrollers/index.js: line 87, col 11, Missing semicolon.\ncontrollers/index.js: line 105, col 47, Missing semicolon.\ncontrollers/index.js: line 115, col 64, Missing semicolon.\ncontrollers/index.js: line 119, col 64, Missing semicolon.\ncontrollers/index.js: line 124, col 56, Missing semicolon.\ncontrollers/index.js: line 137, col 62, Missing semicolon.\ncontrollers/index.js: line 64, col 26, \'error\' is defined but never used.\ncontrollers/index.js: line 74, col 41, \'fileData\' is defined but never used.\ncontrollers/index.js: line 140, col 27, \'location\' is defined but never used.\n\n12 errors'); 
   });
 
 });
