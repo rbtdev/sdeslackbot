@@ -6,14 +6,8 @@ export default Ember.Controller.extend({
 
   locations: groupBy('model','area'),
 
-  lat:  function () {
-  	return 32.91;
-  }.property(),
-
-  lng:  function () {
-  	return -116.62;
-  }.property(),
-
+  lat: 32.8528287,
+  lng: -116.6158525,
   zoom:     9,
   type:     'hybrid',
   mapTypes: MAP_TYPES,

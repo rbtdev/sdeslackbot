@@ -187,41 +187,38 @@
 }
 
 #locations {
-  font-size: 12px;
   .title {
     text-align: center;
     font-size: x-large;
   }
 
   .portal-list {
-    margin:30px;
-    margin-top: 60px;
+      margin-top: 30px;
   }
 
   .map {
-    text-align: center;
-    margin: 30px;
-    margin-left: 60px;
+
   }
   
   .portal {
-      margin: 20px;
-      margin-left: 40px;
 
   }
 
   .add-new {
-      margin-top: 40px
+    margin-top: 30px;
   }
 
   .actions {
       text-align: center;
-      a {
-        width: 40%;
-      }
   }
 
   #locations-upload {
       display: none
+  }
+}
+
+#about {
+  div {
+    border: 1px solid black;
   }
 }
