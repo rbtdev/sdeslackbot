@@ -5446,7 +5446,7 @@ define('ember-mongo/templates/index', ['exports'], function (exports) {
         var el3 = dom.createTextNode("\n		");
         dom.appendChild(el2, el3);
         var el3 = dom.createElement("div");
-        dom.setAttribute(el3,"class","large-2 medium-3 small-4 columns left");
+        dom.setAttribute(el3,"class","large-2 medium-3 small-4 columns left scrolling");
         var el4 = dom.createTextNode("\n			");
         dom.appendChild(el3, el4);
         var el4 = dom.createComment("");
