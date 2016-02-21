@@ -4,7 +4,7 @@
 
 		{{#if session.currentUser.isAdmin}}
 		<div class = "large-3 medium-6 small-12 columns right actions">
-			<a class = "button tiny" href = "/api/v1/locations/download">Download</a>
+			<a class = "button tiny" href = "#" {{action 'downloadCsv'}}>Download</a>
 			<a class = "button tiny" href = "#" {{action 'triggerFileSelection'}}>Upload</a>
 			{{#file-uploader isDisabled=controller.isUploading fileInputChanged="receiveFile" uploadProgress="uploadProgress" }}
 				<input type="file" id="locations-upload">
@@ -18,17 +18,23 @@
 			{{partial "partials/areas"}}
 		</div>
 
-		<div class = "large-8 medium-9 small-8 column left portal-list">
+		<div class = "large-9 medium-9 small-8 column left portal-list">
 			{{#if area}}
-				<div class = "title">Portals in {{area.value}}</div>
-				<div class = "portal-list">{{partial "partials/portals"}}</div>
+				<div class = "row">
+					<div class = "large-9 column centered title">Portals in {{area.value}}</div>
+				</div>
+				<div class = "row">
+					<div class = "large-9 column centered portal-list">{{partial "partials/portals"}}</div>
+				</div>
 			{{else}}
+				{{#if showMap}}
 				<div class = "map">
 				{{google-map
 					  lat=lat lng=lng zoom=zoom type=type markers=markers
 					  gopt_mapTypeControl=false gopt_backgroundColor='transparent'
 				  	  ev_click='didClickMap' markerInfoWindowTemplateName='marker-info-window'}}
 				</div>
+				{{/if}}
 			{{/if}}
 		</div>
 	</div>

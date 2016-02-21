@@ -9,16 +9,16 @@
 			<button {{action "cancelEdit"}} class = "tiny">Cancel</button>
 
 		{{else}}
-			<div class = "large-3 column left">{{portal.name}}</div>
-			<div class = "large-1 left">({{portal.shortCode}})</div>
-			<div class = "large-1 left"><a href = {{portal.mapsUrl}} target="google">Google</a></div>
+			<div class = "large-5 column left">{{portal.name}}</div>
+			<div class = "large-2 left">({{portal.shortCode}})</div>
+			<div class = "large-2 left"><a href = {{portal.mapsUrl}} target="google">Google</a></div>
 			<div class = "large-1 left"><a href = {{portal.intelUrl}} target = "inte">Intel</a></div>
 			{{#if session.currentUser.isAdmin}}
 				<div class = "large-1 left">
 					<span class = "icon" {{action "editPortal" portal}}><i class="fi-pencil"></i></span>
 				</div>
 				<div class = "large-1 left">
-					<span class = "icon" {{action "deletePortal" portal}}><i class="fi-x"></i></span>
+					<span class = "icon delete" {{action "deletePortal" portal}}><i class="fi-x"></i></span>
 				</div>
 			{{/if}}
 		{{/if}}

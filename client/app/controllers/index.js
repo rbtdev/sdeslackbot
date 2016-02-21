@@ -1,13 +1,26 @@
 import Ember from 'ember';
 import {MAP_TYPES} from '../components/google-map';
 import groupBy from 'ember-group-by';
+import ENV from '../config/environment';
 
 export default Ember.Controller.extend({
 
-  locations: groupBy('model','area'),
+	init: function () {
+		var _this = this;
+		this.get('geolocation').getLocation().then(function(geoObject) {
+			_this.set('lat', geoObject.coords.latitude);
+			_this.set('lng', geoObject.coords.longitude);
+			_this.set('showMap', true);
+		});
+	}.on('init'),
 
-  lat: 32.8528287,
+  
+  geolocation: Ember.inject.service(''),
+  lat:32.8528287,
   lng: -116.6158525,
+  locations: groupBy('model','area'),
+  showMap: false,
+
   zoom:     9,
   type:     'hybrid',
   mapTypes: MAP_TYPES,
@@ -88,6 +101,11 @@ export default Ember.Controller.extend({
 	},
 
 	actions: {
+		downloadCsv: function () {
+			var token = this.get('session.secure.token');
+			window.location = ENV.api.apiNameSpace + "/locations/download/?token=" + token
+		},
+
 		uploadProgress: function (progress) {
 			this.set('progress', progress);
 		},
