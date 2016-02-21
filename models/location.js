@@ -6,12 +6,13 @@ var locationSchema = new mongoose.Schema({
     area: String,
     lat: Number,
     lng: Number,
-    intelUrl: String,
+    intelUrl: {type: 'string', unique: 'true'}, // only one unique location
     mapsUrl: String,
     shortCode: String,
-	//author: { type: mongoose.Schema.ObjectId, ref: 'user' }
+    method: String,
+	user: { type: mongoose.Schema.ObjectId, ref: 'user' }
 });
-locationSchema.index({ name: 'text', area: 'text', shortCode: 'text'});
+locationSchema.index({ name: 'text', area: 'text', shortCode: 'text'}); // full text search
 
 function _preSave(next) {
 	if (!this.name || !this.intelUrl || !this.area) {
