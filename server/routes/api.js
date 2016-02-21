@@ -43,7 +43,7 @@ api.use(AuthController.isAuthorized)
 	// Locations
 	.post('/locations/', Locations.create)
 	.get('/locations', Paginate, Locations.readAll)
-	.put('/locations/:id', Locations.update)
+	.put('/locations/:id', Locations.updateOne)
 	.delete('/locations/:id', Locations.delete)
 	.get('/locations/download',  Locations.download)
 
@@ -51,7 +51,7 @@ api.use(AuthController.isAuthorized)
 	.post('/files/', FileUpload.single('file[file]'), FileController.create)
 	.post('/locationsFiles', FileUpload.single('locationsFile[file]'), 
 		CsvUpload(LocationController.collectionName, LocationController.importFields), 
-		Locations.replace)
+		Locations.updateBulk)
 
 // End of routes 
 ;

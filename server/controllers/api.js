@@ -12,11 +12,11 @@ function ApiController(controller) {
 	this.model = controller.model;
 	this.controller = controller;
 	this.readAll = api.readAll.bind(this);
-	this.update = api.update.bind(this);
+	this.updateOne = api.updateOne.bind(this);
 	this.create = api.create.bind(this);
 	this.delete = api.delete.bind(this);
 	this.download = api.download.bind(this);
-	this.replace = api.replace.bind(this);
+	this.updateBulk = api.updateBulk.bind(this);
 }
 
 var api = {
@@ -25,43 +25,43 @@ var api = {
 		this.model
 			.find()
 		    .exec( function (err, docs) {
-				if (err) {
-					res.status(500).send(err);
-				}
-				else {
-					var result = {}
-					result[_this.model.modelName] = docs;
-					res.status(200).send(result);
-				}
+				if (err) return	res.status(500).send(err);
+				var result = {}
+				result[_this.model.modelName] = docs;
+				res.status(200).send(result);
 		    });
 	},
 
-	update:  function (req, res, next) {
+	updateOne:  function (req, res, next) {
 		var _this = this;
 		this.model
 			.findById(req.params.id)
-			.exec(
-				function (err, item) {
-					_this.model.update(item, req.body.item);
-				    return item.save(function (err) {
-				      if (!err) {
-				      	res.status(200).send({item:item});
-				      } else {
-				        res.status(404).send(err);
-				      }
-			    });
+			.exec( function (err, item) {
+				if (err) return res.status(500).send(err);
+				if (!item) return res.status(404).send({});
+
+				var newItem = req.body[_this.model.modelName];
+				for (var field in newItem) {
+					item[field] = newItem[field];
+				}
+			    item.save(function (err) {
+			    	if (err) return res.status(500).send(err);
+					res.status(200).send({item:item});
+				})
 		  	});
 	},
 
 	create: function (req, res, next) {
+		var _this = this;
 		var source = req.body[this.model.modelName];
+		source.user = req.user;
+		source.method = "manual";
 		var item = new this.model(source);
 		item.save(function (err) {
-			if (!err) {
-			  res.status(200).send({item:item});
-			} else {
-			  res.status(500).send({error:err, item:item});
-			}
+			if (err) return res.status(500).send({error:err, item:item});
+			var result = {};
+			result[_this.model.modelName] = item;
+			res.status(200).send(result);
 		});
 	},
 
@@ -69,19 +69,12 @@ var api = {
 		this.model
 			.findById(req.params.id)
 			.exec(function (err, item) {
-				if (err) throw (err);
-				if (item) {
-				    item.remove(function (err) {
-				      if (!err) {
-				        res.status(200).send({});
-				      } else {
-				        res.status(500).send(err);
-				      };
-				    });
-				}
-				else {
-					res.status(404).send({});
-				}
+				if (err) return res.status(500).send(err);
+				if (!item) return res.status(404).send({});
+				item.remove(function (err) {
+					if (err) return res.status(500).send(err);
+			        res.status(200).send({});
+			    });
 			});
 	},
 
@@ -90,72 +83,82 @@ var api = {
 		this.model
 			.find()
 			.exec(function (err, docs) {
-				if (!err) {
-					var fields = _this.controller.exportFields;
-					json2csv({ data: docs, fields: fields }, function(err, csv) {
-				    	if (!err) {
-							res.attachment(_this.controller.exportFileName);
-							res.end(csv);
-						}
-						else {
-							res.status(500).send("Error converting CSV")
-						}
-  					});
-				}
-				else {
-					res.status(500).send("Error getting docs")
-				}
+				if (err) return res.status(500).send(err);
+				if (!docs) return res.status(404).send({});
+				var fields = _this.controller.exportFields;
+				json2csv({ data: docs, fields: fields }, function(err, csv) {
+			    	if (err) return res.status(500).send(err);
+					res.attachment(_this.controller.exportFileName);
+					res.end(csv);
+				});
 			})
 	},
 
-	replace: function (req, res, next) {
+	updateBulk: function (req, res, next) {
 		var _this = this;
 		var saveCount = 0;
+		var newCount = 0;
+		var updateCount = 0;
+		var user = req.user;
 
-		function save(item, cb) {
-			var itemObj = new _this.model(item);
-			itemObj.save(function (err) {
-				if (err) {
-					// ignore errors on individual objects for now
-					return cb();
-				}
-				else {
-					saveCount++
-					return cb();
-				}
-			})
-		};
-
-		mongoose.connection.db.dropCollection(this.controller.collectionName, function(err, result) {
-			var docs = req.body[_this.controller.collectionName];
-			async.each(docs, save, function (err) {
-				if (err) {
-					res.status(500).send(err);
-				}
-				else {
-					_this.model.
-					ensureIndexes(
-					function (err) {
-						if (err) {
-							res.status.send(err);
+		function update (user) {
+			return function save(item, cb) {
+				var importKey = _this.controller.importKey
+				_this.model.findOne({importKey: item[importKey]}, function (err, doc) {
+					if (err) {
+						return cb() // ignore error for individual items
+					}
+					else {
+						if (doc) {
+							for (var i=0; i < _this.controller.importFields.length; i++) {
+								var field = _this.controller.importFields[i];
+								doc[field] = item[field];
+							}
+							updateCount++
 						}
 						else {
-							_this.model
-							.find()
-							.exec(function (err, results) {
-								if (err) {
-									res.status(500).send(err);
-								}
-								else {
-									res.status(200).send({item:results.ops});
-							    }
-							});						
+							// new doc
+							doc = new _this.model(item);
+							newCount++;
 						}
+						doc.user = user;
+						doc.method = 'upload';
+						doc.save(function (err, doc) {
+							if (err) {
+								return cb() // ignore error for individual items
+							}
+							else {
+								saveCount++;
+								return cb();
+							}
+						})
+					}
+				})
+			}
+		};
+
+		// async update each item in the imported file;
+		var docs = req.body[_this.controller.collectionName];
+		async.each(docs, update(user), function (err) {
+			if (err) {
+				res.status(500).send(err);
+			}
+			else {
+				_this.model.
+				ensureIndexes(
+				function (err) {
+					if (err) return res.status(500).send(err);
+					_this.model
+					.find()
+					.exec(function (err, results) {
+						if (err) return res.status(500).send(err);
+						var result = {};
+						result[_this.model.modelName] = results;
+						res.status(200).send(result);
 					});
-				};				
-			})
+				});
+			};				
 		})
-		
 	},
 };
 

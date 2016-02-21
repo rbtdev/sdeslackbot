@@ -15,5 +15,6 @@ module.exports = {
 	importFields: ["name", "area", "intelUrl", "mapsUrl", "shortCode"],
 	exportFields: ['name', 'area', 'intelUrl', 'mapsUrl', 'shortCode', 'lat', 'lng'],
 	exportFileName: "portals.csv",
-	collectionName: LocationModel.modelName + "s"
+	collectionName: LocationModel.modelName + "s",
+	importKey: 'intelUrl'
 };
