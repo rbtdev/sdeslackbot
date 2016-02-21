@@ -1,7 +1,7 @@
 var path = require('path');
 var fs = require('fs');
 
-function  csvUpload(modelName, fieldNames) {
+function  csvUpload(collectionName, fieldNames) {
   return function (req, res, next) {
     var Converter=require("csvtojson").Converter;
     var converter= new Converter({headers: fieldNames});
@@ -9,7 +9,8 @@ function  csvUpload(modelName, fieldNames) {
 
     converter.on("end_parsed",
           function(jsonObj) {
-            req.body[modelName] = jsonObj;
+            console.log("Setting body." + collectionName);
+            req.body[collectionName] = jsonObj;
             next();
     });
 

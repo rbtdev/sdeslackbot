@@ -42,8 +42,5 @@ locationSchema.pre('save', _preSave);
 
 var LocationModel = mongoose.model('location',locationSchema);
 
-module.exports = {
-	model: LocationModel,
-	preSave: preSave,
-	fieldNames: ["name", "area", "intelUrl", "mapsUrl", "shortCode"]
-};
+
+module.exports = LocationModel;

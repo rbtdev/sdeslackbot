@@ -6,7 +6,7 @@ var NoteController = require('../controllers/note.js');
 var UserController = require('../controllers/user.js');
 var FileController = require('../controllers/file.js');
 var CsvUpload = require('../middleware/csvUpload.js');
-var LocationModel = require('../models/location.js');
+var ApiController = require('../controllers/api.js');
 
 var multer  = require('multer');
 var FileUpload = multer({ dest: './public/uploads/'});
@@ -33,13 +33,14 @@ router.put('/notes/:id',AuthController.isAuthorized, NoteController.update);
 router.delete('/notes/:id', AuthController.isAuthorized, NoteController.delete);
 
 // Locations
-router.post('/locations/', AuthController.isAuthorized, LocationController.create);
-router.get('/locations', AuthController.isAuthorized, Paginate, LocationController.readAll);
-router.put('/locations/:id',AuthController.isAuthorized, LocationController.update);
-router.delete('/locations/:id', AuthController.isAuthorized, LocationController.delete);
+var Locations = ApiController(LocationController);
+router.post('/locations/', AuthController.isAuthorized, Locations.create);
+router.get('/locations', AuthController.isAuthorized, Paginate, Locations.readAll);
+router.put('/locations/:id',AuthController.isAuthorized, Locations.update);
+router.delete('/locations/:id', AuthController.isAuthorized, Locations.delete);
 // TODO: The download endpoint is currently not secured.
 //   Need to find a way for the front end to download a file using Auth tokens
-router.get('/locations/download', LocationController.download);
+router.get('/locations/download',  Locations.download);
 
 
 // Files
@@ -47,8 +48,8 @@ router.post('/files/', FileUpload.single('file[file]'), AuthController.isAuthori
 router.post('/locationsFiles', 
 			FileUpload.single('locationsFile[file]'), 
 			AuthController.isAuthorized, 
-			CsvUpload('locations', LocationModel.fieldNames), 
-			LocationController.replace);
+			CsvUpload(LocationController.collectionName, LocationController.importFields), 
+			Locations.replace);
 
 // Images
 router.get('/images/:id', FileController.getImage);

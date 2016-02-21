@@ -26,8 +26,8 @@ export default Ember.Controller.extend({
   		marker.lat = location.lat?location.lat:0;
   		marker.lng = location.lng?location.lng:0;
   		marker.isDraggable = false;
-  		marker.hasInfoWindow = true;
-  		marker.infoWindowTemplate = 'marker-info-window';
+  		//marker.hasInfoWindow = true;
+  		//marker.infoWindowTemplate = 'marker-info-window';
   		markers.pushObject(marker);
   	}
   	return markers;
