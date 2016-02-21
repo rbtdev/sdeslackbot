@@ -25,7 +25,7 @@
 
     <ul class="left">
       <li class = "slack-name">{{session.currentUser.slackName}}</li>
-      <li class = "slack-role">[admin]</li>
+      {{#if session.currentUser.isAdmin}}<li class = "slack-role">[admin]</li>{{/if}}
     </ul>
 
     <!-- Right Nav Section -->
