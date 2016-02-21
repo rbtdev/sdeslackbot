@@ -7,50 +7,52 @@ var UserController = require('../controllers/user.js');
 var FileController = require('../controllers/file.js');
 var CsvUpload = require('../middleware/csvUpload.js');
 var ApiController = require('../controllers/api.js');
-
-var multer  = require('multer');
-var FileUpload = multer({ dest: './public/uploads/'});
-
-var router = express.Router();
-
-// Authentication 
-router.post('/api-token-auth', AuthController.authenticate);
-
-// Password Reset
-router.post('/passwordResetRequests', UserController.setResetPwRequest);
-router.post('/passwordResets', UserController.resetPw);
-
-// User 
-router.post('/users', UserController.create);
-router.get('/users', AuthController.isAuthorized, UserController.readMany); 
-router.get('/users/:id', AuthController.isAuthorized, UserController.readOne);
-router.put('/users/:id', AuthController.isAuthorized, UserController.update);
-
-// Notes 
-router.post('/notes/', AuthController.isAuthorized, NoteController.create);
-router.get('/notes', AuthController.isAuthorized, Paginate, NoteController.readAll);
-router.put('/notes/:id',AuthController.isAuthorized, NoteController.update);
-router.delete('/notes/:id', AuthController.isAuthorized, NoteController.delete);
-
-// Locations
+var FileUpload = require('multer')({ dest: './public/uploads/'});
 var Locations = ApiController(LocationController);
-router.post('/locations/', AuthController.isAuthorized, Locations.create);
-router.get('/locations', AuthController.isAuthorized, Paginate, Locations.readAll);
-router.put('/locations/:id',AuthController.isAuthorized, Locations.update);
-router.delete('/locations/:id', AuthController.isAuthorized, Locations.delete);
-// TODO: The download endpoint is currently not secured.
-//   Need to find a way for the front end to download a file using Auth tokens
-router.get('/locations/download',  Locations.download);
+var api = express.Router();
 
+// Set up API endpoints
 
-// Files
-router.post('/files/', FileUpload.single('file[file]'), AuthController.isAuthorized, FileController.create);
-router.post('/locationsFiles', 
-			FileUpload.single('locationsFile[file]'), 
-			AuthController.isAuthorized, 
-			CsvUpload(LocationController.collectionName, LocationController.importFields), 
-			Locations.replace);
+// Unsecure endpoints (No JWT Token required)
+api
+	// Authentication (login)
+	.post('/api-token-auth', AuthController.authenticate)
+	// Password Reset
+	.post('/passwordResetRequests', UserController.setResetPwRequest)
+	.post('/passwordResets', UserController.resetPw)
+	// User creation (sign up)
+	.post('/users', UserController.create)
+	// Images (uploaded avatars)
+	.get('/images/:id', FileController.getImage)
+;
 
-// Images
-router.get('/images/:id', FileController.getImage);
-module.exports = router;
+// Secure Endpoints
+api.use(AuthController.isAuthorized)
+
+	// Users
+	.get('/users', UserController.readMany)
+	.get('/users/:id', UserController.readOne)
+	.put('/users/:id', UserController.update)
+
+	// Notes 
+	.post('/notes/', NoteController.create)
+	.get('/notes', Paginate, NoteController.readAll)
+	.put('/notes/:id', NoteController.update)
+	.delete('/notes/:id', NoteController.delete)
+
+	// Locations
+	.post('/locations/', Locations.create)
+	.get('/locations', Paginate, Locations.readAll)
+	.put('/locations/:id', Locations.update)
+	.delete('/locations/:id', Locations.delete)
+	.get('/locations/download',  Locations.download)
+
+	// Files
+	.post('/files/', FileUpload.single('file[file]'), FileController.create)
+	.post('/locationsFiles', FileUpload.single('locationsFile[file]'), 
+		CsvUpload(LocationController.collectionName, LocationController.importFields), 
+		Locations.replace)
+
+// End of routes 
+;
+module.exports = api;
