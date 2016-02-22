@@ -2,6 +2,7 @@ var data = require('../models/data');
 var str2argv = require('string-argv');
 var argvParser = require('minimist');
 var Messenger = require('./messenger');
+var GearController = require('../controllers/gear.js');
 
 module.exports = function Brain() {
 	this.exec = exec;
@@ -171,16 +172,74 @@ module.exports = function Brain() {
 		var argv = str2argv.parseArgsStringToArgv(hook.text).splice(1);
 		argv = argv.length?argv:["help"];
 		return {
-			verb: argv[0],
+			verb: argv[0].toLowerCase(),
 			args: argvParser(argv.splice(1), {})
 		};
 	};
 
-	function exec (hook, channel, respond) {
+	function gear(user, args, channel, respond) {
+		var gearHelp = "usage: @intel gear ...";
+		var actions = ["need", "have", "got", "gave"];
+		var levels =  ["l1", "l2", "l3", "l4", "l5", "l6", "l7", "l8"];
+		var strengths = ["r", "vr"];
+		var qualifiers = levels.concat(strengths);
+		var levelItems = ["bursters", , "cubes", "resos"];
+		var strengthItems = ["shields", "axas", "amps"];
+		var plainItems = ["adas", "jarvis"];
+		var items = levelItems.concat(strengthItems.concat(plainItems));
+
+		var request = args._;
+		if (request.length < 1) return respond({text: "need action qualifier and item"});
+		var action = request[0];
+		if (actions.indexOf(action) < 0) return respond({text: "need valid action"});
+	
+		if (request.length < 2) return respond({text: "need qualifer/item"});
+		var qualifier = request[1];
+		var itemPos;
+		if (qualifiers.indexOf(qualifier) < 0) {
+			qualifier = null;
+			itemPos = 1;
+		}
+		else {
+			itemPos = 2;
+			if (request.length < 3) return respond({text: gearHelp})
+		}
+		var item = request[itemPos]
+		if (items.indexOf(item) < 0) return respond({text: gearHelp});
+
+		var gearPost = null;
+		var strengthItemValid = ((strengthItems.indexOf(item) >= 0) & ((!qualifier) || (strengths.indexOf(qualifier) >= 0)));
+		var levelItemValid = ((levelItems.indexOf(item) >= 0) & ((!qualifier) || (levels.indexOf(qualifier) >= 0)));
+		var plainItemValid = ((plainItems.indexOf(item) >= 0) & (!qualifier));
+
+		if (strengthItemValid || levelItemValid || plainItemValid) {
+			gearPost = {
+				user: user.id,
+				action: action,
+				qualifier: qualifier,
+				item: item
+			};
+			GearController.post(gearPost, function (err, post) {
+				if (err) return respond({text: "Unable to submit your request. Try again later."});
+				if (post.action == "need") {
+					respond({text: "Your gear availability has been submitted. You'll receive a message in your Slackbot channel when someone needs what you have."})
+				}
+				else if (post.action == "have") {
+					return respond({text: "Your gear needs have been submitted. You'll receive a message in your Slackbot channel when your gear needs become available."})
+				}
+				else return respond({text: "Thank you for using the Intel Gear Exchange"})
+			});
+		}
+		else {
+			return respond({text: "no such thing as " + qualifier + " " + item})
+		}
+	};
+
+	function exec (user, hook, channel, respond) {
 		console.log("hook = " + JSON.stringify(hook))
 		//data.load("https://docs.google.com/spreadsheets/d/1GI580TI29HL05Omegqb-HqHczU9sAY5XAgY9G-h9Eqs/pubhtml")
 		var command = parse(hook);
-		switch (command.verb.toLowerCase()) {
+		switch (command.verb) {
 			case "list":
 				list(command.args, respond);
 			break;
@@ -192,6 +251,9 @@ module.exports = function Brain() {
 			break;
 			case "motd":
 				motd(hook, command.args, channel, respond);
+			break;
+			case "gear":
+				gear(user, command.args, channel, respond);
 			break;
 			default:
 				help(command.args, respond);
