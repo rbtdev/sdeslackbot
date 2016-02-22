@@ -14,7 +14,7 @@ var locationSchema = new mongoose.Schema({
 });
 locationSchema.index({ name: 'text', area: 'text', shortCode: 'text'}); // full text search
 
-function _preSave(next) {
+function preSave(next) {
 	if (!this.name || !this.intelUrl || !this.area) {
 		return next (new Error());
 	}
@@ -33,11 +33,7 @@ function _preSave(next) {
 	next();
 };
 
-function preSave(location, next) {
-	_preSave.bind(location)(next);
-}
-
-locationSchema.pre('save', _preSave);
+locationSchema.pre('save', preSave);
 
 //locationSchema.plugin(acl.object);
 

@@ -24,7 +24,7 @@ function onMessage (message) {
 
 	var botMessage = ((type === 'message') && (text.split(' ')[0] === '<@' + slack.self.id + '>'))
 	if (botMessage) {
-		this.brain.exec(message, channel, function (response) {
+		this.brain.exec(user, message, channel, function (response) {
 			channel.postMessage(response);
 		});
 	}
