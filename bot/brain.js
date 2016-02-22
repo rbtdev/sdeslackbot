@@ -184,7 +184,7 @@ module.exports = function Brain() {
 		var strengths = ["r", "vr"];
 		var qualifiers = levels.concat(strengths);
 		var levelItems = ["bursters", , "cubes", "resos"];
-		var strengthItems = ["shields", "axas", "amps"];
+		var strengthItems = ["shields", "heatsinks","multihacks", "axas", "amps"];
 		var plainItems = ["adas", "jarvis"];
 		var items = levelItems.concat(strengthItems.concat(plainItems));
 
@@ -222,10 +222,10 @@ module.exports = function Brain() {
 			GearController.post(gearPost, function (err, post) {
 				if (err) return respond({text: "Unable to submit your request. Try again later."});
 				if (post.action == "need") {
-					respond({text: "Your gear availability has been submitted. You'll receive a message in your Slackbot channel when someone needs what you have."})
+					respond({text: "Your gear needs have been submitted. You'll receive a message in your Slackbot channel when your gear needs become available."})
 				}
 				else if (post.action == "have") {
-					return respond({text: "Your gear needs have been submitted. You'll receive a message in your Slackbot channel when your gear needs become available."})
+					return respond({text: "Your gear availability has been submitted. You'll receive a message in your Slackbot channel when someone has what you need."})
 				}
 				else return respond({text: "Thank you for using the Intel Gear Exchange"})
 			});

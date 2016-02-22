@@ -4,16 +4,16 @@ var User = require('../models/user.js');
 
 
 function findMatches(post) {
-	var needDoc = post;
-	var action = (post.action=="need")?"have":"need";
+	var matchAction = (post.action=="need")?"have":"need";
 
-	Gear.find({action: action, qualifier: post.qualifier, item: post.item}, function (err, matchDocs) {
+	Gear.find({action: matchAction, qualifier: post.qualifier, item: post.item}, function (err, matchDocs) {
 		if (err) return cb(err);
 		if (matchDocs.length == 0) return; // Post submitted, no matching haves doc
 		// found matches, send a SlackBot message to the matching users
 		var qualifier = post.qualifier?post.qualifier:"";
 		var item = post.item?post.item:"";
 		for (var i = 0; i < matchDocs.length; i++ ) {
+			console.log("matches found:" + matchDocs.length);
 			var matchDoc = matchDocs[i];
 			var postUser = bot.slack.getUserByID(post.user);
 			var matchUser = bot.slack.getUserByID(matchDoc.user);
@@ -25,8 +25,8 @@ function findMatches(post) {
 			var postResultText = (post.action=="need")?"has what you need.":"needs what you have.";
 			var matchResultText = (post.action=="need")?"needs what you have.":"has what you need.";
 
-			bot.sendDM(postUser, matchText + " " + postUserText + " " + postResultText + " - " + itemText)
-			bot.sendDM(matchUser, matchText + " " + matchUserText + " " + matchResultText + " - " + itemText);
+			bot.sendDM(postUser, matchText + " " + matchUserText + " " + postResultText + " - " + itemText)
+			bot.sendDM(matchUser, matchText + " " + postUserText + " " + matchResultText + " - " + itemText);
 		}
 	})
 }
