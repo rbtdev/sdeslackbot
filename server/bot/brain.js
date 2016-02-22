@@ -186,7 +186,8 @@ module.exports = function Brain() {
 		var levelItems = ["bursters", , "cubes", "resos"];
 		var strengthItems = ["shields", "heatsinks","multihacks", "axas", "amps"];
 		var plainItems = ["adas", "jarvis"];
-		var items = levelItems.concat(strengthItems.concat(plainItems));
+		var easterEggs = ["girls", "money"];
+		var items = levelItems.concat(strengthItems.concat(plainItems).concat(easterEggs));
 
 		var request = args._;
 		if (request.length < 1) return respond({text: "need action qualifier and item"});
@@ -230,8 +231,18 @@ module.exports = function Brain() {
 				else return respond({text: "Thank you for using the Intel Gear Exchange"})
 			});
 		}
+		else if (easterEggs.indexOf(item) >= 0) {
+			var response = "";
+			if (item == "girls") {
+				response = "Well, good luck with that. Maybe less Ingress and more Tinder!";
+			} else if (item == "money") {
+				response = "Don't we all!"
+			}			
+			return respond({text: response })
+		}
 		else {
-			return respond({text: "no such thing as " + qualifier + " " + item})
+			var response = "no such thing as " + qualifier + " " + item;
+			return respond({text: response })
 		}
 	};
 
