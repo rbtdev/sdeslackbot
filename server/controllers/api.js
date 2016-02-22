@@ -96,16 +96,26 @@ var api = {
 
 	updateBulk: function (req, res, next) {
 		var _this = this;
-		var saveCount = 0;
-		var newCount = 0;
-		var updateCount = 0;
+		var stats = {
+			saveCount:0,
+			newCount:0,
+			existingCount: 0,
+			errorCount: 0,
+		};
+
 		var user = req.user;
+		var errorItems = [];
 
 		function update (user) {
 			return function save(item, cb) {
 				var importKey = _this.controller.importKey
-				_this.model.findOne({importKey: item[importKey]}, function (err, doc) {
+				console.log("Finding item with " + importKey + " = " + item[importKey])
+				var query = {};
+				query[importKey] = item[importKey];
+				_this.model.findOne(query, function (err, doc) {
 					if (err) {
+						stats.errorCount++
+						errorItems.push(item);
 						return cb() // ignore error for individual items
 					}
 					else {
@@ -114,21 +124,23 @@ var api = {
 								var field = _this.controller.importFields[i];
 								doc[field] = item[field];
 							}
-							updateCount++
+							stats.existingCount++
 						}
 						else {
 							// new doc
 							doc = new _this.model(item);
-							newCount++;
+							stats.newCount++;
 						}
 						doc.user = user;
 						doc.method = 'upload';
-						doc.save(function (err, doc) {
+						doc.save(function (err, newDoc) {
 							if (err) {
+								stats.errorCount++;
+								errorItems.push(doc);
 								return cb() // ignore error for individual items
 							}
 							else {
-								saveCount++;
+								stats.saveCount++;
 								return cb();
 							}
 						})
@@ -144,19 +156,16 @@ var api = {
 				res.status(500).send(err);
 			}
 			else {
-				_this.model.
-				ensureIndexes(
-				function (err) {
-					if (err) return res.status(500).send(err);
-					_this.model
+				_this.model
 					.find()
 					.exec(function (err, results) {
 						if (err) return res.status(500).send(err);
 						var result = {};
 						result[_this.model.modelName] = results;
+						result.stats = stats;
+						result.errorItems = errorItems;
 						res.status(200).send(result);
 					});
-				});
 			};				
 		})
 	},
