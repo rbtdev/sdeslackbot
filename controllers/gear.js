@@ -41,6 +41,13 @@ var controller = {
 			findMatches(doc);
 			return cb(null, doc);
 		});
+	},
+
+	list: function (slackUserId, cb) {
+		Gear.find({user: slackUserId}, function (err, docs) {
+			if (err) return cb(err);
+			return cb(null, docs);
+		})
 	}
 }
 

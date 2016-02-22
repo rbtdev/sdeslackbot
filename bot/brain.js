@@ -179,7 +179,7 @@ module.exports = function Brain() {
 
 	function gear(user, args, channel, respond) {
 		var gearHelp = "usage: @intel gear ...";
-		var actions = ["need", "have", "got", "gave"];
+		var actions = ["need", "have", "got", "gave", "list"];
 		var levels =  ["l1", "l2", "l3", "l4", "l5", "l6", "l7", "l8"];
 		var strengths = ["r", "vr"];
 		var qualifiers = levels.concat(strengths);
@@ -193,6 +193,33 @@ module.exports = function Brain() {
 		if (request.length < 1) return respond({text: "need action qualifier and item"});
 		var action = request[0];
 		if (actions.indexOf(action) < 0) return respond({text: "need valid action"});
+
+		if (action == "list") {
+			return GearController.list(user.id, function (err, results) {
+				if (err) return respond({text: "Unable to get a list of your gear posts."})
+				if (!results) return respond({text: "You have no active gear posts."});
+				var attachments = [];
+				var text = "You have the following gear posts:"
+				for (var i = 0; i<results.length; i++) {
+					var post = results[i];
+					var fields = [
+			                {
+			                    title: post.action + " " + (post.qualifier?post.qualifier:"") + " " + post.item,
+			                    short: true
+			                }      
+            			];
+					var attachment = {
+						title: "",
+						text: "",
+						fallback: "",
+						fields: fields,
+						mrkdwn_in: ["text"]
+					}
+					attachments.push(attachment);		
+				}
+				respond({text: text, attachments:attachments})
+			});
+		}
 	
 		if (request.length < 2) return respond({text: "need qualifer/item"});
 		var qualifier = request[1];
