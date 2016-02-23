@@ -23,7 +23,7 @@ module.exports = function Brain() {
 	};
 
 	function parse (hook) {
-		var argv = str2argv.parseArgsStringToArgv(hook.text).splice(1);
+		var argv = str2argv.parseArgsStringToArgv(hook.text.toLowerCase()).splice(1);
 		argv = argv.length?argv:["help"];
 		return {
 			verb: argv[0].toLowerCase(),
