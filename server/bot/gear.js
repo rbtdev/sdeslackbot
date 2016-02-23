@@ -50,7 +50,7 @@ function postResponse (respond) {
 };
 
 function gear(user, args, channel, respond) {
-	var gearHelp = "usage: @intel gear ...";
+	var gearHelp = "usage: @intel gear <need|have> [l1-l8 or r,vr] <bursters|resos|cubes|shields|ultrastrikes|multihacks|heatsinks|axas|adas|jarvis>";
 	var actions = ["need", "have", "got", "gave", "list"];
 	var levels =  ["l1", "l2", "l3", "l4", "l5", "l6", "l7", "l8"];
 	var strengths = ["r", "vr"];
@@ -62,16 +62,16 @@ function gear(user, args, channel, respond) {
 	var items = levelItems.concat(strengthItems.concat(plainItems).concat(easterEggs));
 
 	var request = args._;
-	if (request.length < 1) return respond({text: "need action qualifier and item"});
+	if (request.length < 1) return respond({text: gearHelp});
 
 	var action = request[0];
-	if (actions.indexOf(action) < 0) return respond({text: "need valid action"});
+	if (actions.indexOf(action) < 0) return respond({text: "need valid action (need or have)"});
 
 	if (action == "list") {
 		return GearController.list(user.id, listResponse(respond));
 	}
 
-	if (request.length < 2) return respond({text: "need qualifer/item"});
+	if (request.length < 2) return respond({text: "need qualifer or item"});
 
 	var qualifier = request[1];
 	var itemPos;
