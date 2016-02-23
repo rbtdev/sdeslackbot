@@ -55,7 +55,7 @@ function gear(user, args, channel, respond) {
 	var levels =  ["l1", "l2", "l3", "l4", "l5", "l6", "l7", "l8"];
 	var strengths = ["r", "vr"];
 	var qualifiers = levels.concat(strengths);
-	var levelItems = ["bursters", , "cubes", "resos"];
+	var levelItems = ["bursters", , "cubes", "resos", "ultrastrikes"];
 	var strengthItems = ["shields", "heatsinks","multihacks", "axas", "amps"];
 	var plainItems = ["adas", "jarvis"];
 	var easterEggs = ["girls", "money"];
