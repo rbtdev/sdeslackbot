@@ -4,7 +4,7 @@ var schema = new mongoose.Schema({
     action: String, //  need, have, got, gave
     qualifier: String, // l1,l2,l3,l4,l5,l6,l7,l7,r,vr, <areea for keys>
     item: String, // shields, axas, bursters, resos, ultras, cubes, keys
-    createdOn: { type: Date, expires: 60*24 }, // expire a post in 24 hours
+    createdOn: { type: Date, expires: 60*60*24 }, // expire a post in 24 hours
 	user: String, // slack user who created this 
 });
 schema.index({action: 1, qualifier: 1, item: 1, user: 1}, {unique: true});
