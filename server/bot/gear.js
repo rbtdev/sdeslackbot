@@ -9,7 +9,7 @@ function listResponse(respond) {
 		var text = "You have the following gear posts:"
 		for (var i = 0; i<results.length; i++) {
 			var post = results[i];
-			var expiresIn =    "(expires " + moment(post.expiresOn).calendar(null, {sameDay : '[today at] LT', nextDay : '[tomorrow at] LT'}) + ")";
+			var expiresIn =    "(expires " + moment(post.expiresOn).calendar(null, {sameDay : '[today at] h:mm A', nextDay : '[tomorrow at] h:mm A'}) + ")";
 			var postText = post.action + " " + (post.qualifier?post.qualifier:"") + " " + post.item + " " + expiresIn;
 			var attachment = {
 				title: "",
