@@ -17,6 +17,7 @@
     "json2csv": "^3.2.0",
     "jsonwebtoken": "^5.4.1",
     "minimist": "^1.1.0",
+    "moment": "^2.11.2",
     "mongoose-acl": "^0.2.3",
     "morgan": "~1.6.1",
     "multer": "^1.1.0",
