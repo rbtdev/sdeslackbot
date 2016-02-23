@@ -1,4 +1,5 @@
 var GearController = require('../controllers/gear.js');
+var moment = require('moment');
 
 function listResponse(respond) {
 	return function (err, results) {
@@ -8,17 +9,14 @@ function listResponse(respond) {
 		var text = "You have the following gear posts:"
 		for (var i = 0; i<results.length; i++) {
 			var post = results[i];
-			var fields = [
-	                {
-	                    title: post.action + " " + (post.qualifier?post.qualifier:"") + " " + post.item,
-	                    short: true
-	                }      
-				];
+			var expiresIn =    "(expires " + moment(post.expiresOn).calendar(null, {sameDay : '[today at] LT', nextDay : '[tomorrow at] LT'}) + ")";
+			var postText = post.action + " " + (post.qualifier?post.qualifier:"") + " " + post.item + " " + expiresIn;
 			var attachment = {
 				title: "",
-				text: "",
+				text: postText,
 				fallback: "",
-				fields: fields,
+				fields: null,
+				color: (post.action=='need')?'danger':'good',
 				mrkdwn_in: ["text"]
 			}
 			attachments.push(attachment);		

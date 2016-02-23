@@ -1,12 +1,22 @@
 var mongoose = require('mongoose');
+var moment = require('moment');
 
+var expiration = 60*60*24; // 1 day in seconds
 var schema = new mongoose.Schema({
     action: String, //  need, have, got, gave
     qualifier: String, // l1,l2,l3,l4,l5,l6,l7,l7,r,vr, <areea for keys>
     item: String, // shields, axas, bursters, resos, ultras, cubes, keys
-    createdOn: { type: Date, expires: 60*60*24 }, // expire a post in 24 hours
+    createdOn: { type: Date, expires: expiration }, // expire a post in 24 hours
 	user: String, // slack user who created this 
 });
+
+schema.virtual('expiresOn')
+.get(function () {
+	var createdOn = new Date(this.createdOn);
+	var expiresOn = createdOn.setSeconds(createdOn.getSeconds() + expiration);
+	return expiresOn;
+});
+
 schema.index({action: 1, qualifier: 1, item: 1, user: 1}, {unique: true});
 var model = mongoose.model('gear', schema);
 
