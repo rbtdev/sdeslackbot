@@ -17,12 +17,3 @@ function find (searchText, cb) {
       cb(links?links:[]);
   })
 }
-
-// function load (url) {
-//   var Tabletop = require('tabletop');
-
-//   Tabletop.init( { key: url,
-//                    callback: function(data, tabletop) { console.log(data) },
-//                    simpleSheet: true } )
-// };
-
