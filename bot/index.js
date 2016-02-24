@@ -12,18 +12,21 @@ function onOpen () {
 function onMessage (message) {
 
 	var slack = this.slack;
-
-	/// console.log("activy = " + JSON.stringify(message))
-
 	var type = message.type;
 	var channel = slack.getChannelGroupOrDMByID(message.channel);
 	var user = slack.getUserByID(message.user);
-
 	var time = message.ts;
-	var text = message.text?message.text:"";
+	var text = message.text?message.text:" ";
+	var isMessage = (message.type === "message")
+	var botUser = "<@" + slack.self.id + ">";
+	var firstWord = text.split(' ')[0];
+	var isShortcut = firstWord.charAt(0) === "!"
+	var isForMe = ((firstWord === botUser) || isShortcut);
 
-	var botMessage = ((type === 'message') && (text.split(' ')[0] === '<@' + slack.self.id + '>'))
-	if (botMessage) {
+	if (isMessage && isForMe) {
+		if (isShortcut) {
+			message.text = botUser + " " + message.text.slice(1);
+		}
 		this.brain.exec(user, message, channel, function (response) {
 			channel.postMessage(response);
 		});
