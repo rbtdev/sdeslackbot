@@ -21,8 +21,7 @@ function onMessage (message) {
 	var isMessage = (message.type === "message")
 	var botUser = "<@" + slack.self.id + ">";
 	var firstWord = text.split(' ')[0];
-	var isShortcut = false;
-	//var isShortcut = firstWord.charAt(0) === "!"
+	var isShortcut = firstWord.charAt(0) === "."
 	var isForMe = ((firstWord === botUser) || isShortcut);
 
 	if (isMessage && isForMe) {
