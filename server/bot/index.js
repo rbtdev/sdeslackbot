@@ -9,6 +9,7 @@ function onOpen () {
 	console.log('You have %s unread ' + (unreads === 1 ? 'message' : 'messages'), unreads);
 }
 
+
 function onMessage (message) {
 
 	var slack = this.slack;
@@ -28,6 +29,7 @@ function onMessage (message) {
 			message.text = botUser + " " + message.text.slice(1);
 		}
 		this.brain.exec(user, message, channel, function (response) {
+			response.as_user = true;
 			channel.postMessage(response);
 		});
 	}
