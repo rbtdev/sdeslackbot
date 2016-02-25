@@ -48,7 +48,7 @@ function postResponse (respond) {
 	}
 };
 
-function gear(user, args, channel, respond) {
+function gear(user, args, respond) {
 	var gearHelp = "usage: @intel gear <need|have> [l1-l8 or r,vr] <bursters|resos|cubes|shields|ultrastrikes|multihacks|heatsinks|axas|adas|jarvis>";
 	var actions = ["need", "have", "got", "gave", "list"];
 	var levels =  ["l1", "l2", "l3", "l4", "l5", "l6", "l7", "l8"];
