@@ -12,9 +12,7 @@ function listResponse(respond) {
 			var inHours = moment.duration(moment(post.expiresOn).diff(moment())).asHours();
 			var expiresIn =    "(expires in " + inHours.toFixed(0) + "h)";
 			var matchNames = (post.action=="need")?"Pick up from ":"Donate to ";
-			JSON.stringify(post);
 			post.matches.forEach(function (match) {
-				console.log("match user = " + match.user)
 				matchNames = matchNames + "<@" + match.user + "> ";
 			})
 			var postText = "You " + post.action + " " + (post.qualifier?post.qualifier:"").toUpperCase() + " " + post.item + "\t\t" + expiresIn;

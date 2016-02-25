@@ -17,7 +17,6 @@ function onMessage (message) {
 	var slack = this.slack;
 	if (message.text && message.text.length > 0) {
 		var type = message.type;
-		console.log("length = " + message.text.length)
 		var channel = slack.getChannelGroupOrDMByID(message.channel);
 		var user = slack.getUserByID(message.user);
 		var text = message.text?message.text:" ";
@@ -26,7 +25,6 @@ function onMessage (message) {
 		var isMessage = (message.type === "message")
 		var botUser = "<@" + slack.self.id.toLowerCase() + ">";
 		var firstWord = argv[0];
-		console.log("First word: " + firstWord);
 		var isShortcut = (firstWord.charAt(0) === ".");
 		var isForMe = ((firstWord === botUser) || isShortcut);
 

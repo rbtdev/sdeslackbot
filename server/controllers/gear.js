@@ -13,7 +13,6 @@ function findMatches(post) {
 		var qualifier = post.qualifier?post.qualifier:"";
 		var item = post.item?post.item:"";
 		for (var i = 0; i < matchDocs.length; i++ ) {
-			console.log("matches found:" + matchDocs.length);
 			var matchDoc = matchDocs[i];
 			var postUser = bot.slack.getUserByID(post.user);
 			var matchUser = bot.slack.getUserByID(matchDoc.user);
@@ -59,7 +58,6 @@ var controller = {
 			.populate('matches')
 			.exec(function (err, docs) {
 				if (err) return cb(err);
-				console.log("docs " + docs);
 				return cb(null, docs);
 			})
 	}
