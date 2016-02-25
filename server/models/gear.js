@@ -8,6 +8,7 @@ var schema = new mongoose.Schema({
     item: String, // shields, axas, bursters, resos, ultras, cubes, keys
     createdOn: { type: Date, expires: expiration }, // expire a post in 24 hours
 	user: String, // slack user who created this 
+	matches : [{ type: mongoose.Schema.Types.ObjectId, ref: 'gear' }]
 });
 
 schema.virtual('expiresOn')
