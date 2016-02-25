@@ -58,16 +58,6 @@ function gear(command) {
 	var args = command.args;
 	var respond = command.respond;
 
-	var actions = ["need", "have", "got", "gave", "list"];
-	var levels =  ["l1", "l2", "l3", "l4", "l5", "l6", "l7", "l8"];
-	var strengths = ["c", "r", "vr"];
-	var qualifiers = levels.concat(strengths);
-	var levelItems = ["bursters", , "cubes", "resos", "ultrastrikes"];
-	var strengthItems = ["shields", "heatsinks","multihacks", "axas", "linkamps"];
-	var plainItems = ["adas", "jarvis", "ultralinks", "media", "keycaps", "keys"];
-	var easterEggs = ["girls", "money"];
-	var items = levelItems.concat(strengthItems.concat(plainItems).concat(easterEggs));
-
 	var request = args._;
 	if (request.length < 1) return respond({text: "Usage: " + gearHelp});
 
@@ -124,7 +114,17 @@ function gear(command) {
 	}
 };
 
-var gearHelp = "<list|need|have> [l1-l8 or c,r,vr] <bursters|resos|cubes|shields|ultrastrikes|multihacks|heatsinks|axas|adas|jarvis>";
+var actions = ["need", "have", "list"];
+var levels =  ["l1", "l2", "l3", "l4", "l5", "l6", "l7", "l8"];
+var strengths = ["c", "r", "vr"];
+var qualifiers = levels.concat(strengths);
+var levelItems = ["bursters", , "cubes", "resos", "ultrastrikes"];
+var strengthItems = ["shields", "heatsinks","multihacks", "axas", "linkamps"];
+var plainItems = ["mufgs", "capsules", "adas", "jarvis", "ultralinks", "media", "keycaps", "keys"];
+var easterEggs = ["girls", "money"];
+var items = levelItems.concat(strengthItems.concat(plainItems).concat(easterEggs));
+
+var gearHelp = "<list|need|have> [l1-l8 or c,r,vr] <mufgs|capsules|ultralinks|linkamps|bursters|resos|cubes|shields|ultrastrikes|multihacks|heatsinks|axas|adas|jarvis>";
 
 
 module.exports = {
