@@ -92,7 +92,7 @@ function motd (command) {
 };
 
 module.exports = {
-	command: motd,
+	exec: motd,
 	usage: "-m 'message to send' -r <repeat interval in mins> -l <location>"
 }
 

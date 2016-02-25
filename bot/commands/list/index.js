@@ -1,4 +1,4 @@
 module.exports = {
-	command: require('../find').command,
+	exec: require('../find').exec,
 	desc: "alias for the find command with no location"
 }

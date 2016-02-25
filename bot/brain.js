@@ -49,8 +49,8 @@ module.exports = function Brain() {
 		command.user = user;
 		command.respond = respond;
 		command.channel = channel
-		if (BotCommands[command.verb] && BotCommands[command.verb].command) {
-			BotCommands[command.verb].command(command)
+		if (BotCommands[command.verb] && BotCommands[command.verb].exec) {
+			BotCommands[command.verb].exec(command)
 		}
 		else {
 			respond("No command'" + command.verb + "' found");

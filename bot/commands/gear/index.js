@@ -128,7 +128,7 @@ var gearHelp = "<list|need|have> [l1-l8 or c,r,vr] <mufgs|capsules|ultralinks|li
 
 
 module.exports = {
-	command: gear,
+	exec: gear,
 	usage: gearHelp,
 	desc: "posts a gear exchange request"
 }
