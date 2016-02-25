@@ -1,5 +1,4 @@
 var data = require('../models/data');
-var str2argv = require('string-argv');
 var argvParser = require('minimist');
 var gear = require('./gear');
 var motd = require('./motd');
