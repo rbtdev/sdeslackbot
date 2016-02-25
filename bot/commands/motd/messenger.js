@@ -1,6 +1,6 @@
 var str2argv = require('string-argv');
 var argvParser = require('minimist');
-var find = require('./find.js');
+var find = require('../find');
 
 
 var messages = [];

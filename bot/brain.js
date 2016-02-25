@@ -1,23 +1,37 @@
 var data = require('../models/data');
 var argvParser = require('minimist');
-var gear = require('./gear');
-var motd = require('./motd');
-var find = require('./find');
+var normalizedPath = require("path").join(__dirname, "commands");
+var BotCommands = {};
+require("fs").readdirSync(normalizedPath).forEach(function(file) {
+  BotCommands[file] = require("./commands/" + file);
+});
 
 
 module.exports = function Brain() {
 	this.exec = exec;
 
-	function help (args, respond) {
+	function help (respond) {
 		var attachments = [];
-		response = "*Welcome to the Ingress Intel Link Bot (beta)*\n\n";
+		response = "*Welcome to the SDE Slack Team Bot*\n\n";
 		response += "*The following commands are now available*\n";
-		response += "`  @intel find <name> - searches for the location specified by <name>. Ex: @intel find tony romas`\n",
-		response += "`  @intel list - dispays a list of available areas`\n";
-		response += "`  @intel motd -m 'message to send' -r <repeat interval in mins> -l <location>`\n\n";
-		response += "*Coming soon*\n"
-		response += "`  @intel add <area> <name> <shortCode> <intelLink> <mapsLink> - adds an area to the list of available areas. Admins only.`\n";
-		response += "`  @intel upload <google spreadsheet url> - bulk adds a list of area entries. Admins only`\n"
+
+		for (command in BotCommands) {
+			var attachment = {};
+			attachment.mrkdwn_in = ["text", "pretext"]
+			var preText = "";
+			preText += "`" + command + "`";
+			if (BotCommands[command].usage) {
+				preText += " `" + BotCommands[command].usage + "`";
+			}
+			var commandText = "";
+			if (BotCommands[command].desc) {
+				commandText += BotCommands[command].desc;
+			}
+			commandText += "\n";
+			attachment.pretext = preText;
+			attachment.text = commandText;
+			attachments.push(attachment);
+		}
 		respond({text: response, attachments: attachments})
 	};
 
@@ -32,22 +46,15 @@ module.exports = function Brain() {
 
 	function exec (user, argv, channel, respond) {
 		var command = parse(argv);
-		switch (command.verb) {
-			case "list":
-				find(null, respond);
-			break;;
-			case "find":
-				find(command.args, respond);
-			break;
-			case "motd":
-				motd(command.args, respond);
-			break;
-			case "gear":
-				gear(user, command.args, respond);
-			break;
-			default:
-				help(command.args, respond);
-			break;
+		command.user = user;
+		command.respond = respond;
+		command.channel = channel
+		if (BotCommands[command.verb] && BotCommands[command.verb].command) {
+			BotCommands[command.verb].command(command)
+		}
+		else {
+			respond("No command'" + command.verb + "' found");
+			help(respond);
 		}
 	};
 

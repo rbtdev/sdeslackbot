@@ -1,4 +1,4 @@
-var GearController = require('../controllers/gear.js');
+var GearController = require('../../../controllers/gear.js');
 var moment = require('moment');
 
 function listResponse(respond) {
@@ -53,20 +53,23 @@ function postResponse (respond) {
 	}
 };
 
-function gear(user, args, respond) {
-	var gearHelp = "usage: @intel gear <need|have> [l1-l8 or r,vr] <bursters|resos|cubes|shields|ultrastrikes|multihacks|heatsinks|axas|adas|jarvis>";
+function gear(command) {
+	var user = command.user;
+	var args = command.args;
+	var respond = command.respond;
+
 	var actions = ["need", "have", "got", "gave", "list"];
 	var levels =  ["l1", "l2", "l3", "l4", "l5", "l6", "l7", "l8"];
-	var strengths = ["r", "vr"];
+	var strengths = ["c", "r", "vr"];
 	var qualifiers = levels.concat(strengths);
 	var levelItems = ["bursters", , "cubes", "resos", "ultrastrikes"];
-	var strengthItems = ["shields", "heatsinks","multihacks", "axas", "amps"];
-	var plainItems = ["adas", "jarvis"];
+	var strengthItems = ["shields", "heatsinks","multihacks", "axas", "linkamps"];
+	var plainItems = ["adas", "jarvis", "ultralinks", "media", "keycaps", "keys"];
 	var easterEggs = ["girls", "money"];
 	var items = levelItems.concat(strengthItems.concat(plainItems).concat(easterEggs));
 
 	var request = args._;
-	if (request.length < 1) return respond({text: gearHelp});
+	if (request.length < 1) return respond({text: "Usage: " + gearHelp});
 
 	var action = request[0];
 	if (actions.indexOf(action) < 0) return respond({text: "need valid action (need or have)"});
@@ -85,11 +88,11 @@ function gear(user, args, respond) {
 	}
 	else {
 		itemPos = 2;
-		if (request.length < 3) return respond({text: gearHelp})
+		if (request.length < 3) return respond({text: "Usage: " + gearHelp})
 	}
 
 	var item = request[itemPos]
-	if (items.indexOf(item) < 0) return respond({text: gearHelp});
+	if (items.indexOf(item) < 0) return respond({text: "Usage: " + gearHelp});
 
 	var gearPost = null;
 	var strengthItemValid = ((strengthItems.indexOf(item) >= 0) & ((!qualifier) || (strengths.indexOf(qualifier) >= 0)));
@@ -121,4 +124,11 @@ function gear(user, args, respond) {
 	}
 };
 
-module.exports = gear;
+var gearHelp = "<list|need|have> [l1-l8 or c,r,vr] <bursters|resos|cubes|shields|ultrastrikes|multihacks|heatsinks|axas|adas|jarvis>";
+
+
+module.exports = {
+	command: gear,
+	usage: gearHelp,
+	desc: "posts a gear exchange request"
+}
