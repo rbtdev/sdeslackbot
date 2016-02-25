@@ -19,7 +19,7 @@ function find (command) {
 var usage = "<name>";
 
 module.exports = {
-	command: find,
+	exec: find,
 	usage: usage,
 	desc: "searches for the portal specified by <name> (<name> can be an area, abbreviaton, or specific portal)"
 }
