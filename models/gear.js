@@ -24,15 +24,10 @@ var model = mongoose.model('gear', schema);
 schema.pre('save', function (next) {
 	var inverseAction = (this.action=="need")?"have":"need";
 	var _this = this;
-	console.log("checking for inverse conflict: " + this.user + " cannot have a " + inverseAction);
-
 	model.find({'user':this.user, 'qualifier':this.qualifier, 'item': this.item, 'action': inverseAction}, function (err, docs) {
-		console.log("Docs = " + JSON.stringify(docs));
 		if (err) return next(err);
 		if (docs && docs.length > 0) {
 			 var err = new Error("You cant 'need' and 'have' the same items.");
-			 console.log("Error inside pre save: " + JSON.stringify(err));
-			 console.log("Error message inside pre save: " + err.message);
 			return next(err);
 		}
 		_this.createdOn = new Date();
