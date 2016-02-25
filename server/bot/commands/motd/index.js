@@ -1,6 +1,9 @@
 var messenger = require('./messenger');
 
-function motd (args, respond) {
+function motd (command) {
+	var args = command.args;
+	var respond = command.respond;
+
 	var errorMessage = null;
 	console.log("args = " + JSON.stringify(args))
 	var attachments = [];
@@ -88,5 +91,8 @@ function motd (args, respond) {
 	}
 };
 
-module.exports = motd;
+module.exports = {
+	command: motd,
+	usage: "-m 'message to send' -r <repeat interval in mins> -l <location>"
+}
 
