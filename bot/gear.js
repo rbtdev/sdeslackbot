@@ -6,15 +6,22 @@ function listResponse(respond) {
 		if (err) return respond({text: "Unable to get a list of your gear posts."})
 		if (results && results.length == 0) return respond({text: "You have no active gear posts."});
 		var attachments = [];
-		var text = "You have the following gear posts:"
+		var text = ""
 		for (var i = 0; i<results.length; i++) {
 			var post = results[i];
 			var inHours = moment.duration(moment(post.expiresOn).diff(moment())).asHours();
-			var expiresIn =    "(expires in " + inHours.toFixed(0) + ((inHours>1)?' hours':' hour') + ")";
-			var postText = post.action + " " + (post.qualifier?post.qualifier:"") + " " + post.item + " " + expiresIn;
+			var expiresIn =    "(expires in " + inHours.toFixed(0) + "h)";
+			var matchNames = (post.action=="need")?"Pick up from ":"Donate to ";
+			JSON.stringify(post);
+			post.matches.forEach(function (match) {
+				console.log("match user = " + match.user)
+				matchNames = matchNames + "<@" + match.user + "> ";
+			})
+			var postText = "You " + post.action + " " + (post.qualifier?post.qualifier:"").toUpperCase() + " " + post.item + "\t\t" + expiresIn;
+	
 			var attachment = {
-				title: "",
-				text: postText,
+				title: postText,
+				text: post.matches.length?matchNames:"",
 				fallback: "",
 				fields: null,
 				color: (post.action=='need')?'danger':'good',
@@ -94,6 +101,7 @@ function gear(user, args, respond) {
 	if (strengthItemValid || levelItemValid || plainItemValid) {
 		gearPost = {
 			user: user.id,
+			userName: user.name,
 			action: action,
 			qualifier: qualifier,
 			item: item

@@ -15,29 +15,33 @@ function onOpen () {
 function onMessage (message) {
 
 	var slack = this.slack;
-	var type = message.type;
-	var channel = slack.getChannelGroupOrDMByID(message.channel);
-	var user = slack.getUserByID(message.user);
-	var text = message.text?message.text:" ";
-	var argv = str2argv.parseArgsStringToArgv(text.toLowerCase());
+	if (message.text && message.text.length > 0) {
+		var type = message.type;
+		console.log("length = " + message.text.length)
+		var channel = slack.getChannelGroupOrDMByID(message.channel);
+		var user = slack.getUserByID(message.user);
+		var text = message.text?message.text:" ";
+		var argv = str2argv.parseArgsStringToArgv(text.toLowerCase());
 
-	var isMessage = (message.type === "message")
-	var botUser = "<@" + slack.self.id.toLowerCase() + ">";
-	var firstWord = argv[0];
-	var isShortcut = firstWord.charAt(0) === "."
-	var isForMe = ((firstWord === botUser) || isShortcut);
+		var isMessage = (message.type === "message")
+		var botUser = "<@" + slack.self.id.toLowerCase() + ">";
+		var firstWord = argv[0];
+		console.log("First word: " + firstWord);
+		var isShortcut = (firstWord.charAt(0) === ".");
+		var isForMe = ((firstWord === botUser) || isShortcut);
 
-	if (isMessage && isForMe) {
-		if (isShortcut) {
-			argv[0] = argv[0].slice(1); //get rid of the "."
+		if (isMessage && isForMe) {
+			if (isShortcut) {
+				argv[0] = argv[0].slice(1); //get rid of the "."
+			}
+			else {
+				argv = argv.slice(1); //get rid of the bot user name
+			}
+			this.brain.exec(user, argv, channel, function (response) {
+				response.as_user = true;
+				channel.postMessage(response);
+			});
 		}
-		else {
-			argv = argv.slice(1); //get rid of the bot user name
-		}
-		this.brain.exec(user, argv, channel, function (response) {
-			response.as_user = true;
-			channel.postMessage(response);
-		});
 	}
 }
 

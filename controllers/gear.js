@@ -27,6 +27,16 @@ function findMatches(post) {
 
 			bot.sendDM(postUser, matchText + " " + matchUserText + " " + postResultText + " - " + itemText)
 			bot.sendDM(matchUser, matchText + " " + postUserText + " " + matchResultText + " - " + itemText);
+			
+			// update both records with match info
+			matchDoc.matches.push(post._id);
+			post.matches.push(matchDoc._id);
+			matchDoc.save(function (err, doc) {
+				console.log("Saved match info for matching doc")
+			})
+			post.save(function (err, doc) {
+				console.log("Saved match info for post doc");
+			})
 		}
 	})
 }
@@ -44,10 +54,14 @@ var controller = {
 	},
 
 	list: function (slackUserId, cb) {
-		Gear.find({user: slackUserId}, function (err, docs) {
-			if (err) return cb(err);
-			return cb(null, docs);
-		})
+		Gear
+			.find({user: slackUserId})
+			.populate('matches')
+			.exec(function (err, docs) {
+				if (err) return cb(err);
+				console.log("docs " + docs);
+				return cb(null, docs);
+			})
 	}
 }
 
