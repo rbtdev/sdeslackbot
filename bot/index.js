@@ -1,6 +1,8 @@
 var Slack = require('slack-client');
 var Brain = require('./brain.js');
 var UserModel = require('../models/user.js');
+var str2argv = require('string-argv');
+
 
 function onOpen () {
 	var slack = this.slack;
@@ -16,19 +18,23 @@ function onMessage (message) {
 	var type = message.type;
 	var channel = slack.getChannelGroupOrDMByID(message.channel);
 	var user = slack.getUserByID(message.user);
-	var time = message.ts;
 	var text = message.text?message.text:" ";
+	var argv = str2argv.parseArgsStringToArgv(text.toLowerCase());
+
 	var isMessage = (message.type === "message")
-	var botUser = "<@" + slack.self.id + ">";
-	var firstWord = text.split(' ')[0];
+	var botUser = "<@" + slack.self.id.toLowerCase() + ">";
+	var firstWord = argv[0];
 	var isShortcut = firstWord.charAt(0) === "."
 	var isForMe = ((firstWord === botUser) || isShortcut);
 
 	if (isMessage && isForMe) {
 		if (isShortcut) {
-			message.text = botUser + " " + message.text.slice(1);
+			argv[0] = argv[0].slice(1); //get rid of the "."
 		}
-		this.brain.exec(user, message, channel, function (response) {
+		else {
+			argv = argv.slice(1); //get rid of the bot user name
+		}
+		this.brain.exec(user, argv, channel, function (response) {
 			response.as_user = true;
 			channel.postMessage(response);
 		});

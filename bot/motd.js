@@ -1,34 +1,11 @@
-var Messenger = require('./messenger');
-var find = require('./find.js');
-var messenger = new Messenger();
+var messenger = require('./messenger');
 
-
-var str2argv = require('string-argv');
-var argvParser = require('minimist');
-
-function sendMotd() {
-	var message = this;
-	var responseText = "To cancel this message type `@intel motd stop " + message.id + "`\n" + "*" + message.text + "*";
-	if (message.command) {
-		var argv = str2argv.parseArgsStringToArgv(this.command);
-
-		find(argvParser(argv.splice(1)), function (response) {
-			response.text = responseText;
-			console.log("response = " + JSON.stringify(response))
-			message.channel.postMessage(response);
-		});
-	}
-	else {
-		message.channel.post({text: responseText});
-	}
-};
-
-function motd (hook, args,channel, respond) {
+function motd (args, respond) {
 	var errorMessage = null;
 	console.log("args = " + JSON.stringify(args))
 	var attachments = [];
 	if (args._.length) {
-		var command = args._[0].toLowerCase();
+		var command = args._[0];
 		switch (command) {
 			case 'stop':
 				if (args._.length > 1) {
@@ -45,7 +22,7 @@ function motd (hook, args,channel, respond) {
 				}
 			break;
 			case 'list':
-				var messages = messenger.messages();
+				var messages = messenger.getActiveMessages();
 				var attachments = [];
 				messages.forEach(function (message) {
 					var text = ""
@@ -98,15 +75,15 @@ function motd (hook, args,channel, respond) {
 			var commandStr = null;
 			if (location) {
 				var commandStr = "find " + location;
+				console.log("CommandStr = " + commandStr)
 			}
-			var message = messenger.createMessage({
+			var message = new messenger.Message({
 				text: text,
 				interval: repeat*60,
 				command: commandStr,
-				channel: channel,
-				cb: sendMotd
+				respond: respond,
 			});
-			sendMotd.bind(message)();
+			message.send();;
 		}
 	}
 };

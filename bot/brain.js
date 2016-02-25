@@ -22,18 +22,17 @@ module.exports = function Brain() {
 		respond({text: response, attachments: attachments})
 	};
 
-	function parse (hook) {
-		var argv = str2argv.parseArgsStringToArgv(hook.text.toLowerCase()).splice(1);
+	function parse (argv) {
 		argv = argv.length?argv:["help"];
 		return {
-			verb: argv[0].toLowerCase(),
+			verb: argv[0],
 			args: argvParser(argv.splice(1), {})
 		};
 	};
 
 
-	function exec (user, hook, channel, respond) {
-		var command = parse(hook);
+	function exec (user, argv, channel, respond) {
+		var command = parse(argv);
 		switch (command.verb) {
 			case "list":
 				find(null, respond);
@@ -42,10 +41,10 @@ module.exports = function Brain() {
 				find(command.args, respond);
 			break;
 			case "motd":
-				motd(hook, command.args, channel, respond);
+				motd(command.args, respond);
 			break;
 			case "gear":
-				gear(user, command.args, channel, respond);
+				gear(user, command.args, respond);
 			break;
 			default:
 				help(command.args, respond);
