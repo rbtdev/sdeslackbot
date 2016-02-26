@@ -93,6 +93,8 @@ function motd (command) {
 
 module.exports = {
 	exec: motd,
-	usage: "-m 'message to send' -r <repeat interval in mins> -l <location>"
+	usage: "-m 'message to send' -r <repeat interval in mins> -l <location>",
+	desc: "Sends a specified message to the current channel either once or repeating at a specified interval.  " +
+			"An optional portal name/area can be specified to execute the `find` command when the message is sent."
 }
 

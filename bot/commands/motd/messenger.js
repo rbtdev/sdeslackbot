@@ -1,6 +1,6 @@
 var str2argv = require('string-argv');
 var argvParser = require('minimist');
-var find = require('../find');
+var data = require('../../../models/data');
 
 
 var messages = [];
@@ -38,7 +38,7 @@ function sendMessage(message) {
 		if (message.command) {
 			var argv = str2argv.parseArgsStringToArgv(message.command);
 
-			find(argvParser(argv.splice(1)), function (response) {
+			data.find(argvParser(argv.splice(1)), function (response) {
 				response.text = responseText;
 				message.respond(response);
 			});

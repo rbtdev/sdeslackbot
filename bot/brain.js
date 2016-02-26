@@ -1,5 +1,7 @@
 var data = require('../models/data');
 var argvParser = require('minimist');
+
+// Get the modules in the './commands' directory and create the command list
 var normalizedPath = require("path").join(__dirname, "commands");
 var BotCommands = {};
 require("fs").readdirSync(normalizedPath).forEach(function(file) {
@@ -53,7 +55,6 @@ module.exports = function Brain() {
 			BotCommands[command.verb].exec(command)
 		}
 		else {
-			respond("No command'" + command.verb + "' found");
 			help(respond);
 		}
 	};
