@@ -1,6 +1,18 @@
 var GearController = require('../../../controllers/gear.js');
 var moment = require('moment');
 
+var actions = ["need", "have", "list"];
+var levels =  ["l1", "l2", "l3", "l4", "l5", "l6", "l7", "l8"];
+var strengths = ["c", "r", "vr"];
+var qualifiers = levels.concat(strengths);
+var levelItems = ["bursters", , "cubes", "resos", "ultrastrikes"];
+var strengthItems = ["shields", "heatsinks","multihacks", "axas", "linkamps"];
+var plainItems = ["mufgs", "capsules", "adas", "jarvis", "ultralinks", "media", "keycaps", "keys"];
+var easterEggs = ["girls", "money"];
+var items = levelItems.concat(strengthItems.concat(plainItems).concat(easterEggs));
+
+var gearHelp = "<list|need|have> [l1-l8 or c,r,vr] <mufgs|capsules|ultralinks|linkamps|bursters|resos|cubes|shields|ultrastrikes|multihacks|heatsinks|axas|adas|jarvis>";
+
 function listResponse(respond) {
 	return function (err, results) {
 		if (err) return respond({text: "Unable to get a list of your gear posts."})
@@ -35,7 +47,6 @@ function postResponse (respond) {
 	return function (err, post) {
 		if (err) {
 			var response = "Unable to save your request. Please try again later (EC" + err.code + ").";
-			console.log(JSON.stringify(err));
 			if (err.code == 11000) { // Duplicate
 				response = "You've already told me that. You'll be notified when a match occurs.";
 			} else {
@@ -53,37 +64,16 @@ function postResponse (respond) {
 	}
 };
 
-function gear(command) {
-	var user = command.user;
-	var args = command.args;
-	var respond = command.respond;
+function postAction(action, qualifier, item, user, respond) {
 
-	var request = args._;
-	if (request.length < 1) return respond({text: "Usage: " + gearHelp});
-
-	var action = request[0];
-	if (actions.indexOf(action) < 0) return respond({text: "need valid action (need or have)"});
-
-	if (action == "list") {
-		return GearController.list(user.id, listResponse(respond));
+	if (qualifier && (qualifiers.indexOf(qualifier) < 0)) {
+		return respond({text: "Usage: " + gearHelp})
+	}
+	if (!item || (items.indexOf(item) < 0)) {
+		return respond({text: "Usage: " + gearHelp});
 	}
 
-	if (request.length < 2) return respond({text: "need qualifer or item"});
-
-	var qualifier = request[1];
-	var itemPos;
-	if (qualifiers.indexOf(qualifier) < 0) {
-		qualifier = "";
-		itemPos = 1;
-	}
-	else {
-		itemPos = 2;
-		if (request.length < 3) return respond({text: "Usage: " + gearHelp})
-	}
-
-	var item = request[itemPos]
-	if (items.indexOf(item) < 0) return respond({text: "Usage: " + gearHelp});
-
+	qualifier = qualifier?qualifier:"";
 	var gearPost = null;
 	var strengthItemValid = ((strengthItems.indexOf(item) >= 0) & ((!qualifier) || (strengths.indexOf(qualifier) >= 0)));
 	var levelItemValid = ((levelItems.indexOf(item) >= 0) & ((!qualifier) || (levels.indexOf(qualifier) >= 0)));
@@ -99,36 +89,46 @@ function gear(command) {
 		};
 		return GearController.post(gearPost, postResponse(respond))
 	}
-	else if (easterEggs.indexOf(item) >= 0) {
-		var response = "";
-		if (item == "girls") {
-			response = "Well, good luck with that. Maybe less Ingress and more Tinder!";
-		} else if (item == "money") {
-			response = "Don't we all!"
-		}			
-		return respond({text: response })
-	}
 	else {
 		var response = "no such thing as " + qualifier + " " + item;
 		return respond({text: response })
 	}
+}
+
+function gear(command) {
+
+	var user = command.user;
+	var args = command.args;
+	var respond = command.respond;
+
+	var request = args._;
+	if (request.length < 1) return respond({text: "Usage: " + gearHelp});
+	var action = request[0];
+	switch (action) {
+		case "list":
+			return GearController.list(user.id, listResponse(respond));
+		break;
+		case "need":
+		case "have":
+			var qualifier = request[2]?request[1]:null;
+			var item = qualifier?request[2]:request[1];
+			return postAction(action, qualifier, item, user, respond);
+		break;
+		default:
+			return respond({text: "need valid action: " + actions});
+		break
+	}
+
 };
 
-var actions = ["need", "have", "list"];
-var levels =  ["l1", "l2", "l3", "l4", "l5", "l6", "l7", "l8"];
-var strengths = ["c", "r", "vr"];
-var qualifiers = levels.concat(strengths);
-var levelItems = ["bursters", , "cubes", "resos", "ultrastrikes"];
-var strengthItems = ["shields", "heatsinks","multihacks", "axas", "linkamps"];
-var plainItems = ["mufgs", "capsules", "adas", "jarvis", "ultralinks", "media", "keycaps", "keys"];
-var easterEggs = ["girls", "money"];
-var items = levelItems.concat(strengthItems.concat(plainItems).concat(easterEggs));
-
-var gearHelp = "<list|need|have> [l1-l8 or c,r,vr] <mufgs|capsules|ultralinks|linkamps|bursters|resos|cubes|shields|ultrastrikes|multihacks|heatsinks|axas|adas|jarvis>";
-
+var desc = 
+"Post a gear request or availability into the Gear Exchange.  Posts expire " +
+"after 24 hours if no matching post has been submitted.  If someone submits a " +
+"post which satisfies your 'need' or 'have' you will both be notified via a " +
+"message sent to your Slackbot channel";
 
 module.exports = {
 	exec: gear,
 	usage: gearHelp,
-	desc: "posts a gear exchange request"
+	desc: desc
 }
