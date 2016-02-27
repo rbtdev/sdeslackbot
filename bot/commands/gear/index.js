@@ -1,15 +1,14 @@
 var GearController = require('../../../controllers/gear.js');
 var moment = require('moment');
 
-var actions = ["need", "have", "list"];
+var actions = ["need", "have", "list", "del"];
 var levels =  ["l1", "l2", "l3", "l4", "l5", "l6", "l7", "l8"];
 var strengths = ["c", "r", "vr"];
 var qualifiers = levels.concat(strengths);
 var levelItems = ["bursters", , "cubes", "resos", "ultrastrikes"];
 var strengthItems = ["shields", "heatsinks","multihacks", "axas", "linkamps"];
-var plainItems = ["mufgs", "capsules", "adas", "jarvis", "ultralinks", "media", "keycaps", "keys"];
-var easterEggs = ["girls", "money"];
-var items = levelItems.concat(strengthItems.concat(plainItems).concat(easterEggs));
+var plainItems = ["mufgs", "capsules", "adas", "jarvis", "ultralinks", "media", "keycaps", "keys"];;
+var items = levelItems.concat(strengthItems.concat(plainItems));
 
 var gearHelp = "<list|need|have> [l1-l8 or c,r,vr] <mufgs|capsules|ultralinks|linkamps|bursters|resos|cubes|shields|ultrastrikes|multihacks|heatsinks|axas|adas|jarvis>";
 
@@ -75,33 +74,22 @@ function postResponse (respond) {
 
 function postAction(action, qualifier, item, user, respond) {
 
-	if (qualifier && (qualifiers.indexOf(qualifier) < 0)) {
-		return respond({text: "Usage: " + gearHelp})
-	}
-	if (!item || (items.indexOf(item) < 0)) {
-		return respond({text: "Usage: " + gearHelp});
-	}
+	gearPost = {
+		user: user.id,
+		userName: user.name,
+		action: action,
+		qualifier: qualifier,
+		item: item
+	};
+	return GearController.post(gearPost, postResponse(respond))
+};
 
-	qualifier = qualifier?qualifier:"";
-	var gearPost = null;
-	var strengthItemValid = ((strengthItems.indexOf(item) >= 0) & ((!qualifier) || (strengths.indexOf(qualifier) >= 0)));
-	var levelItemValid = ((levelItems.indexOf(item) >= 0) & ((!qualifier) || (levels.indexOf(qualifier) >= 0)));
-	var plainItemValid = ((plainItems.indexOf(item) >= 0) & (!qualifier));
 
-	if (strengthItemValid || levelItemValid || plainItemValid) {
-		gearPost = {
-			user: user.id,
-			userName: user.name,
-			action: action,
-			qualifier: qualifier,
-			item: item
-		};
-		return GearController.post(gearPost, postResponse(respond))
-	}
-	else {
-		var response = "no such thing as " + qualifier + " " + item;
-		return respond({text: response })
-	}
+function deletePost(user, qualifier, item, respond) {
+	GearController.delete(user.id, qualifier, item, function (err) {
+		if (err) return respond({text: "Cannot find a post for " + qualifier + " " + item})
+		return respond({text: "Deleted your post for " + qualifier + " " + item})
+	})
 }
 
 function gear(command) {
@@ -112,24 +100,76 @@ function gear(command) {
 
 	var request = args._;
 	if (request.length < 1) return respond({text: "Usage: " + gearHelp});
-	var action = request[0];
-	switch (action) {
-		case "list":
-			var userId = (request[1] === "all")?null:user.id
-			return GearController.list(userId, listResponse(user.id, respond));
-		break;
-		case "need":
-		case "have":
-			var qualifier = request[2]?request[1]:null;
-			var item = qualifier?request[2]:request[1];
-			return postAction(action, qualifier, item, user, respond);
-		break;
-		default:
-			return respond({text: "need valid action: " + actions});
-		break
+	var fullAction = getFullAction(request);
+	if (!fullAction.err) {
+		switch (fullAction.action) {
+			case "list":
+				var userId = (request[1] === "all")?null:user.id
+				console.log("Listing for " + userId)
+				return GearController.list(userId, listResponse(user.id, respond));
+			break;
+			case "need":
+			case "have":
+				return postAction(fullAction.action, fullAction.qualifier, fullAction.item, user, respond);
+			break;
+			case "del":
+				return deletePost(user, fullAction.qualifier, fullAction.item, respond); 
+			default:
+				return respond({text: "need valid action: " + actions});
+			break
+		}
+	}
+	else {
+		return respond ({text: fullAction.err});
 	}
 
 };
+
+function getFullAction(request) {
+	var fullAction = null;
+	var action = request[0];
+	var qualifier = request[2]?request[1]:null;
+	var item = qualifier?request[2]:request[1];
+
+	if (action && (actions.indexOf(action) < 0)) {
+		return ({err: "Need valid action: " + actions});
+	}
+	if (action == "need" || action == "have" || action == "del") {
+		if (qualifier && (qualifiers.indexOf(qualifier) < 0)) {
+			return ({err: "Need valid level or strength: " + qualifiers});
+		}
+		if (!item || (items.indexOf(item) < 0)) {
+			return ({err: "Need valid item: " + items});
+		}
+		qualifier = qualifier?qualifier:"";
+		var strengthItemValid = ((strengthItems.indexOf(item) >= 0) & ((!qualifier) || (strengths.indexOf(qualifier) >= 0)));
+		var levelItemValid = ((levelItems.indexOf(item) >= 0) & ((!qualifier) || (levels.indexOf(qualifier) >= 0)));
+		var plainItemValid = ((plainItems.indexOf(item) >= 0) & (!qualifier));
+
+		if (strengthItemValid || levelItemValid || plainItemValid) {
+			return ({
+				err: null,
+				action: action,
+				qualifier: qualifier,
+				item: item
+			})
+		}
+		return ({err: "No such thing as a " + qualifier + " " + item});
+	}
+	else {
+		return ({
+			err: null,
+			action: action,
+			qualifier: qualifier,
+			item: item
+		})
+
+	}
+
+}
+	
+
+
 
 var desc = 
 "Post a gear request or availability into the Gear Exchange.  Posts expire " +
