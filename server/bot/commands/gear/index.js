@@ -13,10 +13,11 @@ var items = levelItems.concat(strengthItems.concat(plainItems).concat(easterEggs
 
 var gearHelp = "<list|need|have> [l1-l8 or c,r,vr] <mufgs|capsules|ultralinks|linkamps|bursters|resos|cubes|shields|ultrastrikes|multihacks|heatsinks|axas|adas|jarvis>";
 
-function listResponse(respond) {
+function listResponse(userId, respond) {
 	return function (err, results) {
-		if (err) return respond({text: "Unable to get a list of your gear posts."})
-		if (results && results.length == 0) return respond({text: "You have no active gear posts."});
+
+		if (err) return respond({text: "Unable to get a list of gear posts."})
+		if (results && results.length == 0) return respond({text: "No active gear posts."});
 		var attachments = [];
 		var text = ""
 		for (var i = 0; i<results.length; i++) {
@@ -27,7 +28,15 @@ function listResponse(respond) {
 			post.matches.forEach(function (match) {
 				matchNames = matchNames + "<@" + match.user + "> ";
 			})
-			var postText = "You " + post.action + " " + (post.qualifier?post.qualifier:"").toUpperCase() + " " + post.item + "\t\t" + expiresIn;
+			var postUser = "You";
+			var postAction = post.action;
+
+			if (post.user != userId) {
+				postUser = "<@" + post.user + ">";
+				postAction = (post.action==="have")?"has":"needs";
+			}
+			
+			var postText = postUser + " " + postAction + " " + (post.qualifier?post.qualifier:"").toUpperCase() + " " + post.item + "\t\t" + expiresIn;
 	
 			var attachment = {
 				title: postText,
@@ -106,7 +115,8 @@ function gear(command) {
 	var action = request[0];
 	switch (action) {
 		case "list":
-			return GearController.list(user.id, listResponse(respond));
+			var userId = (request[1] === "all")?null:user.id
+			return GearController.list(userId, listResponse(user.id, respond));
 		break;
 		case "need":
 		case "have":
