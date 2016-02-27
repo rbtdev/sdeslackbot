@@ -53,13 +53,27 @@ var controller = {
 	},
 
 	list: function (slackUserId, cb) {
+		var query = slackUserId?{user: slackUserId}:{};
 		Gear
-			.find({user: slackUserId})
+			.find(query)
 			.populate('matches')
 			.exec(function (err, docs) {
 				if (err) return cb(err);
 				return cb(null, docs);
 			})
+	},
+
+	delete: function (slackUserId, qualifier, item, cb) {
+		var query = {user:slackUserId, qualifier: qualifier, item:item};
+		Gear.findOne(query)
+			.exec(function (err, item) {
+				if (err) return cb(err);
+				if (!item) return cb(new Error("Post not found"));
+				item.remove(function (err) {
+					if (err) return cb(err);
+			        cb();
+			    });
+			});
 	}
 }
 
