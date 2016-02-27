@@ -53,8 +53,9 @@ var controller = {
 	},
 
 	list: function (slackUserId, cb) {
+		var query = slackUserId?{user: slackUserId}:{};
 		Gear
-			.find({user: slackUserId})
+			.find(query)
 			.populate('matches')
 			.exec(function (err, docs) {
 				if (err) return cb(err);
