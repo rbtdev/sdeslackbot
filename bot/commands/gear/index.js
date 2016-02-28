@@ -11,8 +11,9 @@ var plainItems = ["mufgs", "capsules", "adas", "jarvis", "ultralinks", "media", 
 var items = levelItems.concat(strengthItems.concat(plainItems));
 
 var gearHelp = "<list|need|have|help> [l1-l8 or c,r,vr] <mufgs|capsules|ultralinks|linkamps|bursters|resos|cubes|shields|ultrastrikes|multihacks|heatsinks|axas|adas|jarvis>";
-var listHelp = "`.gear list [all]`\n" +
-"lists your current posts in the gear exchange. If 'all' is included, will list all posts for all users.";
+var listHelp = "`.gear list [all] | [post filter]`\n" +
+"lists your current posts in the gear exchange. If 'all' is included, will list all posts for all users. If a 'post filter' is included, will list " +
+"all posts which match the specified filter (ex: `gear list need l8 bursters` will list all posts for users who need l8 bursters)";
 var needHelp = "`.gear need <level|strength> <item>`\n" + 
 "adds a 'need' to the gear exchange. '<level|strength>' can be L1-L8, or 'c', 'r', 'vr' (common, rare, very rare).\n" +
 "<item> is one of " + items;
