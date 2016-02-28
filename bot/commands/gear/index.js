@@ -113,9 +113,21 @@ function gear(command) {
 	if (!fullAction.err) {
 		switch (fullAction.action) {
 			case "list":
-				var userId = (request[1] === "all")?null:user.id
-				console.log("Listing for " + userId)
-				return GearController.list(userId, listResponse(user.id, respond));
+				var query;
+				var listRequest = request.splice(1);
+				if (!listRequest[0]) {
+					query = {user:user.id};
+				}
+				else if (listRequest[0] === "all") {
+					query = {}
+				}
+				else {
+					query = {};
+					query.action = listRequest[0];
+					if (listRequest[1]) query.qualifier = listRequest[1];
+					if (listRequest[2]) query.item = listRequest[2];
+				}
+				return GearController.list(query, listResponse(user.id, respond));
 			break;
 			case "need":
 			case "have":

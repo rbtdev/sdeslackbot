@@ -52,8 +52,7 @@ var controller = {
 		});
 	},
 
-	list: function (slackUserId, cb) {
-		var query = slackUserId?{user: slackUserId}:{};
+	list: function (query, cb) {
 		Gear
 			.find(query)
 			.populate('matches')
