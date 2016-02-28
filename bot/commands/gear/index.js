@@ -1,7 +1,7 @@
 var GearController = require('../../../controllers/gear.js');
 var moment = require('moment');
 
-var actions = ["need", "have", "list", "del"];
+var actions = ["need", "have", "list", "del", "help"];
 var levels =  ["l1", "l2", "l3", "l4", "l5", "l6", "l7", "l8"];
 var strengths = ["c", "r", "vr"];
 var qualifiers = levels.concat(strengths);
@@ -10,8 +10,17 @@ var strengthItems = ["shields", "heatsinks","multihacks", "axas", "linkamps"];
 var plainItems = ["mufgs", "capsules", "adas", "jarvis", "ultralinks", "media", "keycaps", "keys"];;
 var items = levelItems.concat(strengthItems.concat(plainItems));
 
-var gearHelp = "<list|need|have> [l1-l8 or c,r,vr] <mufgs|capsules|ultralinks|linkamps|bursters|resos|cubes|shields|ultrastrikes|multihacks|heatsinks|axas|adas|jarvis>";
-
+var gearHelp = "<list|need|have|help> [l1-l8 or c,r,vr] <mufgs|capsules|ultralinks|linkamps|bursters|resos|cubes|shields|ultrastrikes|multihacks|heatsinks|axas|adas|jarvis>";
+var listHelp = "`.gear list [all]`\n" +
+"lists your current posts in the gear exchange. If 'all' is included, will list all posts for all users.";
+var needHelp = "`.gear need <level|strength> <item>`\n" + 
+"adds a 'need' to the gear exchange. '<level|strength>' can be L1-L8, or 'c', 'r', 'vr' (common, rare, very rare).\n" +
+"<item> is one of " + items;
+var haveHelp = "`.gear have <level|strength> <item>`\n" + 
+"adds a 'have' to the gear exchange. '<level|strength>' can be L1-L8, or 'c', 'r', 'vr' (common, rare, very rare).\n" +
+"<item> is one of " + items;
+var delHelp = "`.gear del <level|strength> <item>`\n" +
+"deletes your gear post for the specified item. Does not delete other users' posts.";
 function listResponse(userId, respond) {
 	return function (err, results) {
 
@@ -113,7 +122,11 @@ function gear(command) {
 				return postAction(fullAction.action, fullAction.qualifier, fullAction.item, user, respond);
 			break;
 			case "del":
-				return deletePost(user, fullAction.qualifier, fullAction.item, respond); 
+				return deletePost(user, fullAction.qualifier, fullAction.item, respond);
+			break;
+			case "help":
+				var helpText = desc + "\n\n" + listHelp + "\n\n" + haveHelp +"\n\n" + needHelp + "\n\n" + delHelp;
+				return respond({text: helpText});
 			default:
 				return respond({text: "need valid action: " + actions});
 			break
