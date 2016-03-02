@@ -12,14 +12,14 @@ function create(req) {
 		portal_url:  req.body['portal_url'],
 		attacker_url: req.body['attacker_url']
 	};
-	var location = new LocationModel({
-		intelUrl: alert.portal_url,
-		name: alert.portal_name,
-		area: "unknown",
-		shortCode: "",
-		method: "outgress"
-	});
-	location.save();
+	// var location = new LocationModel({
+	// 	intelUrl: alert.portal_url,
+	// 	name: alert.portal_name,
+	// 	area: "unknown",
+	// 	shortCode: "",
+	// 	method: "outgress"
+	// });
+	// location.save();
 	return alert;
 }
 module.exports = {
