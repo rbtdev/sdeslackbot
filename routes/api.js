@@ -28,7 +28,7 @@ api
 	.get('/images/:id', FileController.getImage)
 
 	// Receive Outgress Alerts
-	.post('/alerts', Alerts.create)
+	.post('/alerts',FileUpload.array(), Alerts.create)
 
 ;
 
