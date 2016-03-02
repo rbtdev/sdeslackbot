@@ -53,7 +53,14 @@ var api = {
 
 	create: function (req, res, next) {
 		var _this = this;
-		var source = req.body[this.model.modelName];
+		var source = {};
+		console.log("Body = " + JSON.stringify(req.body))
+		if (this.controller.create) {
+			source = this.controller.create(req);
+		}
+		else {
+			source = req.body[this.model.modelName];
+		}
 		source.user = req.user;
 		source.method = "manual";
 		var item = new this.model(source);

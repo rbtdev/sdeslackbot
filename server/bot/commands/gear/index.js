@@ -22,6 +22,14 @@ var haveHelp = "`.gear have <level|strength> <item>`\n" +
 "<item> is one of " + items;
 var delHelp = "`.gear del <level|strength> <item>`\n" +
 "deletes your gear post for the specified item. Does not delete other users' posts.";
+var helpText = desc + "\n\n" + listHelp + "\n\n" + haveHelp +"\n\n" + needHelp + "\n\n" + delHelp;
+var desc = 
+"Post a gear request or availability into the Gear Exchange.  Posts expire " +
+"after 24 hours if no matching post has been submitted.  If someone submits a " +
+"post which satisfies your 'need' or 'have' you will both be notified via a " +
+"message sent to your Slackbot channel";
+
+
 function listResponse(userId, respond) {
 	return function (err, results) {
 
@@ -138,7 +146,6 @@ function gear(command) {
 				return deletePost(user, fullAction.qualifier, fullAction.item, respond);
 			break;
 			case "help":
-				var helpText = desc + "\n\n" + listHelp + "\n\n" + haveHelp +"\n\n" + needHelp + "\n\n" + delHelp;
 				return respond({text: helpText});
 			default:
 				return respond({text: "need valid action: " + actions});
@@ -193,15 +200,6 @@ function getFullAction(request) {
 	}
 
 }
-	
-
-
-
-var desc = 
-"Post a gear request or availability into the Gear Exchange.  Posts expire " +
-"after 24 hours if no matching post has been submitted.  If someone submits a " +
-"post which satisfies your 'need' or 'have' you will both be notified via a " +
-"message sent to your Slackbot channel";
 
 module.exports = {
 	exec: gear,

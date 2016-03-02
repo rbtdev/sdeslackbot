@@ -5,10 +5,12 @@ var LocationController = require('../controllers/location.js');
 var NoteController = require('../controllers/note.js');
 var UserController = require('../controllers/user.js');
 var FileController = require('../controllers/file.js');
+var AlertController = require('../controllers/alert.js');
 var CsvUpload = require('../middleware/csvUpload.js');
 var ApiController = require('../controllers/api.js');
 var FileUpload = require('multer')({ dest: './public/uploads/'});
 var Locations = ApiController(LocationController);
+var Alerts = ApiController(AlertController);
 var api = express.Router();
 
 // Set up API endpoints
@@ -24,6 +26,10 @@ api
 	.post('/users', UserController.create)
 	// Images (uploaded avatars)
 	.get('/images/:id', FileController.getImage)
+
+	// Receive Outgress Alerts
+	.post('/alerts', Alerts.create)
+
 ;
 
 // Secure Endpoints
