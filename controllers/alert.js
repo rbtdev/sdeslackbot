@@ -12,14 +12,16 @@ function create(req) {
 		portal_url:  req.body['portal_url'],
 		attacker_url: req.body['attacker_url']
 	};
-	// var location = new LocationModel({
-	// 	intelUrl: alert.portal_url,
-	// 	name: alert.portal_name,
-	// 	area: "unknown",
-	// 	shortCode: "",
-	// 	method: "outgress"
-	// });
-	// location.save();
+	var intelUrl = "https://www.ingress.com/intel?"
+	intelUrl += "ll=" + alert.latitude + "," + alert.longitude + "&z=17&pll=" + alert.latitude + "," + alert.longitude;
+	var location = new LocationModel({
+		intelUrl: intelUrl,
+		name: alert.portal_name,
+		area: "unknown",
+		shortCode: "",
+		method: "outgress"
+	});
+	location.save();
 	return alert;
 }
 module.exports = {
