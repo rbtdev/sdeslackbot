@@ -33,8 +33,12 @@ function preSave(next) {
 	next();
 };
 
-locationSchema.pre('save', preSave);
+function preFind() {
+	this.where('method').ne('outgress');
+};
 
+locationSchema.pre('save', preSave);
+locationSchema.pre('find', preFind);
 //locationSchema.plugin(acl.object);
 
 var LocationModel = mongoose.model('location',locationSchema);
