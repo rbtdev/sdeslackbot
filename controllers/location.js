@@ -9,6 +9,7 @@ function update(source, target) {
     target.shortCode = source.shortCode;
 };
 
+
 module.exports = {
 	model: LocationModel,
 	update: update,
