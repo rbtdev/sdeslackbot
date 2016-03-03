@@ -11,7 +11,6 @@ function find (searchText, cb) {
   }
   Location
     .find(searchText?{'$text':{'$search':searchText}}:{})
-    .where("method").ne("outgress")
     .sort('name')
     .exec(function (err, links) {
       err?console.log("DB - find error: " + JSON.stringify(err)):null;
