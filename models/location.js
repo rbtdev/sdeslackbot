@@ -34,7 +34,7 @@ function preSave(next) {
 };
 
 function preFind() {
-		this.where('method').ne('upload');
+	this.where({'method': {$ne: 'upload'}});
 };
 
 locationSchema.pre('save', preSave);
