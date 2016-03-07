@@ -56,15 +56,15 @@ function miles(range) {
   return miles.toFixed(2) + "mi";
 }
 
-function portalCalc(range) {
+function portalCalc(range, maxLevel) {
 
-  var maxRange = linkRange(8, ["vrla", "vrla", "vrla", "vrla"]);
+  var maxRange = linkRange(maxLevel, ["vrla", "vrla", "vrla", "vrla"]);
   if ((range > maxRange) || (range < 0)) {
     return {err: "Range is too far"};
   }
   
   var level = Math.ceil(Math.pow(range/160, 0.25));
-  if (level <= 8) {
+  if (level <= maxLevel) {
     return ({
       level: level,
       mods:[]
@@ -73,7 +73,7 @@ function portalCalc(range) {
   var mods = [];
   var results = [];
   var testRange = 0;
-  var level = 8;
+  var level = maxLevel;
   while (level >=1 ) {
     do  {
       if (linkRange(level, mods) >= range) {
@@ -114,7 +114,9 @@ function range (command) {
 
   args[0] = args[0].toString();
   if (args[0].length < 8) {
-    var result = portalCalc(parseFloat(args[0])*1000);
+    var maxLevel = 8;
+    if ((args[1]) && (args[1] <= 8)) maxLevel = args[1];
+    var result = portalCalc(parseFloat(args[0])*1000, maxLevel);
     if (result.err) return respond ({text: result.err});
     var mods = "";
     result.mods.forEach(function (mod) {
