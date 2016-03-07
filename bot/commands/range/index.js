@@ -137,7 +137,7 @@ function range (command) {
 desc = "Find the link range of a portal, or minumum portal needed to link to a given range.";
 var help = "<reso_levels> <mods> or range <distance> (in km)"
 var usage = "`.range 78877477 vrla vrla la la` - get range of the specified portal" + "\n" +
-            "`.range 394` - get portal conigurarion needed to link 394km"
+            "`.range 394` - get portal configuration needed to link 394km"
 
 module.exports = {
   exec: range,
