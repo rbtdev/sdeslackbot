@@ -38,7 +38,7 @@ function preFind() {
 };
 
 locationSchema.pre('save', preSave);
-locationSchema.pre('find', preFind);
+//locationSchema.pre('find', preFind);
 //locationSchema.plugin(acl.object);
 var LocationModel = mongoose.model('location',locationSchema);
 
