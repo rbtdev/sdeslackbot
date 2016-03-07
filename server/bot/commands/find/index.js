@@ -4,21 +4,15 @@ var LocationModel = require("../../../models/location.js");
 function find (command) {
 	var args = command.args;
 	var respond = command.respond;
-	var methods = ["manual", "upload"]
-
 	var response = "Area not found";
 	var searchText = args?args._.join(' '):null;
-	var includeOutgress = (args.outgress || args.o);
-	if (includeOutgress) {
-		console.log("Include outgress..");
-		methods.push("outgress");
-	}
 	if (searchText) {
     	searchText = '\"' + searchText + '\"';
   	}
 	LocationModel
-	.find(searchText?{'$text':{'$search':searchText}}:{})
-	.where('method').in(methods)
+	.find()
+	.where(searchText?{'$text':{'$search':searchText}}:{})
+	.where('method').ne('outgress')
     .sort('name')
     .exec(function (err, links) {
     	if (err) return respond({text: "DB error."});
