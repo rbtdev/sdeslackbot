@@ -7,7 +7,7 @@ var strengths = ["c", "r", "vr"];
 var qualifiers = levels.concat(strengths);
 var levelItems = ["bursters", , "cubes", "resos", "ultrastrikes"];
 var strengthItems = ["shields", "heatsinks","multihacks", "axas", "linkamps"];
-var plainItems = ["mufgs", "capsules", "adas", "jarvis", "ultralinks", "media", "keycaps", "keys"];;
+var plainItems = ["lpcs", "mufgs", "capsules", "adas", "jarvis", "ultralinks"];;
 var items = levelItems.concat(strengthItems.concat(plainItems));
 
 var gearHelp = "<list|need|have|help> [l1-l8 or c,r,vr] <mufgs|capsules|ultralinks|linkamps|bursters|resos|cubes|shields|ultrastrikes|multihacks|heatsinks|axas|adas|jarvis>";
