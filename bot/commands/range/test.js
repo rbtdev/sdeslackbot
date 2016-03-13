@@ -47,3 +47,10 @@ var command = {
 console.log("testing with : "+ command.args._);
 range.exec(command);
 
+var command = {
+	args: {_:[200, 5]},
+	respond: respond
+}
+console.log("testing with : "+ command.args._);
+range.exec(command);
+

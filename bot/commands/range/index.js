@@ -1,8 +1,23 @@
-multiplier = {
-  la: 2,
-  ula: 5,
-  vrla: 7
+var modIndex = {
+  la: 0,
+  ula: 1,
+  vrla: 2
 }
+
+var mods = [
+  {
+    name: "la",
+    value: 2
+  },
+  {
+    name: "ula",
+    value: 5
+  },
+  {
+    name: "vrla",
+    value: 7
+  }
+]
 
 function level(portal) {
   var levels   = portal.split('');
@@ -14,9 +29,14 @@ function level(portal) {
 }
 
 
+function multiplier(mod) {
+  if (modIndex[mod]) return mods[modIndex[mod]].value;
+  else return null;
+}
+
 function linkRange(average, linkamps) {
     linkamps.sort(function (a, b) {
-      multiplier[b] - multiplier[a]
+      multiplier(a) - multiplier(b);
     })
     baseRange   = 160*Math.pow(average, 4)
     return baseRange*rangeBoost(linkamps);
@@ -26,8 +46,8 @@ function linkRange(average, linkamps) {
     boost = 0.0;
     count = 0;
     linkamps.forEach(function (mod) {
-      if (multiplier[mod]) {
-        baseMultiplier = multiplier[mod];
+      if (multiplier(mod)) {
+        baseMultiplier = multiplier(mod);
         boost += baseMultiplier*scale[count]
         count++
       }
@@ -70,25 +90,26 @@ function portalCalc(range, maxLevel) {
       mods:[]
     })
   }
-  var mods = [];
+  var portalMods = [];
   var results = [];
   var testRange = 0;
   var level = maxLevel;
   while (level >=1 ) {
     do  {
-      if (linkRange(level, mods) >= range) {
+      if (linkRange(level, portalMods) >= range) {
         return ({
           level:level,
           mods: []
         });
       }
-      for (mod in multiplier) {
+      for (mod in modIndex) {
         for (modSlot = 0; modSlot < 4; modSlot++) {
-          mods[modSlot] = mod;  
-          testRange = linkRange(level, mods)
+          console.log("mod:" + mod);
+          portalMods[modSlot] = mods[modIndex[mod]].name;  
+          testRange = linkRange(level, portalMods)
           if (testRange >= range) {
             var resultMods = [];
-            mods.forEach(function (mod) {
+            portalMods.forEach(function (mod) {
               resultMods.push(mod);
             })
             return ({
