@@ -30,7 +30,7 @@ function level(portal) {
 
 
 function multiplier(mod) {
-  if (modIndex[mod]) return mods[modIndex[mod]].value;
+  if (modIndex[mod] !== undefined) return mods[modIndex[mod]].value;
   else return null;
 }
 
@@ -46,6 +46,8 @@ function linkRange(average, linkamps) {
     boost = 0.0;
     count = 0;
     linkamps.forEach(function (mod) {
+      console.log("mod:" + mod)
+      console.log("multiplier: " + multiplier(mod));
       if (multiplier(mod)) {
         baseMultiplier = multiplier(mod);
         boost += baseMultiplier*scale[count]
