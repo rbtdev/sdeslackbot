@@ -55,7 +55,7 @@ module.exports = function Brain() {
 			BotCommands[command.verb].exec(command)
 		}
 		else {
-			help(respond);
+			//help(respond);
 		}
 	};
 
