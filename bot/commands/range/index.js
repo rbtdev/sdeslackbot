@@ -39,15 +39,15 @@ function linkRange(average, linkamps) {
       multiplier(a) - multiplier(b);
     })
     baseRange   = 160*Math.pow(average, 4)
-    return baseRange*rangeBoost(linkamps);
+    var range = baseRange*rangeBoost(linkamps);
+    console.log("Portal: " + average + " with " + linkamps + " - " + range);
+    return range
 
   function rangeBoost(linkamps) {
     scale = [1.0, 0.25, 0.125, 0.125];
     boost = 0.0;
     count = 0;
     linkamps.forEach(function (mod) {
-      console.log("mod:" + mod)
-      console.log("multiplier: " + multiplier(mod));
       if (multiplier(mod)) {
         baseMultiplier = multiplier(mod);
         boost += baseMultiplier*scale[count]
@@ -101,26 +101,21 @@ function portalCalc(range, maxLevel) {
       if (linkRange(level, portalMods) >= range) {
         return ({
           level:level,
-          mods: []
+          mods: portalMods
         });
       }
       for (mod in modIndex) {
+        portalMods = [];
         for (modSlot = 0; modSlot < 4; modSlot++) {
-          console.log("mod:" + mod);
           portalMods[modSlot] = mods[modIndex[mod]].name;  
           testRange = linkRange(level, portalMods)
           if (testRange >= range) {
-            var resultMods = [];
-            portalMods.forEach(function (mod) {
-              resultMods.push(mod);
-            })
             return ({
               level: level,
-              mods: resultMods
+              mods: portalMods
             });
           }        
         }
-
       }
     level--
     } while (testRange < range)
