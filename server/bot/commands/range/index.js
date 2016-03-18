@@ -1,4 +1,4 @@
-var Geo = require('../../../lib/geo.js');
+var Geo = require('../../../lib/geo');
 
 var modIndex = {
   la: 0,
