@@ -1,3 +1,5 @@
+var Geo = require('../../../lib/geo.js');
+
 var modIndex = {
   la: 0,
   ula: 1,
@@ -123,51 +125,16 @@ function portalCalc(range, maxLevel) {
   return results
 }
 
-
 function urlRange(url1, url2) {
-
-  function ll(url) {
-    var result = null;
-    var params = url.split("pll=")
-    if (params.length >=2) {
-      var llStr = params[1];
-      var ll = llStr.split(',');
-      result = {};
-      result.lat = parseFloat(ll[0]);
-      result.lon = parseFloat(ll[1]);
-    }
-    return result;
+  var loc1 = new Geo.Location(url1);
+  var loc2 = new Geo.Location(url2);
+  console.log("loc1 = " + loc1.geo);
+  console.log("loc2 = " + loc2.geo);
+  var distance = null;
+  if (loc1.geo && loc2.geo) {
+      distance = loc1.distanceTo(loc2);
   }
-
-  function toRadians(deg) {
-    return 2*Math.PI*deg/360.0;
-  }
-
-  var d = null;
-  var R = 6371000; // metres
-  var ll1 = ll(url1);
-  var ll2 = ll(url2);
-
-  if (ll1 && ll2) {
-    var lat1 = ll1.lat;
-    var lon1 = ll1.lon;
-    var lat2 = ll2.lat;
-    var lon2 = ll2.lon;
-
-    var l1 = toRadians(lat1);
-    var l2 = toRadians(lat2);
-    var dr = toRadians(lat2-lat1);
-    var dl = toRadians(lon2-lon1);
-
-    var a = Math.sin(dr/2) * Math.sin(dr/2) +
-            Math.cos(l1) * Math.cos(l2) *
-            Math.sin(dl/2) * Math.sin(dl/2);
-    var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-
-    d = R * c;    
-  }
-    
-  return d;
+  return distance;
 }
 
 function range (command) {
@@ -178,10 +145,10 @@ function range (command) {
   if (!args[0]) return respond ({text: "Need valid portal, range, or intel urls"})
   if ((args.length == 2) && (isNaN(args[0]) && isNaN(args[1]))) {
     // calc dist
-    var range = urlRange(args[0], args[1]);
+    var distance = urlRange(args[0], args[1]);
     var response = "";
-    if (range !== null) {
-      response = "Range between portals: " + metric(range) + " (" + miles(range) + ")";
+    if (distance !== null) {
+      response = "Distance between portals: " + metric(distance) + " (" + miles(distance) + ")";
     }
     else {
       response = "Need valid intel URLs";
