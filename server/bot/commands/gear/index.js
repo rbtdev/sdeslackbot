@@ -9,6 +9,7 @@ var levelItems = ["bursters", , "cubes", "resos", "ultrastrikes"];
 var strengthItems = ["shields", "heatsinks","multihacks", "axas", "linkamps"];
 var plainItems = ["lpcs", "mufgs", "capsules", "adas", "jarvis", "ultralinks"];;
 var items = levelItems.concat(strengthItems.concat(plainItems));
+var slack = null;
 
 var gearHelp = "<list|need|have|help> [l1-l8 or c,r,vr] <mufgs|capsules|ultralinks|linkamps|bursters|resos|cubes|shields|ultrastrikes|multihacks|heatsinks|axas|adas|jarvis>";
 var listHelp = "`.gear list [all] | [post filter]`\n" +
@@ -49,7 +50,7 @@ function listResponse(userId, respond) {
 			var postAction = post.action;
 
 			if (post.user != userId) {
-				postUser = "<@" + post.user + ">";
+				postUser = "<@" + slack.getUserByID(post.user).name + ">";
 				postAction = (post.action==="have")?"has":"needs";
 			}
 			
@@ -115,6 +116,7 @@ function gear(command) {
 	var user = command.user;
 	var args = command.args;
 	var respond = command.respond;
+	slack = command.slack;
 
 	var request = args._;
 	if (request.length < 1) return respond({text: "Usage: " + gearHelp});
