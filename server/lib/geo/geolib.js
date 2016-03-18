@@ -10,11 +10,7 @@ function geoFromUrl(url) {
       var ll = llStr.split(',');
       var lat = parseFloat(ll[0]);
       var lng = parseFloat(ll[1]);
-      if (!isNaN(lat) && !isNaN(lng)) {
-          geo = [];
-	      geo[0] = parseFloat(ll[0]);
-	      geo[1] = parseFloat(ll[1]);
-      }
+      geo = (!isNaN(lat) && !isNaN(lng))?[lat,lng]:null;
     }
 	return geo;
 }
