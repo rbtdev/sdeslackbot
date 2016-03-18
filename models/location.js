@@ -1,4 +1,6 @@
 var mongoose = require('mongoose');
+var Geo = require('../lib/geo');
+
 //var acl = require('mongoose-acl');
 
 var locationSchema = new mongoose.Schema({
@@ -23,12 +25,9 @@ function preSave(next) {
 	}
 
 	/// Passed basic validation
-
-	var params = this.intelUrl?this.intelUrl.split("pll="):[]
-	var llStr = params.length==2?params[1]:"0,0";
-	var ll = llStr.split(',');
-	this.lat = parseFloat(ll[0]);
-	this.lng = parseFloat(ll[1]);
+	var location = new Geo.Location(this.intelUrl);
+	this.lat = location.geo[0];
+	this.lng = location.geo[1];
 	this.mapsUrl = "http://maps.google.com/?q=" + this.name + "@" + this.lat + "," + this.lng;
 	next();
 };
