@@ -54,3 +54,20 @@ var command = {
 console.log("testing with : "+ command.args._);
 range.exec(command);
 
+
+var command = {
+	args: {_:["https://www.ingress.com/intel?ll=27.485766,-114.977805&z=5&pll=33.419505,-117.620146",
+	          "https://www.ingress.com/intel?ll=22.062128,-136.511008&z=5&pll=19.491163,-154.960195"]},
+	respond: respond
+}
+console.log("testing with : " + command.args._);
+range.exec(command);
+
+var command = {
+	args: {_:["pll=33.419505,-117.620146",
+	          "pll=19.491163,-154.960195"]},
+	respond: respond
+}
+console.log("testing with : " + command.args._);
+range.exec(command);
+
