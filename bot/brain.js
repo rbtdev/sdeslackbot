@@ -50,7 +50,8 @@ module.exports = function Brain() {
 		var command = parse(argv);
 		command.user = user;
 		command.respond = respond;
-		command.channel = channel
+		command.channel = channel;
+		command.slack = channel._client;
 		if (BotCommands[command.verb] && BotCommands[command.verb].exec) {
 			BotCommands[command.verb].exec(command)
 		}
