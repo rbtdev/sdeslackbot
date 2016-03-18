@@ -8,6 +8,10 @@ var locationSchema = new mongoose.Schema({
     area: String,
     lat: Number,
     lng: Number,
+	geo: { 
+		type: [Number],  // [<longitude>, <latitude>]
+    	index: '2d'      // create the geospatial index
+    },
     intelUrl: {type: 'string', unique: 'true'}, // only one unique location
     mapsUrl: String,
     shortCode: String,
@@ -28,6 +32,7 @@ function preSave(next) {
 	var location = new Geo.Location(this.intelUrl);
 	this.lat = location.geo[0];
 	this.lng = location.geo[1];
+	this.geo = location.geo;
 	this.mapsUrl = "http://maps.google.com/?q=" + this.name + "@" + this.lat + "," + this.lng;
 	next();
 };
