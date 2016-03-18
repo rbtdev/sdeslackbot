@@ -9,12 +9,22 @@ function Location() {
 	}
 	else if ((arguments.length == 2) && (!isNaN(arguments[0]) && !isNaN(arguments[1]))) {
 		// lat,lng arguments
-		this.geo = [arguments[0], arguments[1]]
-	}
+		var lat = arguments[0];
+		var lng = arguments[1];
+		this.geo = [lng, lat]; // complies with Mongoose Geospatial index format
+	} 
 }
 
 Location.prototype.distanceTo = function (location) {
-	return Lib.distance(this.geo, location.geo);
+	return Lib.distance(this, location);
+}
+
+Location.prototype.lat = function () {
+	return this.geo[1];
+}
+
+Location.prototype.lng = function () {
+	return this.geo[0];
 }
 
 module.exports = Location;
