@@ -71,3 +71,11 @@ var command = {
 console.log("testing with : " + command.args._);
 range.exec(command);
 
+var command = {
+	args: {_:["x117.620146",
+	          "pll=19.491163,-154.960195"]},
+	respond: respond
+}
+console.log("testing with : " + command.args._);
+range.exec(command);
+
