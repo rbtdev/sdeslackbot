@@ -10,7 +10,7 @@ var locationSchema = new mongoose.Schema({
     lng: Number,
 	geo: { 
 		type: [Number],  // [<longitude>, <latitude>]
-    	index: '2d'      // create the geospatial index
+    	index: '2dsphere'      // create the geospatial index
     },
     intelUrl: {type: 'string', unique: 'true'}, // only one unique location
     mapsUrl: String,
