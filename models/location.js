@@ -30,8 +30,8 @@ function preSave(next) {
 
 	/// Passed basic validation
 	var location = new Geo.Location(this.intelUrl);
-	this.lat = location.geo[0];
-	this.lng = location.geo[1];
+	this.lat = location.lat();
+	this.lng = location.lng();
 	this.geo = location.geo;
 	this.mapsUrl = "http://maps.google.com/?q=" + this.name + "@" + this.lat + "," + this.lng;
 	next();
