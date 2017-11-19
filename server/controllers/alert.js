@@ -1,5 +1,5 @@
 var AlertModel = require('../models/alert.js');
-var LocationModel = require('../models/location.js');
+var LocationModel = require('mongoose').model('outgress_location');
 
 function create(req) {
 	console.log('body:' + JSON.stringify(req.body))
@@ -9,7 +9,7 @@ function create(req) {
 		longitude: req.body['longitude'],
 		attacker: req.body['attacker'],
 		portal_image_url: req.body['portal_image_url'],
-		portal_url:  req.body['portal_url'],
+		portal_url: req.body['portal_url'],
 		attacker_url: req.body['attacker_url']
 	};
 	var intelUrl = "https://www.ingress.com/intel?"
