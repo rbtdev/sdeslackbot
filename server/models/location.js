@@ -8,10 +8,6 @@ var locationSchema = new mongoose.Schema({
 	area: String,
 	lat: Number,
 	lng: Number,
-	geo: {
-		type: [Number], // [<longitude>, <latitude>]
-		index: '2dsphere' // create the geospatial index
-	},
 	intelUrl: {
 		type: 'string',
 		unique: 'true'
@@ -42,7 +38,6 @@ function preSave(next) {
 	var location = new Geo.Location(this.intelUrl);
 	this.lat = location.lat();
 	this.lng = location.lng();
-	this.geo = location.geo;
 	this.mapsUrl = "http://maps.google.com/?q=" + this.name + "@" + this.lat + "," + this.lng;
 	next();
 };
@@ -59,6 +54,5 @@ locationSchema.pre('save', preSave);
 //locationSchema.pre('find', preFind);
 //locationSchema.plugin(acl.object);
 var LocationModel = mongoose.model('location', locationSchema);
-var OutgressLocation = mongoose.model('outgress_location', locationSchema);
 
 module.exports = LocationModel;

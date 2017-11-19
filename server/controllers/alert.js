@@ -1,5 +1,5 @@
 var AlertModel = require('../models/alert.js');
-var LocationModel = require('mongoose').model('outgress_location');
+var LocationModel = require('../models/location.js');
 
 function create(req) {
 	console.log('body:' + JSON.stringify(req.body))
