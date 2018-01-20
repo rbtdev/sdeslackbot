@@ -6,7 +6,7 @@
   "scripts": {
     "preinstall": "cd server && npm install",
     "start": "node ./server/bin/www",
-    "heroku-postbuild": "cd client && npm install && npm install && npm run build",
+    "heroku-postbuild": "cd client && npm install && bower install && npm run build",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
