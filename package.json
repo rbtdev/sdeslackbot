@@ -1,0 +1,22 @@
+{
+  "name": "sdeslackbot",
+  "version": "1.0.0",
+  "description": "Command to push server to heroku:",
+  "main": "index.js",
+  "scripts": {
+    "preinstall": "cd server && npm install",
+    "start": "node ./server/bin/www",
+    "heroku-postbuild": "cd client && npm install && npm install && npm run build",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rbtdev/sdeslackbot.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/rbtdev/sdeslackbot/issues"
+  },
+  "homepage": "https://github.com/rbtdev/sdeslackbot#readme"
+}
