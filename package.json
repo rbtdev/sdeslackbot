@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "Command to push server to heroku:",
   "main": "index.js",
+  "engines": {
+    "node": "6.12.3"
+  },
   "scripts": {
     "preinstall": "cd server && npm install",
     "start": "node ./server/bin/www",
