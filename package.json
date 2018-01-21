@@ -7,9 +7,10 @@
     "node": "6.12.3"
   },
   "scripts": {
-    "preinstall": "cd server && npm install",
+    "build": "cd client && npm run build",
+    "preinstall": "cd server && npm install && cd ../client && npm install",
     "start": "node ./server/bin/www",
-    "heroku-postbuild": "cd client && npm install --only=dev --no-shrinkwrap && npm run build",
+    "heroku-postbuild": "cd client && npm install && npm run build",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
