@@ -44,8 +44,8 @@ function listResponse(userId, respond) {
 		var text = ""
 		for (var i = 0; i < results.length; i++) {
 			var post = results[i];
-			var inHours = moment.duration(moment(post.expiresOn).diff(moment())).asHours();
-			var expiresIn = "(expires in " + inHours.toFixed(0) + "h)";
+			//var inHours = moment.duration(moment(post.expiresOn).diff(moment())).asHours();
+			var expiresIn = " (expires " +  moment(post.expiresOn).fromNow() + ")";
 			var matchNames = (post.action == "need") ? "Pick up from " : "Donate to ";
 			post.matches.forEach(function (match) {
 				matchNames = matchNames + "<@" + match.user + "> ";
