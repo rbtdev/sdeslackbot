@@ -8,8 +8,9 @@ var schema = new mongoose.Schema({
 	item: String, // shields, axas, bursters, resos, ultras, cubes, keys
 	createdOn: {
 		type: Date,
-		expires: expiration
-	}, // expire a post in 72 hours
+		default: Date.now(),
+		index: { expires: expiration } 
+	},
 	user: String, // slack user who created this 
 	userName: String,
 	matches: [{
