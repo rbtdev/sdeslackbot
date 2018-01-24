@@ -1,0 +1,5 @@
+JWT_SECRET=some secret string for authentication tokens
+MONGOLAB_URI=mongoDB conection string
+SLACK_ADMIN=slack admin user id
+SLACK_KEY=slack integration key
+TEAMS=[{"team":"slack team name", "key":"slack team unique id"}]
